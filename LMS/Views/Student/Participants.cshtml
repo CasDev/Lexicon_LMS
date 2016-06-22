@@ -1,0 +1,16 @@
+﻿@model IEnumerable<ApplicationUser>
+@{
+    ViewBag.Title = "Participants";
+}
+
+<h2>Participants</h2>
+@if (ViewBag.Warning != null)
+{
+    <p class="warning">@ViewBag.Warning</p>
+}
+<ul>
+@foreach (var User in Model)
+{
+    <li>@User.UserName</li>
+}
+ </ul>
