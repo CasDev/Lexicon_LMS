@@ -1,7 +1,19 @@
-﻿
+﻿@model Course
 @{
     ViewBag.Title = "Index";
+    LMS.Models.User LoggedIn = Model.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 }
 
 <h2>Index</h2>
+
+<h3>Hej @LoggedIn.FirstName</h3>
+
+<u1>
+    <li>@Model.Name</li>
+    <li>@Model.Description</li>
+    <li>@Model.StartDate</li>
+    <li>@Model.EndDate</li>
+</u1>
+
+
 
