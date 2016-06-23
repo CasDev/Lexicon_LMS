@@ -1,0 +1,38 @@
+﻿@model Course
+@{
+    ViewBag.Title = "Index";
+    LMS.Models.User LoggedIn = Model.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+}
+
+<h2>Index</h2>
+
+<h3>Hej @LoggedIn.FirstName</h3>
+
+<u1>
+    <li>@Model.Name</li>
+    <li>@Model.Description</li>
+    <li>@Model.StartDate.ToString(" yyyy-MM-dd ")</li>
+    <li>@Model.EndDate.ToString(" yyyy-MM-dd ")</li>
+</u1>
+<table>
+    <tr>
+        <th>Modules</th>
+        <th>Title</th>
+        <th>Startdate</th>
+        <th></th>
+        <th>Enddate</th>
+    </tr>
+    @foreach (Module module in Model.Modules)
+    {
+        <tr>
+            <th></th>
+            <td>@module.Name</td>
+            <td>@module.StartDate.ToString(" yyyy-MM-dd ")</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>@module.EndDate.ToString(" yyyy-MM-dd ")</td>
+        </tr>
+    }
+</table>
+
+
+

@@ -1,0 +1,28 @@
+﻿@model Course
+@{
+    ViewBag.Title = "Participants of "+ Model.Name;
+}
+
+<h3>Participants of</h3>
+<h2>@Model.Name</h2>
+@if (ViewBag.Warning != null)
+{
+    <p class="warning">@ViewBag.Warning</p>
+}
+<table>
+    <tr>
+        <th><a href="@Url.Content("~/Student/Participants?sort=FirstName")">Firstname</a></th>
+        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th><a href="@Url.Content("~/Student/Participants?sort=LastName")">Lastname</a></th>
+    </tr>
+    @foreach (var User in Model.Users)
+    {
+        <tr>
+            <a href="mailto:@User.Email">
+                <td>@User.FirstName</td>
+                <td></td>
+                <td>@User.LastName</td>
+            </a>
+        </tr>
+    }
+ </table>
