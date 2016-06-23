@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Module>
+<table>
+    <tr>
+        <th>Modules</th>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+        <th></th>
+        <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+    </tr>
+    @foreach (Module module in Model)
+    {
+        <tr>
+            <th></th>
+            <td>@module.Name</td>
+            <td>@module.StartDate.ToString(" yyyy-MM-dd ")</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>@module.EndDate.ToString(" yyyy-MM-dd ")</td>
+        </tr>
+    }
+</table>

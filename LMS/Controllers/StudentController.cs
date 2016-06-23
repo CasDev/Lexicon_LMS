@@ -22,6 +22,11 @@ namespace LMS.Controllers
             return db.Courses.Where(c => c.Users.Where(u => u.Id == user.Id).Count() > 0).FirstOrDefault();
         }
 
+        public Course FindCourse()
+        {
+            return FindCourse(FindUser());
+        }
+
         public Course FindCourse(int id)
         {
             return db.Courses.Where(c => c.Id == id).FirstOrDefault();
@@ -37,12 +42,25 @@ namespace LMS.Controllers
             course = (course != null ? course : new Course());
             return (course.Users != null ? course.Users : new List<User>());
         }
-
-        // GET: Student
+        
         [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
-            return View();
+            Course course = FindCourse();
+            course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
+            course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
+
+            return View(course);
+        }
+
+        [Authorize(Roles = "Student")]
+        public ActionResult OldModules()
+        {
+            Course course = FindCourse();
+            course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
+            course.Modules = course.Modules.Where(m => m.EndDate < DateTime.Now).OrderBy(m => m.EndDate).Reverse().ToList();
+
+            return View(course);
         }
 
         [Authorize(Roles = "Student")]
@@ -50,7 +68,7 @@ namespace LMS.Controllers
         {
             bool _sort = (sort != null && sort == "FirstName" ? false : true);
 
-            Course course = FindCourse(FindUser());
+            Course course = FindCourse();
             course.Users = (course.Users != null ? course.Users : new List<User>());
             if (_sort)
             {

@@ -1,12 +1,9 @@
 ﻿@model Course
 @{
-    ViewBag.Title = "Index";
-    LMS.Models.User LoggedIn = Model.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+    ViewBag.Title = "Old Modules";
 }
 
-<h2>Index</h2>
-
-<h3>Hej @LoggedIn.FirstName</h3>
+<h2>Gammla moduler för @Model.Name</h2>
 
 <u1>
     <li>@Model.Name</li>
@@ -15,6 +12,3 @@
     <li>@Model.EndDate.ToString(" yyyy-MM-dd ")</li>
 </u1>
 @Html.Partial("ModulesTable", Model.Modules)
-
-
-
