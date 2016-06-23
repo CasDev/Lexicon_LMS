@@ -49,6 +49,7 @@ namespace LMS.Controllers
         public ActionResult Participants()
         {
             Course course = FindCourse(FindUser());
+            course.Users = (course.Users != null ? course.Users : new List<ApplicationUser>());
             int id = (course != null ? course.Id : 0);
 
             if (id <= 0)
@@ -56,7 +57,7 @@ namespace LMS.Controllers
                 ViewBag.Warning = "The ID of the Course was not able to be found";
             }
 
-            return View(FindParticipants(id));
+            return View(course);
         }
     }
 }
