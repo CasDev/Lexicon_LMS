@@ -1,0 +1,14 @@
+﻿@model Course
+@{
+    ViewBag.Title = "Old Modules";
+}
+
+<h2>Gammla moduler för @Model.Name</h2>
+
+<u1>
+    <li>@Model.Name</li>
+    <li>@Model.Description</li>
+    <li>@Model.StartDate.ToString(" yyyy-MM-dd ")</li>
+    <li>@Model.EndDate.ToString(" yyyy-MM-dd ")</li>
+</u1>
+@Html.Partial("ModulesTable", Model.Modules)
