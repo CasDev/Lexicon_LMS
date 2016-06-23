@@ -13,6 +13,6 @@ namespace LMS.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public virtual ICollection Users { get; set; }
+        public virtual ICollection<ApplicationUser> Users { get; set; }
     }
 }

@@ -4,6 +4,7 @@ namespace LMS.Migrations
     using Microsoft.AspNet.Identity.EntityFramework;
     using Models;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -24,11 +25,11 @@ namespace LMS.Migrations
 
             var users = new ApplicationUser[] {
                 new ApplicationUser() {
-                    Email = "castell_john@hotmail.com", UserName = "kaffeutvecklare"
+                    Email = "castell_john@hotmail.com", UserName = "castell_john@hotmail.com"
                 },
                 new ApplicationUser()
                 {
-                    Email = "admin@mail.nu", UserName = "admin"
+                    Email = "admin@mail.nu", UserName = "admin@mail.nu"
                 }
             };
             foreach (ApplicationUser _user in users)
@@ -42,11 +43,32 @@ namespace LMS.Migrations
                 rManager.Create(role);
             }
 
-            ApplicationUser user = uManager.FindByName("kaffeutvecklare");
+            ApplicationUser user = uManager.FindByName("castell_john@hotmail.com");
             uManager.AddToRole(user.Id, "Student");
             uManager.Update(user);
 
-            user = uManager.FindByName("admin");
+            Course Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15), Users = new List<ApplicationUser>() };
+            Course.Users.Add(user);
+            context.Courses.AddOrUpdate(x => x.Name,
+                Course);
+            context.SaveChanges();
+
+            foreach (ApplicationUser _user in new ApplicationUser[] {
+                new ApplicationUser { Email = "example@mail.nu", UserName = "example@mail.nu" },
+                new ApplicationUser { Email = "sebcas@live.se", UserName = "sebcas@live.se" },
+                new ApplicationUser { Email = "anexample@mail.nu", UserName = "anexample@mail.nu" },
+            })
+            {
+                uManager.Create(_user, "password");
+                user = uManager.FindByName(_user.UserName);
+
+                uManager.AddToRole(user.Id, "Student");
+                Course.Users.Add(user);
+            }
+            context.Courses.AddOrUpdate(x => x.Name,
+                Course);
+
+            user = uManager.FindByName("admin@mail.nu");
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);
             //  This method will be called after migrating to the latest version.

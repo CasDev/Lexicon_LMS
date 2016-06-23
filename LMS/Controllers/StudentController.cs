@@ -17,14 +17,25 @@ namespace LMS.Controllers
             return db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
         }
 
-        public List<ApplicationUser> FindParticipants(int id)
+        public Course FindCourse(ApplicationUser user)
         {
-            List<ApplicationUser> participants = new List<ApplicationUser>();
+            return db.Courses.Where(c => c.Users.Where(u => u.Id == user.Id).Count() > 0).FirstOrDefault();
+        }
+
+        public Course FindCourse(int id)
+        {
+            return db.Courses.Where(c => c.Id == id).FirstOrDefault();
+        }
+
+        public ICollection<ApplicationUser> FindParticipants(int id)
+        {
+            Course course = null;
             if (id > 0)
             {
-                // TODO: Load all
+                course = FindCourse(id);
             }
-            return participants;
+            course = (course != null ? course : new Course());
+            return (course.Users != null ? course.Users : new List<ApplicationUser>());
         }
 
         // GET: Student
@@ -35,22 +46,18 @@ namespace LMS.Controllers
         }
 
         [Authorize(Roles = "Student")]
-        public ActionResult Participants(string id)
+        public ActionResult Participants()
         {
-            if (id == null)
-            {
-                ApplicationUser user = FindUser();
-                // TODO: instead of zero, find the id of the course
-                id = "0";
-            }
-            int _id = 0;
-            Int32.TryParse(id, out _id);
-            if (_id <= 0)
+            Course course = FindCourse(FindUser());
+            course.Users = (course.Users != null ? course.Users : new List<ApplicationUser>());
+            int id = (course != null ? course.Id : 0);
+
+            if (id <= 0)
             {
                 ViewBag.Warning = "The ID of the Course was not able to be found";
             }
 
-            return View(FindParticipants(_id));
+            return View(course);
         }
     }
 }
