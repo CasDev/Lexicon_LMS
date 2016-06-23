@@ -12,6 +12,7 @@ namespace LMS.Models.DataAccess
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+           
         }
 
         public DbSet<Course> Courses { get; set; }
