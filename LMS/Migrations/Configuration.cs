@@ -18,21 +18,21 @@ namespace LMS.Migrations
 
         protected override void Seed(LMS.Models.DataAccess.ApplicationDbContext context)
         {
-            var uStore = new UserStore<ApplicationUser>(context);
-            var uManager = new UserManager<ApplicationUser>(uStore);
+            var uStore = new UserStore<User>(context);
+            var uManager = new UserManager<User>(uStore);
             var rStore = new RoleStore<IdentityRole>(context);
             var rManager = new RoleManager<IdentityRole>(rStore);
 
-            var users = new ApplicationUser[] {
-                new ApplicationUser() {
-                    Email = "castell_john@hotmail.com", UserName = "castell_john@hotmail.com"
+            var users = new User[] {
+                new User {
+                    Email = "castell_john@hotmail.com", UserName = "castell_john@hotmail.com", FirstName = "John", LastName = "Castell"
                 },
-                new ApplicationUser()
+                new User
                 {
-                    Email = "admin@mail.nu", UserName = "admin@mail.nu"
+                    Email = "admin@mail.nu", UserName = "admin@mail.nu", FirstName = "Admin", LastName = "Adminsson"
                 }
             };
-            foreach (ApplicationUser _user in users)
+            foreach (User _user in users)
             {
                 uManager.Create(_user, "password");
             }
@@ -43,20 +43,20 @@ namespace LMS.Migrations
                 rManager.Create(role);
             }
 
-            ApplicationUser user = uManager.FindByName("castell_john@hotmail.com");
+            User user = uManager.FindByName("castell_john@hotmail.com");
             uManager.AddToRole(user.Id, "Student");
             uManager.Update(user);
 
-            Course Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15), Users = new List<ApplicationUser>() };
+            Course Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15), Users = new List<User>() };
             Course.Users.Add(user);
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
             context.SaveChanges();
 
-            foreach (ApplicationUser _user in new ApplicationUser[] {
-                new ApplicationUser { Email = "example@mail.nu", UserName = "example@mail.nu" },
-                new ApplicationUser { Email = "sebcas@live.se", UserName = "sebcas@live.se" },
-                new ApplicationUser { Email = "anexample@mail.nu", UserName = "anexample@mail.nu" },
+            foreach (User _user in new User[] {
+                new User { Email = "example@mail.nu", UserName = "example@mail.nu", FirstName = "förnamn", LastName = "Efternamn" },
+                new User { Email = "sebcas@live.se", UserName = "sebcas@live.se", FirstName = "Exempel", LastName = "Jonsson" },
+                new User { Email = "anexample@mail.nu", UserName = "anexample@mail.nu", FirstName = "Firstname", LastName = "Lastname" },
             })
             {
                 uManager.Create(_user, "password");

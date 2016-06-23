@@ -12,7 +12,7 @@ namespace LMS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ApplicationUser FindUser()
+        public User FindUser()
         {
             return db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
         }
@@ -27,7 +27,7 @@ namespace LMS.Controllers
             return db.Courses.Where(c => c.Id == id).FirstOrDefault();
         }
 
-        public ICollection<ApplicationUser> FindParticipants(int id)
+        public ICollection<User> FindParticipants(int id)
         {
             Course course = null;
             if (id > 0)
@@ -35,7 +35,7 @@ namespace LMS.Controllers
                 course = FindCourse(id);
             }
             course = (course != null ? course : new Course());
-            return (course.Users != null ? course.Users : new List<ApplicationUser>());
+            return (course.Users != null ? course.Users : new List<User>());
         }
 
         // GET: Student
@@ -49,7 +49,7 @@ namespace LMS.Controllers
         public ActionResult Participants()
         {
             Course course = FindCourse(FindUser());
-            course.Users = (course.Users != null ? course.Users : new List<ApplicationUser>());
+            course.Users = (course.Users != null ? course.Users : new List<User>());
             int id = (course != null ? course.Id : 0);
 
             if (id <= 0)

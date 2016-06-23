@@ -12,6 +12,6 @@
 <ul>
 @foreach (var User in Model.Users)
 {
-    <li><a href="mailto:@User.Email">@User.UserName</a></li>
+    <li><a href="mailto:@User.Email">@User.FirstName @User.LastName</a></li>
 }
  </ul>
