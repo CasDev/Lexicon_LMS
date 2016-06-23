@@ -49,7 +49,7 @@ namespace LMS.Controllers
         {
             Course course = FindCourse();
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
-            course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now && m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
+            course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
 
             return View(course);
         }

@@ -83,6 +83,10 @@ namespace LMS.Migrations
             Module.CourseId = Course.Id;
             context.Modules.AddOrUpdate(m => m.Name,
                 Module);
+            Module = new Module { Name = "Övningstillfällen", Description = "Öva på diverse", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15) };
+            Module.CourseId = Course.Id;
+            context.Modules.AddOrUpdate(m => m.Name,
+                Module);
             context.SaveChanges();
 
             context.Courses.AddOrUpdate(x => x.Name,

@@ -14,25 +14,7 @@
     <li>@Model.StartDate.ToString(" yyyy-MM-dd ")</li>
     <li>@Model.EndDate.ToString(" yyyy-MM-dd ")</li>
 </u1>
-<table>
-    <tr>
-        <th>Modules</th>
-        <th>Title</th>
-        <th>Startdate</th>
-        <th></th>
-        <th>Enddate</th>
-    </tr>
-    @foreach (Module module in Model.Modules)
-    {
-        <tr>
-            <th></th>
-            <td>@module.Name</td>
-            <td>@module.StartDate.ToString(" yyyy-MM-dd ")</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>@module.EndDate.ToString(" yyyy-MM-dd ")</td>
-        </tr>
-    }
-</table>
+@Html.Partial("ModulesTable", Model.Modules)
 
 
 
