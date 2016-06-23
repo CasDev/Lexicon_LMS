@@ -9,9 +9,20 @@
 {
     <p class="warning">@ViewBag.Warning</p>
 }
-<ul>
-@foreach (var User in Model.Users)
-{
-    <li><a href="mailto:@User.Email">@User.FirstName @User.LastName</a></li>
-}
- </ul>
+<table>
+    <tr>
+        <th><a href="@Url.Content("~/Student/Participants?sort=FirstName")">Firstname</a></th>
+        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th><a href="@Url.Content("~/Student/Participants?sort=LastName")">Lastname</a></th>
+    </tr>
+    @foreach (var User in Model.Users)
+    {
+        <tr>
+            <a href="mailto:@User.Email">
+                <td>@User.FirstName</td>
+                <td></td>
+                <td>@User.LastName</td>
+            </a>
+        </tr>
+    }
+ </table>

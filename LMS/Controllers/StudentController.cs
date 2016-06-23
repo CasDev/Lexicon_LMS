@@ -46,10 +46,19 @@ namespace LMS.Controllers
         }
 
         [Authorize(Roles = "Student")]
-        public ActionResult Participants()
+        public ActionResult Participants(string sort)
         {
+            bool _sort = (sort != null && sort == "FirstName" ? false : true);
+
             Course course = FindCourse(FindUser());
             course.Users = (course.Users != null ? course.Users : new List<User>());
+            if (_sort)
+            {
+                course.Users = course.Users.OrderBy(u => u.LastName).ToList();
+            }
+            else {
+                course.Users =  course.Users.OrderBy(u => u.FirstName).ToList();
+            }
             int id = (course != null ? course.Id : 0);
 
             if (id <= 0)
