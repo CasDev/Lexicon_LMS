@@ -67,9 +67,22 @@ namespace LMS.Migrations
             }
 
             // TODO: add modules
-            Module module = new Module { Name = "C#", Description = "Learning C#", StartDate = new DateTime(2016, 3, 2), EndDate = new DateTime(2016, 3, 28) };
+            Module Module = new Module { Name = "C#", Description = "Learning C#", StartDate = new DateTime(2016, 3, 2), EndDate = new DateTime(2016, 3, 28) };
+            Module.CourseId = Course.Id;
             context.Modules.AddOrUpdate(m => m.Name,
-                module);
+                Module);
+            Module = new Module { Name = "SQL Server", Description = "Learning how MS SQL Server works", StartDate = new DateTime(2016, 3, 1), EndDate = new DateTime(2016, 5, 13) };
+            Module.CourseId = Course.Id;
+            context.Modules.AddOrUpdate(m => m.Name,
+                Module);
+            Module = new Module { Name = "SQL", Description = "Learning SQL", StartDate = new DateTime(2016, 3, 1), EndDate = new DateTime(2016, 3, 10) };
+            Module.CourseId = Course.Id;
+            context.Modules.AddOrUpdate(m => m.Name,
+                Module);
+            Module = new Module { Name = "Entity Framework", Description = "Working skills with Entity Framework", StartDate = new DateTime(2016, 3, 16), EndDate = new DateTime(2016, 4, 18) };
+            Module.CourseId = Course.Id;
+            context.Modules.AddOrUpdate(m => m.Name,
+                Module);
             context.SaveChanges();
 
             context.Courses.AddOrUpdate(x => x.Name,
