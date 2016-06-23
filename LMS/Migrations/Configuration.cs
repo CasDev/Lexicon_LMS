@@ -65,6 +65,13 @@ namespace LMS.Migrations
                 uManager.AddToRole(user.Id, "Student");
                 Course.Users.Add(user);
             }
+
+            // TODO: add modules
+            Module module = new Module { Name = "C#", Description = "Learning C#", StartDate = new DateTime(2016, 3, 2), EndDate = new DateTime(2016, 3, 28) };
+            context.Modules.AddOrUpdate(m => m.Name,
+                module);
+            context.SaveChanges();
+
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
 
