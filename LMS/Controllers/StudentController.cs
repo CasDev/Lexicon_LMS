@@ -47,6 +47,10 @@ namespace LMS.Controllers
         public ActionResult Index()
         {
             Course course = FindCourse();
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
 
@@ -57,6 +61,10 @@ namespace LMS.Controllers
         public ActionResult OldModules()
         {
             Course course = FindCourse();
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.EndDate < DateTime.Now).OrderBy(m => m.EndDate).Reverse().ToList();
 
@@ -66,9 +74,13 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Participants(string sort)
         {
+            Course course = FindCourse();
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
             bool _sort = (sort != null && sort == "FirstName" ? false : true);
 
-            Course course = FindCourse();
             course.Users = (course.Users != null ? course.Users : new List<User>());
             if (_sort)
             {

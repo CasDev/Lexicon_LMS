@@ -294,6 +294,7 @@
     <Content Include="Views\Student\Participants.cshtml" />
     <Content Include="Views\Student\ModulesTable.cshtml" />
     <Content Include="Views\Student\OldModules.cshtml" />
+    <Content Include="Views\Student\NoKnown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
