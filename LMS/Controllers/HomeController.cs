@@ -71,6 +71,14 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+            return Redirect("~/");
+        }
+
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
