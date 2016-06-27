@@ -18,7 +18,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Hem", "Index", "Home")</li>
-                    @Html.Partial("Menu", (MenyItems) ViewBag.Menu)
+                    @if (ViewBag.Menu != null)
+                    {
+                    @Html.Partial("Menu", ((MenyItems)ViewBag.Menu))
+                    }
                 </ul>
             </div>
         </div>

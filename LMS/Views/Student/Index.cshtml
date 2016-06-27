@@ -4,17 +4,12 @@
     LMS.Models.User LoggedIn = Model.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 }
 
-<h2>Index</h2>
-
 <h3>Hej @LoggedIn.FirstName</h3>
 
-<u1>
-    <li>@Model.Name</li>
-    <li>@Model.Description</li>
-    <li>@Model.StartDate.ToString(" yyyy-MM-dd ")</li>
-    <li>@Model.EndDate.ToString(" yyyy-MM-dd ")</li>
-</u1>
+<h4>@Model.Name</h4>
+<p>@Model.Description</p>
+<p>mellan <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> -och <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
+<br />
 @Html.Partial("ModulesTable", Model.Modules)
-
 
 

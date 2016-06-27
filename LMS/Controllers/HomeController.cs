@@ -73,7 +73,10 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            if (Request.IsAuthenticated)
+            {
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            }
 
             return Redirect("~/");
         }
@@ -81,6 +84,44 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            if (Request.IsAuthenticated)
+            {
+                User user = db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+                if (user != null)
+                {
+                    IdentityRole teacher = db.Roles.Where(r => r.Name == "Teacher").FirstOrDefault();
+                    IdentityRole student = db.Roles.Where(r => r.Name == "Student").FirstOrDefault();
+                    if (teacher == null || student == null)
+                    {
+                        ModelState.AddModelError("", "Roles has become unstable, and the system has been closed.");
+                        ModelState.AddModelError("", "Please contact an administrative personal.");
+                        ModelState.AddModelError("", "Logout initiated.");
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                    }
+                    else if (user.Roles.Where(r => r.RoleId == student.Id).Count() > 0)
+                    {
+                        return Redirect("~/Student/");
+                    }
+                    else if (user.Roles.Where(r => r.RoleId == teacher.Id).Count() > 0)
+                    {
+                        ModelState.AddModelError("", "Teacher not implemented yet.");
+                        ModelState.AddModelError("", "Logout initiated.");
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "User found. Role not recognize. Logout initiated.");
+                        ModelState.AddModelError("", "Logout initiated.");
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                    }
+                }
+                else {
+                    ModelState.AddModelError("Email", "User related to email not found");
+                    ModelState.AddModelError("", "Logout initiated.");
+                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                }
+            }
+
             return View();
         }
 
@@ -93,11 +134,11 @@ namespace LMS.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
             User user = db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
             if (user != null)
             {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, change to shouldLockout: true
                 var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
                 switch (result)
                 {
@@ -110,15 +151,18 @@ namespace LMS.Controllers
                             ModelState.AddModelError("", "Please contact an administrative personal.");
                             ModelState.AddModelError("", "Logout initiated.");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                        } else  if (user.Roles.Where(r => r.RoleId == student.Id).Count() > 0)
+                        }
+                        else if (user.Roles.Where(r => r.RoleId == student.Id).Count() > 0)
                         {
                             return Redirect("~/Student/");
-                        } else if (user.Roles.Where(r => r.RoleId == teacher.Id).Count() > 0)
+                        }
+                        else if (user.Roles.Where(r => r.RoleId == teacher.Id).Count() > 0)
                         {
                             ModelState.AddModelError("", "Teacher not implemented yet.");
                             ModelState.AddModelError("", "Logout initiated.");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                        } else
+                        }
+                        else
                         {
                             ModelState.AddModelError("", "User found. Role not recognize. Logout initiated.");
                             ModelState.AddModelError("", "Logout initiated.");
@@ -142,20 +186,6 @@ namespace LMS.Controllers
             }
 
             return View(model);
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
 
         protected override void Dispose(bool disposing)
