@@ -6,6 +6,7 @@ namespace LMS.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
+        //[Display(Name = "E-post")]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
@@ -49,15 +50,18 @@ namespace LMS.Models
     public class LoginViewModel
     {
         [Required]
+        //[Display(Name = "E-post")]
         [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        //[Display(Name = "Lösenord")]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
+        //[Display(Name = "Remember me?")]
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
@@ -66,12 +70,14 @@ namespace LMS.Models
     {
         [Required]
         [EmailAddress]
+        //[Display(Name = "E-post")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
+        //[Display(Name = "Lösenord")]
         [Display(Name = "Password")]
         public string Password { get; set; }
 

@@ -1,0 +1,8 @@
+﻿@model MenyItems
+@if (Model != null)
+{
+    foreach (MenyItem item in Model.Items)
+    {
+        <li><a href="@Url.Content(item.Link)">@item.Text</a></li>
+    }
+}

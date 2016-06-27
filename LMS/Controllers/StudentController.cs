@@ -46,7 +46,15 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
+
             Course course = FindCourse();
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
 
@@ -56,7 +64,15 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult OldModules()
         {
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
+
             Course course = FindCourse();
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.EndDate < DateTime.Now).OrderBy(m => m.EndDate).Reverse().ToList();
 
@@ -66,9 +82,17 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Participants(string sort)
         {
-            bool _sort = (sort != null && sort == "FirstName" ? false : true);
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
 
             Course course = FindCourse();
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
+            bool _sort = (sort != null && sort == "FirstName" ? false : true);
+
             course.Users = (course.Users != null ? course.Users : new List<User>());
             if (_sort)
             {
