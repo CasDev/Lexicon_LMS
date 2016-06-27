@@ -11,7 +11,7 @@
         <div class="col-md-8">
             <!--Från <Account<login.cshtml-->
             <section id="loginform">
-                @using (Html.BeginForm("Index", "Home", new { returnurl = ViewBag.returnurl }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-4", role = "form" }))
+                @using (Html.BeginForm("Index", "Home", new { returnurl = ViewBag.returnurl }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-6", role = "form" }))
                 //@using (Html.BeginForm("Index", "Home", new { returnurl = ViewBag.returnurl }, FormMethod.Post, new { @class = "form-horizontal, role = "form" }))
                 {
                     @Html.AntiForgeryToken()
