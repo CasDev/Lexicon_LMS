@@ -1,5 +1,9 @@
 ﻿using LMS.Models;
+using LMS.Models.DataAccess;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +17,7 @@ namespace LMS.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public HomeController()
         {
@@ -48,6 +53,14 @@ namespace LMS.Controllers
             }
         }
 
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
+        }
+
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -74,20 +87,53 @@ namespace LMS.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            User user = db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
+            if (user != null)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        IdentityRole teacher = db.Roles.Where(r => r.Name == "Teacher").FirstOrDefault();
+                        IdentityRole student = db.Roles.Where(r => r.Name == "Student").FirstOrDefault();
+                        if (teacher == null || student == null)
+                        {
+                            ModelState.AddModelError("", "Roles has become unstable, and the system has been closed.");
+                            ModelState.AddModelError("", "Please contact an administrative personal.");
+                            ModelState.AddModelError("", "Logout initiated.");
+                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        } else  if (user.Roles.Where(r => r.RoleId == student.Id).Count() > 0)
+                        {
+                            return Redirect("~/Student/");
+                        } else if (user.Roles.Where(r => r.RoleId == teacher.Id).Count() > 0)
+                        {
+                            ModelState.AddModelError("", "Teacher not implemented yet.");
+                            ModelState.AddModelError("", "Logout initiated.");
+                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        } else
+                        {
+                            ModelState.AddModelError("", "User found. Role not recognize. Logout initiated.");
+                            ModelState.AddModelError("", "Logout initiated.");
+                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        }
+                        break;
+                    case SignInStatus.LockedOut:
+                        ModelState.AddModelError("", "User lockout initiated. Not yet implemented.");
+                        break;
+                    case SignInStatus.RequiresVerification:
+                        ModelState.AddModelError("", "Two way authorization is needed, but not implemented.");
+                        break;
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        break;
+                }
             }
+            else {
+                ModelState.AddModelError("Email", "User related to email not found");
+            }
+
+            return View(model);
         }
 
         public ActionResult About()
