@@ -224,6 +224,7 @@
     <Compile Include="Models\DataAccess\Database.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Meny.cs" />
     <Compile Include="Models\Module.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -297,6 +298,7 @@
     <Content Include="Views\Student\ModulesTable.cshtml" />
     <Content Include="Views\Student\OldModules.cshtml" />
     <Content Include="Views\Student\NoKnown.cshtml" />
+    <Content Include="Views\Shared\Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

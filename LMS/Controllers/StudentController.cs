@@ -46,6 +46,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
+
             Course course = FindCourse();
             if (course == null)
             {
@@ -60,6 +64,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult OldModules()
         {
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
+
             Course course = FindCourse();
             if (course == null)
             {
@@ -74,6 +82,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Participants(string sort)
         {
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
+
             Course course = FindCourse();
             if (course == null)
             {
