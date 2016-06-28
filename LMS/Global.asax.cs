@@ -22,6 +22,7 @@ namespace LMS
         {
             HttpContext httpContext = HttpContext.Current;
             Exception ex = httpContext.Error;
+            Server.ClearError();
             httpContext.Response.Redirect("~/Error?error="+ ( ex != null ? ex.Message : ""));
         }
     }
