@@ -17,5 +17,13 @@ namespace LMS
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Application_Error()
+        {
+            HttpContext httpContext = HttpContext.Current;
+            Exception ex = httpContext.Error;
+            Server.ClearError();
+            httpContext.Response.Redirect("~/Error?error="+ ( ex != null ? ex.Message : ""));
+        }
     }
 }

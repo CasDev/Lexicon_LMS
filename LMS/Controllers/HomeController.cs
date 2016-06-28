@@ -116,7 +116,7 @@ namespace LMS.Controllers
                     }
                 }
                 else {
-                    ModelState.AddModelError("Email", "User related to email not found");
+                    ModelState.AddModelError("Email", "Den e-postadress du angett är inte registrerad");
                     ModelState.AddModelError("", "Logout initiated.");
                     AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 }
@@ -177,12 +177,12 @@ namespace LMS.Controllers
                         break;
                     case SignInStatus.Failure:
                     default:
-                        ModelState.AddModelError("", "Invalid login attempt.");
+                        ModelState.AddModelError("", "Felaktig inloggning.");
                         break;
                 }
             }
             else {
-                ModelState.AddModelError("Email", "User related to email not found");
+                ModelState.AddModelError("Email", "Den e-postadress du angett är inte registrerad.");
             }
 
             return View(model);
