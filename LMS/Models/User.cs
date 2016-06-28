@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -10,7 +11,10 @@ namespace LMS.Models
 {
     public class User : ApplicationUser
     {
+        [Display(Name = "Förnamn")]
         public string FirstName { get; set; }
+
+        [Display(Name = "Efternamn")]
         public string LastName { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
