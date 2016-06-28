@@ -240,6 +240,10 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\logo-lexicon.gif" />
+    <Content Include="Images\P1070349.jpeg" />
+    <Content Include="Images\sjovik2.jpg" />
+    <Content Include="Images\sundbybergfolkhogskoleelever_webb.jpg" />
+    <Content Include="Images\Vuxna elever.jpg" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
