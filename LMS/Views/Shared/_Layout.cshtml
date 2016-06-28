@@ -10,14 +10,13 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse">
         <div class="container">
             <div class="navbar-header">
                 <a href="/" class="navbar-brand"><img src="~/Images/logo-lexicon.gif" height="30" /></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Hem", "Index", "Home")</li>
                     @if (ViewBag.Menu != null)
                     {
                     @Html.Partial("Menu", ((MenyItems)ViewBag.Menu))
@@ -26,8 +25,9 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content lmsbackground">
         <h1>Lexicons LMS, Lärplattform</h1>
+        <hr />
         @RenderBody()
     </div>
 

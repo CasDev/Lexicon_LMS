@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<Module>
 <table>
     <tr>
-        <th>Modules</th>
+        <th>Moduler</th>
+        <th></th>
         <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th></th>
         <th>@Html.DisplayNameFor(model => model.StartDate)</th>
         <th></th>
         <th>@Html.DisplayNameFor(model => model.EndDate)</th>
@@ -11,7 +13,9 @@
     {
         <tr>
             <th></th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
             <td>@module.Name</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>@module.StartDate.ToString(" yyyy-MM-dd ")</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>@module.EndDate.ToString(" yyyy-MM-dd ")</td>

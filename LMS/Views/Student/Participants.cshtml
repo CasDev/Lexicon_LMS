@@ -3,7 +3,7 @@
     ViewBag.Title = "Participants of "+ Model.Name;
 }
 
-<h3>Participants of</h3>
+<h3>Studenter vid kursen</h3>
 <h2>@Model.Name</h2>
 @if (ViewBag.Warning != null)
 {
@@ -18,11 +18,17 @@
     @foreach (var User in Model.Users)
     {
         <tr>
-            <a href="mailto:@User.Email">
-                <td>@User.FirstName</td>
-                <td></td>
-                <td>@User.LastName</td>
-            </a>
+            <td>
+                <a class="none" href="mailto:@User.Email">
+                    @User.FirstName
+               </a>
+            </td>
+            <td></td>
+            <td>
+                <a class="none" href="mailto:@User.Email">
+                    @User.LastName
+                </a>
+            </td>
         </tr>
     }
  </table>
