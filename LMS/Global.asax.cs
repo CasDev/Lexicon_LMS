@@ -21,7 +21,8 @@ namespace LMS
         protected void Application_Error()
         {
             HttpContext httpContext = HttpContext.Current;
-            httpContext.Response.Redirect("~/Error");
+            Exception ex = httpContext.Error;
+            httpContext.Response.Redirect("~/Error?error="+ ( ex != null ? ex.Message : ""));
         }
     }
 }
