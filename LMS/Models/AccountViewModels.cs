@@ -62,7 +62,7 @@ namespace LMS.Models
         public string Password { get; set; }
 
         //[Display(Name = "Remember me?")]
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Kom ihåg mig!")]
         public bool RememberMe { get; set; }
     }
 

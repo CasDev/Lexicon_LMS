@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Välkommen till Lexicon";
 }
-<div class="jumbotron">
+<div class="jumbotron" align="center">
     <div class="row">
         <div class="col-md-8">
             <section id="loginform">
@@ -15,14 +15,14 @@
                             @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "E-post", autofocus = "autofocus" })
                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                         </div>
-                    </div>
+                    </div><br>
                     <div class="form-group">
                         <div class="col-md-10">
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Lösenord" })
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" align="center">
                         <div class="col-md-offset-2 col-md-10">
                             <div class="checkbox">
                                 @Html.CheckBoxFor(m => m.RememberMe)
