@@ -2,15 +2,11 @@
 @{
     ViewBag.Title = "Välkommen till Lexicon";
 }
-
-
-
 <div class="jumbotron">
     <div class="row">
         <div class="col-md-8">
             <section id="loginform">
-                @using (Html.BeginForm("Index", "Home", new { returnurl = ViewBag.returnurl }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-4", role = "form" }))
-                //@using (Html.BeginForm("Index", "Home", new { returnurl = ViewBag.returnurl }, FormMethod.Post, new { @class = "form-horizontal, role = "form" }))
+                @using (Html.BeginForm("Index", "Home", new { returnurl = ViewBag.returnurl }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-7", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -44,13 +40,6 @@
         </div>
     </div>
 </div>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
-
-
-
 <div class="container">
     <br>
     <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="3500">
@@ -60,42 +49,54 @@
             <li data-target="#myCarousel" data-slide-to="1"></li>
             <li data-target="#myCarousel" data-slide-to="2"></li>
             <li data-target="#myCarousel" data-slide-to="3"></li>
+            <li data-target="#myCarousel" data-slide-to="4"></li>
+            <li data-target="#myCarousel" data-slide-to="5"></li>
+            <li data-target="#myCarousel" data-slide-to="6"></li>
         </ol>
-
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
             <div class="item active ">
-                <img id="caropic" src="~/Images/Vuxna elever.jpg" class="img-responsive main-image" width="100%" />
+                <img id="caropic" src="~/Images/jenny_visar_appar.jpg" class="img-responsive main-image" width="100%" />
             </div>
             <div class="item ">
-
-                <img id="caropic" src="~/Images/sundbybergfolkhogskoleelever_webb.jpg" class="img-responsive main-image" width="100%" />
-                <div class="carousel-caption ">
-                    <!--<h2 style="font-size:50px;color:#1486d1">Lärplattformen Lexicon</h2>-->
-
-                </div>
-
-            </div>
-
-            <div class="item ">
-
-                <img id="caropic" src="~/Images/P1070349.jpeg" class="img-responsive main-image" width="100%" />
+                <img src="~/Images/deltagare-sfi-i-klassrum-630x320.jpg" class="img-responsive main-image" width="100%" />
                 <div class="carousel-caption img-responsive">
-
+                    <!--<h2 style="font-size:50px;color:#1486d1">Lärplattformen Lexicon</h2>-->
+                </div>
+            </div>
+            <div class="item ">
+                <img id="caropic" src="~/Images/sundbybergfolkhogskoleelever_webb.jpg" class="img-responsive main-image" width="100%" />
+                <div class="carousel-caption img-responsive">
                     <!--<img src="~/Images/summer deal.JPG" class="img-responsive">-->
                 </div>
             </div>
             <div class="item">
                 <img id="caropic" src="~/Images/sjovik2.jpg" class="img-responsive main-image" width="100%" />
                 <div class="carousel-caption img-responsive">
-
-
                     <!--<img src="~/Images/electric vehicle.jpg" class="img-responsive" />-->
-
                 </div>
             </div>
-
-
+            <div class="item">
+                <img src="~/Images/28219_umu-vp-6013.jpg" class="img-responsive main-image" width="100%" />
+                <div class="carousel-caption img-responsive">
+                    <!--<img src="~/Images/electric vehicle.jpg" class="img-responsive" />-->
+                </div>
+            </div>
+            <div class="item">
+                <img src="~/Images/Vuxna elever.jpg" class="img-responsive main-image" width="100%" />
+                <div class="carousel-caption img-responsive">
+                    <!--<img src="~/Images/electric vehicle.jpg" class="img-responsive" />-->
+                </div>
+            </div>
+            <div class="item">
+                <img src="~/Images/PB190279-3.jpg" class="img-responsive main-image" width="100%" />
+                <div class="carousel-caption img-responsive">
+                    <!--<img src="~/Images/electric vehicle.jpg" class="img-responsive" />-->
+                </div>
+            </div>
         </div>
     </div>
 </div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
