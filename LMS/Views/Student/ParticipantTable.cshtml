@@ -1,0 +1,24 @@
+﻿@model IEnumerable<User>
+<table>
+    <tr>
+        <th><a href="@Url.Content("~/Student/Participants?sort=FirstName")">@Html.DisplayNameFor(m => m.FirstName)</a></th>
+        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th><a href="@Url.Content("~/Student/Participants?sort=LastName")">@Html.DisplayNameFor(m => m.LastName)</a></th>
+    </tr>
+    @foreach (var User in Model)
+    {
+        <tr>
+            <td>
+                <a class="none" href="mailto:@User.Email">
+                    @User.FirstName
+                </a>
+            </td>
+            <td></td>
+            <td>
+                <a class="none" href="mailto:@User.Email">
+                    @User.LastName
+                </a>
+            </td>
+        </tr>
+    }
+</table>

@@ -288,6 +288,7 @@
     <Content Include="Views\Student\OldModules.cshtml" />
     <Content Include="Views\Student\NoKnown.cshtml" />
     <Content Include="Views\Shared\Menu.cshtml" />
+    <Content Include="Views\Student\ParticipantTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -328,7 +329,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50994</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

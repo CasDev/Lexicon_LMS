@@ -9,26 +9,4 @@
 {
     <p class="warning">@ViewBag.Warning</p>
 }
-<table>
-    <tr>
-        <th><a href="@Url.Content("~/Student/Participants?sort=FirstName")">Firstname</a></th>
-        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-        <th><a href="@Url.Content("~/Student/Participants?sort=LastName")">Lastname</a></th>
-    </tr>
-    @foreach (var User in Model.Users)
-    {
-        <tr>
-            <td>
-                <a class="none" href="mailto:@User.Email">
-                    @User.FirstName
-               </a>
-            </td>
-            <td></td>
-            <td>
-                <a class="none" href="mailto:@User.Email">
-                    @User.LastName
-                </a>
-            </td>
-        </tr>
-    }
- </table>
+@Html.Partial("ParticipantTable", Model.Users)
