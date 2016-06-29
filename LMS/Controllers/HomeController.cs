@@ -110,13 +110,13 @@ namespace LMS.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "User found. Role not recognize. Logout initiated.");
+                        ModelState.AddModelError("", "User found. Role not recognize.");
                         ModelState.AddModelError("", "Logout initiated.");
                         AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     }
                 }
                 else {
-                    ModelState.AddModelError("Email", "Den e-postadress du angett är inte registrerad");
+                    ModelState.AddModelError("", "Inloggad användare ej funnen.");
                     ModelState.AddModelError("", "Logout initiated.");
                     AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 }
@@ -164,13 +164,13 @@ namespace LMS.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("", "User found. Role not recognize. Logout initiated.");
+                            ModelState.AddModelError("", "User found. Role not recognize.");
                             ModelState.AddModelError("", "Logout initiated.");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                         }
                         break;
                     case SignInStatus.LockedOut:
-                        ModelState.AddModelError("", "User lockout initiated. Not yet implemented.");
+                        ModelState.AddModelError("", "User lockout initiated, but not implemented.");
                         break;
                     case SignInStatus.RequiresVerification:
                         ModelState.AddModelError("", "Two way authorization is needed, but not implemented.");
@@ -181,8 +181,9 @@ namespace LMS.Controllers
                         break;
                 }
             }
-            else {
-                ModelState.AddModelError("Email", "Den e-postadress du angett är inte registrerad.");
+            else
+            {
+                ModelState.AddModelError("", "Felaktig inloggning.");
             }
 
             return View(model);
