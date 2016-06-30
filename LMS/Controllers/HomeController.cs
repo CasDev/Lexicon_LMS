@@ -95,7 +95,6 @@ namespace LMS.Controllers
                     {
                         ModelState.AddModelError("", "Roles has become unstable, and the system has been closed.");
                         ModelState.AddModelError("", "Please contact an administrative personal.");
-                        ModelState.AddModelError("", "Logout initiated.");
                         AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     }
                     else if (user.Roles.Where(r => r.RoleId == student.Id).Count() > 0)
@@ -110,14 +109,12 @@ namespace LMS.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "User found. Role not recognize.");
-                        ModelState.AddModelError("", "Logout initiated.");
+                        ModelState.AddModelError("", "Inloggad användare ej funnen.");
                         AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     }
                 }
                 else {
                     ModelState.AddModelError("", "Inloggad användare ej funnen.");
-                    ModelState.AddModelError("", "Logout initiated.");
                     AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 }
             }
@@ -164,8 +161,7 @@ namespace LMS.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("", "User found. Role not recognize.");
-                            ModelState.AddModelError("", "Logout initiated.");
+                            ModelState.AddModelError("", "Felaktig inloggning.");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                         }
                         break;
