@@ -44,6 +44,11 @@ namespace LMS.Controllers
             return (course.Users != null ? course.Users : new List<User>());
         }
         
+        public Activity FindActivity(int id)
+        {
+            return db.Activities.Where(a => a.Id == id).FirstOrDefault();
+        }
+
         [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
@@ -122,6 +127,7 @@ namespace LMS.Controllers
         [HttpPost]
         public ActionResult Assignment(int? id, HttpPostedFileBase file)
         {
+            Activity activity = FindActivity(id);
             // Verify that the user selected a file
             if (file != null && file.ContentLength > 0)
             {
@@ -136,7 +142,7 @@ namespace LMS.Controllers
             // redirect back to the index action to show the form once again
 //            return RedirectToAction("Index");
 
-            return View("~/Views/Student/Activity.cshtml");
+            return View("~/Views/Student/Activity.cshtml", activity);
         }
 
         [HttpGet]
