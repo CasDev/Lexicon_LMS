@@ -34,7 +34,7 @@ namespace LMS.Migrations
                     Email = "mariehansson10@hotmail.com", UserName = "mariehansson10@hotmail.com", FirstName = "Marie", LastName = "Hansson"
                 },
                 new User {
-                    Email = "kaffeutvecklare@gmail.com", UserName = "mariehansson10@hotmail.com", FirstName = "John", LastName = "Castell"
+                    Email = "kaffeutvecklare@gmail.com", UserName = "kaffeutvecklare@gmail.com", FirstName = "John", LastName = "Castell"
                 },
                 new User
                 {
