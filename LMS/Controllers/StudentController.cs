@@ -127,7 +127,8 @@ namespace LMS.Controllers
         [HttpPost]
         public ActionResult Assignment(int? id, HttpPostedFileBase file)
         {
-            Activity activity = FindActivity(id);
+            Activity activity = FindActivity((int)id); //Denna rad ändrad från nedanstående av Marie, p g a kompileringsfel. 
+            //Activity activity = FindActivity(id);
             // Verify that the user selected a file
             if (file != null && file.ContentLength > 0)
             {
@@ -156,7 +157,7 @@ namespace LMS.Controllers
         {
             //TODO: vad händer om id är null?
             // TODO: Hämta aktivitet
-            Activity activity = new Activity();
+            Activity activity = FindActivity((int)id);
 
             if (activity == null)
             {
