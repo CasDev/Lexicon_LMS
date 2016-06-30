@@ -323,6 +323,7 @@
     <Content Include="Views\Shared\Menu.cshtml" />
     <Content Include="Views\Student\ParticipantTable.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Student\Activity.cshtml" />
     <Content Include="Doc till LMS\Test Cases Lexicon LMS Sprint 1.pdf" />
     <Content Include="Views\Student\Assignment.cshtml" />
   </ItemGroup>
