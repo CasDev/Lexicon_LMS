@@ -124,32 +124,53 @@ namespace LMS.Controllers
             return View(course);
         }
 
+        [Authorize(Roles = "Student")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Assignment(int? id, HttpPostedFileBase file)
+        public ActionResult Assignment(HttpPostedFileBase file, int? id)
         {
-            Activity activity = FindActivity((int)id); //Denna rad ändrad från nedanstående av Marie, p g a kompileringsfel. 
-            //Activity activity = FindActivity(id);
-            // Verify that the user selected a file
+            if (id == null)
+            {
+                // TODO:
+            }
+            Activity activity = FindActivity((int)id);
+            User user = FindUser();
             if (file != null && file.ContentLength > 0)
             {
-                var fileName = Path.GetFileName(file.FileName);
-                // TODO: make this work
-//                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-//                file.SaveAs(path);
+                //                Document Document = DocumentCRUD.SaveDocument(Server, "ovning/" + id + "/" + FindUser().Id.Replace("-", ""), file.ContentType, "ovning", file);
+                Document Document = DocumentCRUD.SaveDocument(Server, Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id.Replace("-", "") +"/"), "ovning", file);
+                if (Document == null)
+                {
+                    ModelState.AddModelError("", "Din inlämningsuppgift har ej sparts");
+                } else
+                {
+                    Document.Name = "Inlämning för " + user.FirstName + " " + user.LastName;
+                    Document.Description = "Inlämning för " + user.FirstName + " " + user.LastName;
+                    Document.UploadTime = DateTime.Now;
+                    Document.ActivityId = null;
+                    Document.CourseId = null;
+                    Document.ModifyUserId = 0;
+                    Document.ModuleId = null;
+                    Document.UserId = user.Id;
+
+                    db.Documents.Add(Document);
+                    db.SaveChanges();
+                }
             } else
             {
                 ModelState.AddModelError("", "En fil med innehåll måste erhållas");
             }
-            // redirect back to the index action to show the form once again
-//            return RedirectToAction("Index");
 
-            return View("~/Views/Student/Activity.cshtml", activity);
+            return View("~/Views/Student/Test.cshtml", activity);
         }
 
         [HttpGet]
+        [Authorize(Roles = "Student")]
         public ActionResult Assignment(int? id)
         {
-            return Redirect("~/Student/Activity" + (id != null ? "?id="+ id : ""));
+            //            return Redirect("~/Student/Activity" + (id != null ? "?id="+ id : ""));
+            Activity activity = FindActivity((int)id);
+            return View("~/Views/Student/Test.cshtml", activity);
         }
 
         [Authorize(Roles = "Student")]

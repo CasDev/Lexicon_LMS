@@ -3,8 +3,6 @@
     <tr>
         <th>Moduler</th>
         <th></th>
-        <th>@Html.DisplayNameFor(model => model.Name)</th>
-        <th></th>
         <th>@Html.DisplayNameFor(model => model.StartDate)</th>
         <th></th>
         <th>@Html.DisplayNameFor(model => model.EndDate)</th>
@@ -12,9 +10,7 @@
     @foreach (Module module in Model)
     {
         <tr>
-            <th></th>
-            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-            <td>@module.Name</td>
+            <td><a href="@Url.Content("~/Student/Module/"+ module.Id)">@module.Name</a></td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>@module.StartDate.ToString(" yyyy-MM-dd ")</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
