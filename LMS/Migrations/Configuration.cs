@@ -89,24 +89,25 @@ namespace LMS.Migrations
                 Module);
             context.SaveChanges();
 
+            Module = context.Modules.Where(m => m.Name == "Entity Framework").FirstOrDefault();
+            Activity Activity = new Activity { Name = "Pluralsight", Description = "Se videos av Anton X på ämnet Entity Framework", StartDate = null, EndDate = null, Deadline = Module.EndDate, ModuleId = Module.Id, Type = "E-learning" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+            Activity = new Activity { Name = "Adrians Entity Framework", Description = "Föreläsning av Adrian", StartDate = new DateTime(2016, 3, 16, 10, 0, 0), EndDate = new DateTime(2016, 3, 16, 17, 0, 0), Deadline = null, ModuleId = Module.Id, Type = "Lecture" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+
+            Module = context.Modules.Where(m => m.Name == "Övningstillfällen").FirstOrDefault();
+            Activity = new Activity { Name = "Öva på HTML 4.1", Description = "HTML-övningar", StartDate = new DateTime(2016, 8, 10, 8, 30, 0), EndDate = new DateTime(2016, 8, 15, 17, 0, 0), Deadline = new DateTime(2016, 8, 16, 15, 0, 0), ModuleId = Module.Id, Type = "Practice" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
 
             user = uManager.FindByName("admin@mail.nu");
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
         }
     }
 }

@@ -30,10 +30,10 @@ namespace LMS.Models
         public string FileFolder { get; set; }
         public string FileExtention { get; set; }
         
-        public int UserId { get; set; }
-        public int CourseId { get; set; }
-        public int ModuleId { get; set; }
-        public int ActivityId { get; set; }
+        public int? UserId { get; set; }
+        public int? CourseId { get; set; }
+        public int? ModuleId { get; set; }
+        public int? ActivityId { get; set; }
 
         public virtual User User { get; set; }
         public virtual Course Course { get; set; }
