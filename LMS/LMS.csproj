@@ -313,6 +313,7 @@
     <Content Include="Views\Shared\Menu.cshtml" />
     <Content Include="Views\Student\ParticipantTable.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Student\Activity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
