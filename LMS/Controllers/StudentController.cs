@@ -2,6 +2,7 @@
 using LMS.Models.DataAccess;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -43,6 +44,11 @@ namespace LMS.Controllers
             return (course.Users != null ? course.Users : new List<User>());
         }
         
+        public Activity FindActivity(int id)
+        {
+            return db.Activities.Where(a => a.Id == id).FirstOrDefault();
+        }
+
         [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
@@ -118,6 +124,32 @@ namespace LMS.Controllers
             return View(course);
         }
 
+        [HttpPost]
+        public ActionResult Assignment(int? id, HttpPostedFileBase file)
+        {
+            Activity activity = FindActivity(id);
+            // Verify that the user selected a file
+            if (file != null && file.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                // TODO: make this work
+//                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+//                file.SaveAs(path);
+            } else
+            {
+                ModelState.AddModelError("", "En fil med innehåll måste erhållas");
+            }
+            // redirect back to the index action to show the form once again
+//            return RedirectToAction("Index");
+
+            return View("~/Views/Student/Activity.cshtml", activity);
+        }
+
+        [HttpGet]
+        public ActionResult Assignment(int? id)
+        {
+            return Redirect("~/Student/Activity" + (id != null ? "?id="+ id : ""));
+        }
 
         [Authorize(Roles = "Student")]
         public ActionResult Activity(int? id)
