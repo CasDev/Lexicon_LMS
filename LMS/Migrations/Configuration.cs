@@ -27,6 +27,15 @@ namespace LMS.Migrations
                 new User {
                     Email = "castell_john@hotmail.com", UserName = "castell_john@hotmail.com", FirstName = "John", LastName = "Castell"
                 },
+                new User {
+                    Email = "ari.kylmanen@comhem.se", UserName = "ari.kylmanen@comhem.se", FirstName = "Ari", LastName = "Kylmänen"
+                },
+                new User {
+                    Email = "mariehansson10@hotmail.com", UserName = "mariehansson10@hotmail.com", FirstName = "Marie", LastName = "Hansson"
+                },
+                new User {
+                    Email = "kaffeutvecklare@gmail.com", UserName = "mariehansson10@hotmail.com", FirstName = "John", LastName = "Castell"
+                },
                 new User
                 {
                     Email = "admin@mail.nu", UserName = "admin@mail.nu", FirstName = "Admin", LastName = "Adminsson"
@@ -46,8 +55,20 @@ namespace LMS.Migrations
             User user = uManager.FindByName("castell_john@hotmail.com");
             uManager.AddToRole(user.Id, "Student");
             uManager.Update(user);
+            user = uManager.FindByName("ari.kylmanen@comhem.se");
+            uManager.AddToRole(user.Id, "Student");
+            uManager.Update(user);
+            user = uManager.FindByName("mariehansson10@hotmail.com");
+            uManager.AddToRole(user.Id, "Student");
+            uManager.Update(user);
 
             Course Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15), Users = new List<User>() };
+            Course.Users.Add(user);
+            user = uManager.FindByName("castell_john@hotmail.com");
+            Course.Users.Add(user);
+            user = uManager.FindByName("ari.kylmanen@comhem.se");
+            Course.Users.Add(user);
+            user = uManager.FindByName("mariehansson10@hotmail.com");
             Course.Users.Add(user);
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
@@ -65,8 +86,7 @@ namespace LMS.Migrations
                 uManager.AddToRole(user.Id, "Student");
                 Course.Users.Add(user);
             }
-
-            // TODO: add modules
+            
             Module Module = new Module { Name = "C#", Description = "Learning C#", StartDate = new DateTime(2016, 3, 2), EndDate = new DateTime(2016, 3, 28) };
             Module.CourseId = Course.Id;
             context.Modules.AddOrUpdate(m => m.Name,
