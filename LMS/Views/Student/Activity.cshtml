@@ -1,7 +1,14 @@
 ﻿
+@model Activity 
 @{
-    ViewBag.Title = "Activity";
+    ViewBag.Title = "Index";
 }
 
-<h2>Activity</h2>
 
+<h4>@Model.Name</h4>
+<p>@Model.Description</p>
+@if (Model.StartDate != null && Model.EndDate != null)
+{
+<p>mellan <time datetime="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.StartDate).ToString(" yyyy-MM-dd "))</time> -och <time datetime="@(((DateTime)Model.EndDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.EndDate).ToString(" yyyy-MM-dd "))</time></p>
+<br />
+}

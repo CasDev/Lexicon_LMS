@@ -1,0 +1,9 @@
+﻿@model IEnumerable<Document>
+<hr />
+<h4>Tillhörabde document</h4>
+<ul>
+    @foreach (Document Doc in Model)
+    {
+        <li>@Doc.Name</li>
+    }
+</ul>
