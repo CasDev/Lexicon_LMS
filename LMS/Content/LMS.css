@@ -20,6 +20,10 @@ a.none {
     margin:0 0 20px 0;
 }
 
+.text-danger {
+    font-size: initial;
+}
+
 .form-group input {
     margin: 2px 0;
 }

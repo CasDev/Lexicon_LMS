@@ -27,6 +27,15 @@ namespace LMS.Migrations
                 new User {
                     Email = "castell_john@hotmail.com", UserName = "castell_john@hotmail.com", FirstName = "John", LastName = "Castell"
                 },
+                new User {
+                    Email = "ari.kylmanen@comhem.se", UserName = "ari.kylmanen@comhem.se", FirstName = "Ari", LastName = "Kylmänen"
+                },
+                new User {
+                    Email = "mariehansson10@hotmail.com", UserName = "mariehansson10@hotmail.com", FirstName = "Marie", LastName = "Hansson"
+                },
+                new User {
+                    Email = "kaffeutvecklare@gmail.com", UserName = "kaffeutvecklare@gmail.com", FirstName = "John", LastName = "Castell"
+                },
                 new User
                 {
                     Email = "admin@mail.nu", UserName = "admin@mail.nu", FirstName = "Admin", LastName = "Adminsson"
@@ -46,8 +55,20 @@ namespace LMS.Migrations
             User user = uManager.FindByName("castell_john@hotmail.com");
             uManager.AddToRole(user.Id, "Student");
             uManager.Update(user);
+            user = uManager.FindByName("ari.kylmanen@comhem.se");
+            uManager.AddToRole(user.Id, "Student");
+            uManager.Update(user);
+            user = uManager.FindByName("mariehansson10@hotmail.com");
+            uManager.AddToRole(user.Id, "Student");
+            uManager.Update(user);
 
             Course Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15), Users = new List<User>() };
+            Course.Users.Add(user);
+            user = uManager.FindByName("castell_john@hotmail.com");
+            Course.Users.Add(user);
+            user = uManager.FindByName("ari.kylmanen@comhem.se");
+            Course.Users.Add(user);
+            user = uManager.FindByName("mariehansson10@hotmail.com");
             Course.Users.Add(user);
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
@@ -65,8 +86,7 @@ namespace LMS.Migrations
                 uManager.AddToRole(user.Id, "Student");
                 Course.Users.Add(user);
             }
-
-            // TODO: add modules
+            
             Module Module = new Module { Name = "C#", Description = "Learning C#", StartDate = new DateTime(2016, 3, 2), EndDate = new DateTime(2016, 3, 28) };
             Module.CourseId = Course.Id;
             context.Modules.AddOrUpdate(m => m.Name,
@@ -89,24 +109,25 @@ namespace LMS.Migrations
                 Module);
             context.SaveChanges();
 
+            Module = context.Modules.Where(m => m.Name == "Entity Framework").FirstOrDefault();
+            Activity Activity = new Activity { Name = "Pluralsight", Description = "Se videos av Anton X på ämnet Entity Framework", StartDate = null, EndDate = null, Deadline = Module.EndDate, ModuleId = Module.Id, Type = "E-learning" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+            Activity = new Activity { Name = "Adrians Entity Framework", Description = "Föreläsning av Adrian", StartDate = new DateTime(2016, 3, 16, 10, 0, 0), EndDate = new DateTime(2016, 3, 16, 17, 0, 0), Deadline = null, ModuleId = Module.Id, Type = "Lecture" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+
+            Module = context.Modules.Where(m => m.Name == "Övningstillfällen").FirstOrDefault();
+            Activity = new Activity { Name = "Öva på HTML 4.1", Description = "HTML-övningar", StartDate = new DateTime(2016, 8, 10, 8, 30, 0), EndDate = new DateTime(2016, 8, 15, 17, 0, 0), Deadline = new DateTime(2016, 8, 16, 15, 0, 0), ModuleId = Module.Id, Type = "Practice" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
 
             user = uManager.FindByName("admin@mail.nu");
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
         }
     }
 }

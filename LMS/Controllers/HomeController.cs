@@ -95,7 +95,6 @@ namespace LMS.Controllers
                     {
                         ModelState.AddModelError("", "Roles has become unstable, and the system has been closed.");
                         ModelState.AddModelError("", "Please contact an administrative personal.");
-                        ModelState.AddModelError("", "Logout initiated.");
                         AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     }
                     else if (user.Roles.Where(r => r.RoleId == student.Id).Count() > 0)
@@ -110,14 +109,12 @@ namespace LMS.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "User found. Role not recognize. Logout initiated.");
-                        ModelState.AddModelError("", "Logout initiated.");
+                        ModelState.AddModelError("", "Inloggad användare ej funnen.");
                         AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     }
                 }
                 else {
-                    ModelState.AddModelError("Email", "Den e-postadress du angett är inte registrerad");
-                    ModelState.AddModelError("", "Logout initiated.");
+                    ModelState.AddModelError("", "Inloggad användare ej funnen.");
                     AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 }
             }
@@ -164,13 +161,12 @@ namespace LMS.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("", "User found. Role not recognize. Logout initiated.");
-                            ModelState.AddModelError("", "Logout initiated.");
+                            ModelState.AddModelError("", "Felaktig inloggning.");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                         }
                         break;
                     case SignInStatus.LockedOut:
-                        ModelState.AddModelError("", "User lockout initiated. Not yet implemented.");
+                        ModelState.AddModelError("", "User lockout initiated, but not implemented.");
                         break;
                     case SignInStatus.RequiresVerification:
                         ModelState.AddModelError("", "Two way authorization is needed, but not implemented.");
@@ -181,8 +177,9 @@ namespace LMS.Controllers
                         break;
                 }
             }
-            else {
-                ModelState.AddModelError("Email", "Den e-postadress du angett är inte registrerad.");
+            else
+            {
+                ModelState.AddModelError("", "Felaktig inloggning.");
             }
 
             return View(model);

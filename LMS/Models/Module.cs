@@ -22,8 +22,9 @@ namespace LMS.Models
         [Display(Name = "Slutdatum")]
         public DateTime EndDate { get; set; }
 
-        public int CourseId { get; set; }
+        public int? CourseId { get; set; }
 
         public virtual Course Course { get; set; }
+        public virtual ICollection<Activity> Activities { get; set; }
     }
 }

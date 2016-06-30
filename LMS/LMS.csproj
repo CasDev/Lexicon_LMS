@@ -218,10 +218,20 @@
     <Compile Include="Migrations\201606231147571_Init_Modules.Designer.cs">
       <DependentUpon>201606231147571_Init_Modules.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606300730028_Init_Activity.cs" />
+    <Compile Include="Migrations\201606300730028_Init_Activity.Designer.cs">
+      <DependentUpon>201606300730028_Init_Activity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606300738250_Init_Document.cs" />
+    <Compile Include="Migrations\201606300738250_Init_Document.Designer.cs">
+      <DependentUpon>201606300738250_Init_Document.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DataAccess\Database.cs" />
+    <Compile Include="Models\Document.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Meny.cs" />
     <Compile Include="Models\Module.cs" />
@@ -314,6 +324,7 @@
     <Content Include="Views\Student\ParticipantTable.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Student\Activity.cshtml" />
+    <Content Include="Doc till LMS\Test Cases Lexicon LMS Sprint 1.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -338,6 +349,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606231147571_Init_Modules.resx">
       <DependentUpon>201606231147571_Init_Modules.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606300730028_Init_Activity.resx">
+      <DependentUpon>201606300730028_Init_Activity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606300738250_Init_Document.resx">
+      <DependentUpon>201606300738250_Init_Document.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
