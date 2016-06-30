@@ -232,6 +232,7 @@
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DataAccess\Database.cs" />
     <Compile Include="Models\Document.cs" />
+    <Compile Include="Models\DocumentCRUD.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Meny.cs" />
     <Compile Include="Models\Module.cs" />
@@ -325,7 +326,9 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Student\Activity.cshtml" />
     <Content Include="Doc till LMS\Test Cases Lexicon LMS Sprint 1.pdf" />
-    <Content Include="Views\Student\Module.cshtml" />
+    <Content Include="Views\Student\Assignment.cshtml" />
+    <Content Include="Views\Shared\AllDocs.cshtml" />
+	<Content Include="Views\Student\Module.cshtml" />
     <Content Include="Views\Student\ActivitiesTable.cshtml" />
   </ItemGroup>
   <ItemGroup>

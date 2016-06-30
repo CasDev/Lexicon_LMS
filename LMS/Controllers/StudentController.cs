@@ -2,6 +2,7 @@
 using LMS.Models.DataAccess;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -43,6 +44,11 @@ namespace LMS.Controllers
             return (course.Users != null ? course.Users : new List<User>());
         }
         
+        public Activity FindActivity(int id)
+        {
+            return db.Activities.Where(a => a.Id == id).FirstOrDefault();
+        }
+
         [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
@@ -118,27 +124,56 @@ namespace LMS.Controllers
             return View(course);
         }
 
+        [HttpPost]
+        public ActionResult Assignment(int? id, HttpPostedFileBase file)
+        {
+            Activity activity = FindActivity((int)id); //Denna rad ändrad från nedanstående av Marie, p g a kompileringsfel. 
+            //Activity activity = FindActivity(id);
+            // Verify that the user selected a file
+            if (file != null && file.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                // TODO: make this work
+//                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+//                file.SaveAs(path);
+            } else
+            {
+                ModelState.AddModelError("", "En fil med innehåll måste erhållas");
+            }
+            // redirect back to the index action to show the form once again
+//            return RedirectToAction("Index");
+
+            return View("~/Views/Student/Activity.cshtml", activity);
+        }
+
+        [HttpGet]
+        public ActionResult Assignment(int? id)
+        {
+            return Redirect("~/Student/Activity" + (id != null ? "?id="+ id : ""));
+        }
 
         [Authorize(Roles = "Student")]
         public ActionResult Activity(int? id)
         {
             //TODO: vad händer om id är null?
             // TODO: Hämta aktivitet
-            Activity activity = new Activity();
-    /*        if (course == null)
+            Activity activity = FindActivity((int)id);
+
+            if (activity == null)
             {
                 return View("~/Views/Student/NoKnown.cshtml");
             }
+            /*
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }*/
 
             MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
+            items.Items.Add(new MenyItem { Text = "Se äldre aktiviteter för " + activity.Module.Name, Link = "~/Student/OldActivities/" + activity.Module.Id });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
-            course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
-            course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
-            */
             return View(activity);
         }
 
