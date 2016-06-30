@@ -1,9 +1,9 @@
-﻿
-@model Activity 
+﻿@model Activity 
 @{
     ViewBag.Title = "Index";
 }
 
+<p></p>
 
 <h4>@Model.Name</h4>
 <p>@Model.Description</p>
@@ -12,3 +12,12 @@
 <p>mellan <time datetime="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.StartDate).ToString(" yyyy-MM-dd "))</time> -och <time datetime="@(((DateTime)Model.EndDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.EndDate).ToString(" yyyy-MM-dd "))</time></p>
 <br />
 }
+<p>Detta är en @Model.Type-aktivitet</p>
+<p>Denna tillhör module: @Model.Module.Name</p>
+
+@if (Model.Deadline != null)
+    {
+
+    }
+
+<!--TODO: Skriv in vilken modul, som aktiviteten tillhör samt vilken typ det är. -->

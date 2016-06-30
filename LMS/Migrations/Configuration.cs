@@ -109,14 +109,20 @@ namespace LMS.Migrations
                 Module);
             context.SaveChanges();
 
+            //Här börjar aktiviteterna seedas: 
+            
+            //Detta är Aktivitet nr 1:
             Module = context.Modules.Where(m => m.Name == "Entity Framework").FirstOrDefault();
             Activity Activity = new Activity { Name = "Pluralsight", Description = "Se videos av Anton X på ämnet Entity Framework", StartDate = null, EndDate = null, Deadline = Module.EndDate, ModuleId = Module.Id, Type = "E-learning" };
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
+
+            //Detta är Aktivitet nr 2: 
             Activity = new Activity { Name = "Adrians Entity Framework", Description = "Föreläsning av Adrian", StartDate = new DateTime(2016, 3, 16, 10, 0, 0), EndDate = new DateTime(2016, 3, 16, 17, 0, 0), Deadline = null, ModuleId = Module.Id, Type = "Lecture" };
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
 
+            //Detta är Aktivitet nr 3: 
             Module = context.Modules.Where(m => m.Name == "Övningstillfällen").FirstOrDefault();
             Activity = new Activity { Name = "Öva på HTML 4.1", Description = "HTML-övningar", StartDate = new DateTime(2016, 8, 10, 8, 30, 0), EndDate = new DateTime(2016, 8, 15, 17, 0, 0), Deadline = new DateTime(2016, 8, 16, 15, 0, 0), ModuleId = Module.Id, Type = "Practice" };
             context.Activities.AddOrUpdate(x => x.Name,
