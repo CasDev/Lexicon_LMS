@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Activity>
+<table>
+    <tr>
+        <th>Aktiviteter</th>
+        <th></th>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th></th>
+        <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+        <th></th>
+        <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+    </tr>
+    @foreach (Activity activity in Model)
+    {
+        <tr>
+            <th></th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <td>@activity.Name</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>@(activity.StartDate != null ? ((DateTime)activity.StartDate).ToString(" yyyy-MM-dd ") : "Inget startdatum")</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>@(activity.EndDate != null ? ((DateTime)activity.EndDate).ToString(" yyyy-MM-dd ") : "Inget stopdatum")</td>
+        </tr>
+    }
+</table>

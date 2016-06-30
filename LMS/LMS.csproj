@@ -332,7 +332,9 @@
     <Content Include="Doc till LMS\Test Cases Lexicon LMS Sprint 1.pdf" />
     <Content Include="Views\Student\Assignment.cshtml" />
     <Content Include="Views\Shared\AllDocs.cshtml" />
-    <Content Include="Views\Student\Test.cshtml" />
+	<Content Include="Views\Student\Module.cshtml" />
+    <Content Include="Views\Student\ActivitiesTable.cshtml" />
+	<Content Include="Views\Student\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

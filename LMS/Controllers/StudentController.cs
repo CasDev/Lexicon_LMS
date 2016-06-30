@@ -178,7 +178,7 @@ namespace LMS.Controllers
         {
             //TODO: vad händer om id är null?
             // TODO: Hämta aktivitet
-            Activity activity = new Activity();
+            Activity activity = FindActivity((int)id);
 
             if (activity == null)
             {
@@ -196,6 +196,14 @@ namespace LMS.Controllers
             ViewBag.Menu = items;
 
             return View(activity);
+        }
+
+        [Authorize(Roles = "Student")]
+        public ActionResult Module(int? id)
+        {
+            Module module = db.Modules.Where(m => m.Id == id).FirstOrDefault();
+
+            return View(module);
         }
     }
 }
