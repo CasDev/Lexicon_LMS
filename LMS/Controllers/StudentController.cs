@@ -124,21 +124,23 @@ namespace LMS.Controllers
         {
             //TODO: vad händer om id är null?
             // TODO: Hämta aktivitet
-/*            Activity activity = new Activity();
-            if (course == null)
+            Activity activity = new Activity();
+
+            if (activity == null)
             {
                 return View("~/Views/Student/NoKnown.cshtml");
             }
+            /*
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }*/
 
             MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
+            items.Items.Add(new MenyItem { Text = "Se äldre aktiviteter för " + activity.Module.Name, Link = "~/Student/OldActivities/" + activity.Module.Id });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
-            course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
-            course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
-            */
             return View(activity);
         }
     }
