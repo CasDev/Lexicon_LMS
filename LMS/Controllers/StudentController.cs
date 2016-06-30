@@ -124,8 +124,8 @@ namespace LMS.Controllers
         {
             //TODO: vad händer om id är null?
             // TODO: Hämta aktivitet
-/*            Activity activity = new Activity();
-            if (course == null)
+            Activity activity = new Activity();
+    /*        if (course == null)
             {
                 return View("~/Views/Student/NoKnown.cshtml");
             }
@@ -140,6 +140,14 @@ namespace LMS.Controllers
             course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
             */
             return View(activity);
+        }
+
+        [Authorize(Roles = "Student")]
+        public ActionResult Module(int? id)
+        {
+            Module module = db.Modules.Where(m => m.Id == id).FirstOrDefault();
+
+            return View(module);
         }
     }
 }
