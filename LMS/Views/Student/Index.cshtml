@@ -5,6 +5,10 @@
 }
 
 <h3>Hej @LoggedIn.FirstName</h3>
+@if (ViewBag.Documents != null)
+{
+    @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)
+}
 
 <h4>@Model.Name</h4>
 <p>@Model.Description</p>

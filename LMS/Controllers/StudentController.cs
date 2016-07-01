@@ -67,6 +67,8 @@ namespace LMS.Controllers
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
 
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToCourse(course.Id, db);
+
             return View(course);
         }
 
@@ -81,6 +83,7 @@ namespace LMS.Controllers
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
+            items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
@@ -101,6 +104,7 @@ namespace LMS.Controllers
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
+            items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
@@ -131,7 +135,7 @@ namespace LMS.Controllers
         {
             if (id == null)
             {
-                // TODO:
+                return Redirect("~/Error/?error=Inget Id angett för Activity");
             }
             Activity activity = FindActivity((int)id);
             User user = FindUser();
@@ -141,7 +145,7 @@ namespace LMS.Controllers
                 Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id +"/"), "ovning", file);
                 if (Document == null)
                 {
-                    ModelState.AddModelError("", "Din inlämningsuppgift har ej sparts");
+                    ModelState.AddModelError("", "Din inlämningsuppgift har ej sparats");
                 } else
                 {
                     Document.Name = "Inlämning för " + user.FirstName + " " + user.LastName;
@@ -161,30 +165,37 @@ namespace LMS.Controllers
                 ModelState.AddModelError("", "En fil med innehåll måste erhållas");
             }
 
-            return View("~/Views/Student/Test.cshtml", activity);
+            return View("~/Views/Student/Activity.cshtml", activity);
         }
 
+        [HttpGet]
         [Authorize(Roles = "Student")]
         public ActionResult Activity(int? id)
         {
-            //TODO: vad händer om id är null?
-            // TODO: Hämta aktivitet
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för Activity");
+            }
             Activity activity = FindActivity((int)id);
 
             if (activity == null)
             {
-                return View("~/Views/Student/NoKnown.cshtml");
+                return Redirect("~/Error/?error=Ingen Aktivitet funnen");
             }
-            /*
-            if (course == null)
+
+            Module module = activity.Module;
+            Course course = module.Course;
+
+            if(course.Id != FindCourse().Id)
             {
-                return View("~/Views/Student/NoKnown.cshtml");
-            }*/
+                return Redirect("~/Error/?error=Du har ej tillgång hit.");
+            }
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Se äldre aktiviteter för " + activity.Module.Name, Link = "~/Student/OldActivities/" + activity.Module.Id });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
 
             return View(activity);
         }
@@ -192,7 +203,26 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Module(int? id)
         {
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för Modulen");
+            }
+
             Module module = db.Modules.Where(m => m.Id == id).FirstOrDefault();
+
+            if (module == null)
+            {
+                return Redirect("~/Error/?error=Ingen Modul funnen");
+            }
+
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
+
+            Course course = module.Course;
+
+            if (course.Id != FindCourse().Id)
+            {
+                return Redirect("~/Error/?error=Du har ej tillgång hit.");
+            }
 
             return View(module);
         }

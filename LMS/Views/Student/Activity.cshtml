@@ -2,6 +2,10 @@
 @{
     ViewBag.Title = "Index";
 }
+@if (ViewBag.Documents != null)
+{
+    @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)
+}
 <p></p>
 <h4>@Model.Name</h4>
 <p>@Model.Description</p>

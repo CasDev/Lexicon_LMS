@@ -131,6 +131,10 @@ namespace LMS.Migrations
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
 
+            Document Document = new Document { Name = "Maries Fil", Description = "Marie har en fil.", FileFolder = "/", FileName = "Marie.txt", FileExtention = ".txt", UserId = user.Id, UploadTime = DateTime.Today, ModifyUserId = 0, ModuleId = Module.Id };
+            context.Documents.AddOrUpdate(d => d.Name, Document);
+
+
             user = uManager.FindByName("admin@mail.nu");
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);

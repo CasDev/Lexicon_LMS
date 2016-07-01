@@ -3,6 +3,11 @@
     ViewBag.Title = "Module";
 }
 
+@if (ViewBag.Documents != null)
+{
+    @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)
+}
+
 <h2>Modul</h2>
 
 <h4>@Model.Name</h4>
