@@ -138,7 +138,7 @@ namespace LMS.Controllers
             if (file != null && file.ContentLength > 0)
             {
                 //                Document Document = DocumentCRUD.SaveDocument(Server, "ovning/" + id + "/" + FindUser().Id.Replace("-", ""), file.ContentType, "ovning", file);
-                Document Document = DocumentCRUD.SaveDocument(Server, Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id.Replace("-", "") +"/"), "ovning", file);
+                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id.Replace("-", "") +"/"), "ovning", file);
                 if (Document == null)
                 {
                     ModelState.AddModelError("", "Din inlämningsuppgift har ej sparts");
