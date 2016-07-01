@@ -10,11 +10,11 @@
 <p>För denna övningsuppgift så är inlämningstiden satt till: @Model.Deadline</p>
 @if (Model.Deadline > DateTime.Now && !HasFile)
 {
-    <p class="warning">Tiden har gått över för denna inlämningsuppgift</p>
+    <p class="warning">Deadline för denna aktivitet har passerat för denna inlämningsuppgift</p>
 }
 @if (!HasFile)
 {
-    using (Html.BeginForm("Activity", "Student", new { id = Model.Id.ToString() }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-7", role = "form", enctype = "multipart/form-data" }))
+    using (Html.BeginForm("Activity", "Student", new { id = Model.Id.ToString() }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-2", role = "form", enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -26,7 +26,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-10">
-                <input type="submit" value="´Skicka in" class="btn btn-default" />
+                <input type="submit" value="Skicka in" class="btn btn-default" />
             </div>
         </div>
     }
