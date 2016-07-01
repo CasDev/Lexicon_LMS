@@ -24,7 +24,7 @@ namespace LMS.Models
             return db.Documents.Where(d => (d.ActivityId != null && d.ActivityId == id)).ToList();
         }
 
-        public static Document SaveDocument(HttpServerUtilityBase server, string folder, string fileName, HttpPostedFileBase file)
+        public static Document SaveDocument(string folder, string fileName, HttpPostedFileBase file)
         {
             if (!File.Exists(folder +"/"+ fileName))
             {
