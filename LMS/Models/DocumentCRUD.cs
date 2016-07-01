@@ -44,26 +44,25 @@ namespace LMS.Models
             return db.Documents.Where(d => (d.ActivityId != null && d.ActivityId == id)).ToList();
         }
 
-        public static Document Update(string folder, string fileName, HttpPostedFileBase file)
+        public static Document Update(string folder, string fileName, string extention, HttpPostedFileBase file)
         {
             DeleteDocument(folder + "/" + fileName);
 
-            return SaveDocument(folder, fileName, file);
+            return SaveDocument(folder, fileName, extention, file);
         }
 
-        public static Document SaveDocument(string folder, string fileName, HttpPostedFileBase file)
+        public static Document SaveDocument(string folder, string fileName, string extention, HttpPostedFileBase file)
         {
-            if (!File.Exists(folder +"/"+ fileName))
+            if (!File.Exists(folder +"/"+ fileName + extention))
             {
                 if (!Directory.Exists(folder))
                 {
                     Directory.CreateDirectory(folder);
                 }
-
-                var path = Path.Combine(folder, fileName);
+                var path = Path.Combine(folder, fileName + extention);
                 file.SaveAs(path);
 
-                return new Document { FileExtention = System.IO.Path.GetExtension(path), FileFolder = folder, FileName = fileName };
+                return new Document { FileExtention = extention, FileFolder = folder, FileName = fileName + extention };
             }
             return null;
         }
