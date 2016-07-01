@@ -1,6 +1,6 @@
 ﻿@model Activity
 @{
-    bool HasFile = false;
+    bool HasFile = (ViewBag.HasFile != null ? (bool) ViewBag.HasFile : false);
     // Se om övningsfil finns redan tilgänglig
 }
 
@@ -8,11 +8,11 @@
 <h2>Övningsuppgift för @Model.Name</h2>
 <br />
 <p>För denna övningsuppgift så är inlämningstiden satt till: @Model.Deadline</p>
-@if (Model.Deadline > DateTime.Now && !HasFile)
+@if (!HasFile && Model.Deadline > DateTime.Now)
 {
     <p class="warning">Deadline för denna aktivitet har passerat för denna inlämningsuppgift</p>
 }
-@if (!HasFile)
+@if (!HasFile && Model.Deadline < DateTime.Now)
 {
     using (Html.BeginForm("Activity", "Student", new { id = Model.Id.ToString() }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-2", role = "form", enctype = "multipart/form-data" }))
     {
@@ -30,4 +30,11 @@
             </div>
         </div>
     }
+} else if (!HasFile && Model.Deadline >= DateTime.Now)
+{
+    <h4>Du har missat din deadline.</h4>
+    <h6>Du kan alltid försöka kontakta läraren direkt.</h6>
+} else if (HasFile)
+{
+    <h2>Du har redan lämnat in denna övning :)</h2>
 }

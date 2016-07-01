@@ -224,8 +224,8 @@ namespace LMS.Controllers
             User user = FindUser();
             if (file != null && file.ContentLength > 0)
             {
-                //                Document Document = DocumentCRUD.SaveDocument(Server, "ovning/" + id + "/" + FindUser().Id.Replace("-", ""), file.ContentType, "ovning", file);
-                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id +"/"), "ovning", file);
+                string extention = System.IO.Path.GetExtension(file.FileName);
+                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id +"/"), "ovning", extention, file);
                 if (Document == null)
                 {
                     ModelState.AddModelError("", "Din inlämningsuppgift har ej sparats");
@@ -279,6 +279,11 @@ namespace LMS.Controllers
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
+
+            if (activity.Deadline != null)
+            {
+                ViewBag.HasFile = (DocumentCRUD.FindAssignment(FindUser(), activity, db, Server) != null ? true : false);
+            }
 
             return View(activity);
         }

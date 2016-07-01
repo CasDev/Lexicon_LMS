@@ -9,11 +9,22 @@ namespace LMS.Models
 {
     public static class DocumentCRUD
     {
-        public static Document FindDocument(User user, Activity activity, ApplicationDbContext db, HttpServerUtilityBase server)
+        public static Document FindAssignment(User user, Activity activity, ApplicationDbContext db, HttpServerUtilityBase server)
         {
-            if (Directory.Exists(server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"))) {
-                return db.Documents.Where(d => (d.Name == "Inlämning för " + user.FirstName + " " + user.LastName &&
-                    d.FileFolder == server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"))).FirstOrDefault();
+            string folder = server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/");
+            if (Directory.Exists(folder)) {
+                return db.Documents.FirstOrDefault(d => (d.Name == "Inlämning för " + user.FirstName + " " + user.LastName &&
+                    d.FileFolder == folder));
+            }
+            return null;
+        }
+
+        public static Document FindDocument(string folder, string name, ApplicationDbContext db)
+        {
+            if (Directory.Exists(folder))
+            {
+                return db.Documents.FirstOrDefault(d => (d.Name == name &&
+                    d.FileFolder == folder));
             }
             return null;
         }
@@ -44,26 +55,25 @@ namespace LMS.Models
             return db.Documents.Where(d => (d.ActivityId != null && d.ActivityId == id)).ToList();
         }
 
-        public static Document Update(string folder, string fileName, HttpPostedFileBase file)
+        public static Document Update(string folder, string fileName, string extention, HttpPostedFileBase file)
         {
             DeleteDocument(folder + "/" + fileName);
 
-            return SaveDocument(folder, fileName, file);
+            return SaveDocument(folder, fileName, extention, file);
         }
 
-        public static Document SaveDocument(string folder, string fileName, HttpPostedFileBase file)
+        public static Document SaveDocument(string folder, string fileName, string extention, HttpPostedFileBase file)
         {
-            if (!File.Exists(folder +"/"+ fileName))
+            if (!File.Exists(folder +"/"+ fileName + extention))
             {
                 if (!Directory.Exists(folder))
                 {
                     Directory.CreateDirectory(folder);
                 }
-
-                var path = Path.Combine(folder, fileName);
+                var path = Path.Combine(folder, fileName + extention);
                 file.SaveAs(path);
 
-                return new Document { FileExtention = System.IO.Path.GetExtension(path), FileFolder = folder, FileName = fileName };
+                return new Document { FileExtention = extention, FileFolder = folder, FileName = fileName + extention };
             }
             return null;
         }
