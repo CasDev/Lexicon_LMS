@@ -127,7 +127,7 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Assignment(HttpPostedFileBase file, int? id)
+        public ActionResult Activity(HttpPostedFileBase file, int? id)
         {
             if (id == null)
             {
@@ -138,7 +138,7 @@ namespace LMS.Controllers
             if (file != null && file.ContentLength > 0)
             {
                 //                Document Document = DocumentCRUD.SaveDocument(Server, "ovning/" + id + "/" + FindUser().Id.Replace("-", ""), file.ContentType, "ovning", file);
-                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id.Replace("-", "") +"/"), "ovning", file);
+                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id +"/"), "ovning", file);
                 if (Document == null)
                 {
                     ModelState.AddModelError("", "Din inlämningsuppgift har ej sparts");
@@ -161,15 +161,6 @@ namespace LMS.Controllers
                 ModelState.AddModelError("", "En fil med innehåll måste erhållas");
             }
 
-            return View("~/Views/Student/Test.cshtml", activity);
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Student")]
-        public ActionResult Assignment(int? id)
-        {
-            //            return Redirect("~/Student/Activity" + (id != null ? "?id="+ id : ""));
-            Activity activity = FindActivity((int)id);
             return View("~/Views/Student/Test.cshtml", activity);
         }
 

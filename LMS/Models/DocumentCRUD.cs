@@ -9,6 +9,26 @@ namespace LMS.Models
 {
     public static class DocumentCRUD
     {
+        public static Document FindDocument(User user, Activity activity, ApplicationDbContext db, HttpServerUtilityBase server)
+        {
+            if (Directory.Exists(server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"))) {
+                return db.Documents.Where(d => (d.Name == "Inlämning för " + user.FirstName + " " + user.LastName &&
+                    d.FileFolder == server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"))).FirstOrDefault();
+            }
+            return null;
+        }
+
+        public static bool DeleteDocument(string filepath)
+        {
+            if (File.Exists(filepath))
+            {
+                File.Delete(filepath);
+
+                return true;
+            }
+            return false;
+        }
+
         public static IEnumerable<Document> FindAllDocumentsBelongingToModule(int id, ApplicationDbContext db)
         {
             return db.Documents.Where(d => (d.ModuleId != null && d.ModuleId == id)).ToList();
@@ -22,6 +42,13 @@ namespace LMS.Models
         public static IEnumerable<Document> FindAllDocumentsBelongingToActivity(int id, ApplicationDbContext db)
         {
             return db.Documents.Where(d => (d.ActivityId != null && d.ActivityId == id)).ToList();
+        }
+
+        public static Document Update(string folder, string fileName, HttpPostedFileBase file)
+        {
+            DeleteDocument(folder + "/" + fileName);
+
+            return SaveDocument(folder, fileName, file);
         }
 
         public static Document SaveDocument(string folder, string fileName, HttpPostedFileBase file)
