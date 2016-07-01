@@ -16,6 +16,9 @@ namespace LMS.Models
 
         [Display(Name = "Efternamn")]
         public string LastName { get; set; }
+        
+        public int? CoursesId { get; set; } //Foreign Key, Nullable
+        public virtual Course Courses { get; set; } //Ovanstående Foreign Key kopplas via denna virtual property 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
         {

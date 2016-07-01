@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Activity>
+@{
+    ViewBag.Title = "Assignments";
+}
+
+<h2>Assignments</h2>
+
+@foreach (Activity activity in Model)
+{
+    <p>@activity.Name </p>
+}

@@ -124,7 +124,7 @@ namespace LMS.Migrations
 
             //Detta är Aktivitet nr 3: 
             Module = context.Modules.Where(m => m.Name == "Övningstillfällen").FirstOrDefault();
-            Activity = new Activity { Name = "Öva på HTML 4.1", Description = "HTML-övningar", StartDate = new DateTime(2016, 8, 10, 8, 30, 0), EndDate = new DateTime(2016, 8, 15, 17, 0, 0), Deadline = new DateTime(2016, 8, 16, 15, 0, 0), ModuleId = Module.Id, Type = "Practice" };
+            Activity = new Activity { Name = "Öva på HTML 4.1", Description = "HTML-övningar", StartDate = new DateTime(2016, 5, 10, 8, 30, 0), EndDate = new DateTime(2016, 8, 15, 17, 0, 0), Deadline = new DateTime(2016, 8, 16, 15, 0, 0), ModuleId = Module.Id, Type = "Practice" };
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
 

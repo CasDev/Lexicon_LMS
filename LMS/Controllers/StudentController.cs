@@ -15,12 +15,16 @@ namespace LMS.Controllers
 
         public User FindUser()
         {
-            return db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+//            return db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault(); //Redundant, överflödig kod. Where ej nödvändigt. 
+            return db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
         }
 
-        public Course FindCourse(ApplicationUser user)
+        //John Hellman tyckte detta var jätteroligt! 
+        public Course FindCourse(User user)
         {
-            return db.Courses.Where(c => c.Users.Where(u => u.Id == user.Id).Count() > 0).FirstOrDefault();
+            return db.Courses.FirstOrDefault(c => c.Id==user.CoursesId);
+            //return db.Courses.Where(c => c.Users.Where(u => u.Id == user.Id).Count() > 0).FirstOrDefault();
+            //Where ska man bara ha om man vill ha en lista, d v s ej då man bara vill plocka ut 1 item. 
         }
 
         public Course FindCourse()
@@ -30,8 +34,8 @@ namespace LMS.Controllers
 
         public Course FindCourse(int id)
         {
-            return db.Courses.Where(c => c.Id == id).FirstOrDefault();
-        }
+            return db.Courses.FirstOrDefault(c => c.Id == id); //Behåll denna. Bättre kod än att använda Where, vilket blir överflödigt (redundant). (John Hellman har hjälpt oss.) 
+        }                                           
 
         public ICollection<User> FindParticipants(int id)
         {
@@ -44,9 +48,27 @@ namespace LMS.Controllers
             return (course.Users != null ? course.Users : new List<User>());
         }
         
+        public List<Activity> FindAllDeadlines(IEnumerable<Activity> list)
+        {
+             // hittar alla med en deadline, ur en fördefinierad lista
+            return list.Where(x => x.Deadline != null).ToList(); //Här är det bra med Where, eftersom man vill ha en lista. 
+        }
+
         public Activity FindActivity(int id)
         {
-            return db.Activities.Where(a => a.Id == id).FirstOrDefault();
+            return db.Activities.FirstOrDefault(a => a.Id == id);
+        }
+
+        public List<Activity> FindAllOldAndCurrentActivities(Course course)
+        {
+            // actuella aktivitetet
+            List<Activity> Activities = new List<Models.Activity>();
+            foreach (Module m in db.Modules.Where(m => m.CourseId == course.Id && DateTime.Now >= m.StartDate).ToList())
+            {
+                Activities.AddRange(m.Activities.Where(a => a.ModuleId == m.Id && (a.StartDate == null || DateTime.Now >= a.StartDate)).ToList());
+                // .Where(a => a.StartDate == null || a.StartDate > DateTime.Now) kanske kan användas
+            }
+            return Activities;
         }
 
         [Authorize(Roles = "Student")]
@@ -72,6 +94,14 @@ namespace LMS.Controllers
             return View(course);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Student")]
+        public ActionResult Assignments()
+        {
+            List<Activity> assignments = FindAllDeadlines(FindAllOldAndCurrentActivities(FindCourse()));
+            return View(assignments);
+        }
+
         [Authorize(Roles = "Student")]
         public ActionResult OldModules()
         {
@@ -92,6 +122,59 @@ namespace LMS.Controllers
 
             return View(course);
         }
+
+
+        //Marie Hansson och Ari skapar funktion, för att hämta pågående och forna aktiviteter kopplade till moduler och kurs. FindOldAndCurrentActivity(Course)
+        //[Authorize(Roles = "Student")]
+        //public ActionResult Activity()
+        //{
+        //    Activity activity = FindAllDeadlines();
+        //    if (activity == null)
+        //    {
+        //        return View("~/Views/Student/NoKnown.cshtml");
+        //    }
+
+        //    MenyItems items = new MenyItems();
+        //    items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
+        //    items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
+        //    items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+        //    ViewBag.Menu = items;
+
+        //    course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
+        //    course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
+
+        //    ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToCourse(course.Id, db);
+
+        //    return View(course);
+        //}
+
+        //[Authorize(Roles = "Student")]
+        //public ActionResult ActivitiesTable()
+        //{
+        //    Course course = FindCourse();
+        //    if (course == null)
+        //    {
+        //        return View("~/Views/Student/NoKnown.cshtml");
+        //    }
+
+        //    MenyItems items = new MenyItems();
+        //    items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
+        //    items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
+        //    items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+        //    ViewBag.Menu = items;
+
+        //    course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
+        //    course.Modules = course.Modules.Where(m => m.EndDate < DateTime.Now).OrderBy(m => m.EndDate).Reverse().ToList();
+
+        //    return View(course);
+        //}
+
+
+        //Här slutar de funktioner som Marie och Ari arbetar med, för att hämta aktiviteter
+
+
+
+
 
         [Authorize(Roles = "Student")]
         public ActionResult Participants(string sort)
