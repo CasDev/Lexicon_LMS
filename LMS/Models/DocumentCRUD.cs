@@ -9,11 +9,22 @@ namespace LMS.Models
 {
     public static class DocumentCRUD
     {
-        public static Document FindDocument(User user, Activity activity, ApplicationDbContext db, HttpServerUtilityBase server)
+        public static Document FindAssignment(User user, Activity activity, ApplicationDbContext db, HttpServerUtilityBase server)
         {
-            if (Directory.Exists(server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"))) {
-                return db.Documents.Where(d => (d.Name == "Inlämning för " + user.FirstName + " " + user.LastName &&
-                    d.FileFolder == server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"))).FirstOrDefault();
+            string folder = server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/");
+            if (Directory.Exists(folder)) {
+                return db.Documents.FirstOrDefault(d => (d.Name == "Inlämning för " + user.FirstName + " " + user.LastName &&
+                    d.FileFolder == folder));
+            }
+            return null;
+        }
+
+        public static Document FindDocument(string folder, string name, ApplicationDbContext db)
+        {
+            if (Directory.Exists(folder))
+            {
+                return db.Documents.FirstOrDefault(d => (d.Name == name &&
+                    d.FileFolder == folder));
             }
             return null;
         }

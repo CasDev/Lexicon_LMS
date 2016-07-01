@@ -197,6 +197,11 @@ namespace LMS.Controllers
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
 
+            if (activity.Deadline != null)
+            {
+                ViewBag.HasFile = (DocumentCRUD.FindAssignment(FindUser(), activity, db, Server) != null ? true : false);
+            }
+
             return View(activity);
         }
 
