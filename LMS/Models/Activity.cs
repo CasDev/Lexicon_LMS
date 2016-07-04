@@ -19,13 +19,13 @@ namespace LMS.Models
         [Display(Name = "Beskrivning")]
         public string Description { get; set; }
 
-        [Display(Name = "Starttid")]
+        [Display(Name = "Startdatum")]              //Marie har ändrat detta. 
         public DateTime? StartDate { get; set; }
 
-        [Display(Name = "Sluttid")]
+        [Display(Name = "Slutdatum")]               //Marie har ändrat detta. 
         public DateTime? EndDate { get; set; }
         
-        [Display(Name = "Deadline")]
+        [Display(Name = "Inlämningsdatum")]         //Marie har ändrat detta. 
         public DateTime? Deadline { get; set; }
 
         public int? ModuleId { get; set; }
