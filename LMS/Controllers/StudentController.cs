@@ -73,6 +73,72 @@ namespace LMS.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Student")]
+        public ActionResult Download(int? id)
+        {
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för denna download");
+            }
+
+            Course course = FindCourse();
+            if (course == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
+
+            Document doc = db.Documents.FirstOrDefault(d => d.Id == id);
+            if (doc == null)
+            {
+                return Redirect("~/Error/?error=Inget document funnet");
+            }
+            if (doc.ActivityId == null && doc.CourseId == null && doc.ModuleId == null)
+            {
+                return Redirect("~/Error/?error=Du har ej tillgång hit");
+            }
+
+            if (doc.ActivityId != null)
+            {
+                Activity _activity = db.Activities.FirstOrDefault(m => m.Id == doc.ModuleId);
+                Module _module = _activity.Module;
+                Course _course = _module.Course;
+                if (_course.Id != course.Id)
+                {
+                    return Redirect("~/Error/?error=Du har ej tillgång hit");
+                }
+            } else if (doc.CourseId != null)
+            {
+                Course _course = db.Courses.FirstOrDefault(m => m.Id == doc.ModuleId);
+                if (_course.Id != course.Id)
+                {
+                    return Redirect("~/Error/?error=Du har ej tillgång hit");
+                }
+            } else if (doc.ModuleId != null)
+            {
+                Module _module = db.Modules.FirstOrDefault(m => m.Id == doc.ModuleId);
+                Course _course = _module.Course;
+                if (_course.Id != course.Id)
+                {
+                    return Redirect("~/Error/?error=Du har ej tillgång hit");
+                }
+            }
+
+            string filepath = doc.FileFolder + doc.FileName;
+            byte[] filedata = System.IO.File.ReadAllBytes(filepath);
+            string contentType = MimeMapping.GetMimeMapping(filepath);
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = doc.FileName,
+                Inline = false,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
+            return File(filedata, contentType);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
             Course course = FindCourse();
