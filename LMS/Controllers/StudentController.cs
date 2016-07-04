@@ -19,7 +19,7 @@ namespace LMS.Controllers
             return db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
         }
 
-        //John Hellman tyckte detta var jätteroligt! 
+        // John Hellman tyckte detta var jätteroligt! 
         public Course FindCourse(User user)
         {
             return db.Courses.FirstOrDefault(c => c.Id==user.CoursesId);
