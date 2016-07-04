@@ -2,12 +2,14 @@
 @{
     ViewBag.Title = "Module";
 }
-<h2>Modul</h2>
+<div class="leftalize fortywidth">
+    <h2>Modul</h2>
 
-<h4>@Model.Name</h4>
-<p>@Model.Description</p>
+    <h4>@Model.Name</h4>
+    <p>@Model.Description</p>
 
-<p>Från <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> till och med <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
+    <p>Från <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> till och med <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
+</div>
 @if (ViewBag.Documents != null)
 {
     @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)

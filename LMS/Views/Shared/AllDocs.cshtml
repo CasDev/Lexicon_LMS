@@ -3,10 +3,10 @@
 {
     <hr />
     <h4>Tillhörande document</h4>
-    <ul>
+    <ul class="none-listed">
         @foreach (Document Doc in Model)
         {
-            <li>@Html.ActionLink(Doc.Name, "Download", new { id = Doc.Id });</li>
+            <li>@Html.ActionLink(Doc.Name, "Download", new { id = Doc.Id })</li>
         }
     </ul>
 }

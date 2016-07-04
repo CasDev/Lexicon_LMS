@@ -31,3 +31,15 @@ a.none {
 .centralize {
     text-align: center;
 }
+
+.leftalize {
+    text-align: left;
+}
+
+.fortywidth {
+    width: 40%;
+}
+
+ul.none-listed {
+    list-style-type: none;
+}
