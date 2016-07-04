@@ -64,6 +64,22 @@ namespace LMS.Models
             return SaveDocument(folder, fileName, extention, file);
         }
 
+        public static Document SaveDocument(string folder, string fileName, string extention, byte[] file)
+        {
+            if (!File.Exists(folder + "/" + fileName + extention))
+            {
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                var path = Path.Combine(folder, fileName + extention);
+                File.WriteAllBytes(path, file);
+
+                return new Document { FileExtention = extention, FileFolder = folder, FileName = fileName + extention };
+            }
+            return null;
+        }
+
         public static Document SaveDocument(string folder, string fileName, string extention, HttpPostedFileBase file)
         {
             if (!File.Exists(folder +"/"+ fileName + extention))
