@@ -99,6 +99,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Assignments(string sort)
         {
+            if (FindCourse() == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
+
             User user = FindUser();
             List<AssignmentCheck> checker = new List<AssignmentCheck>();
             foreach (Activity activity in FindAllDeadlines(FindAllOldAndCurrentActivities(FindCourse())))
@@ -124,6 +129,12 @@ namespace LMS.Controllers
                         break;
                 }
             }
+
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
+
             return View(checker);
         }
 
@@ -194,6 +205,12 @@ namespace LMS.Controllers
             {
                 return Redirect("~/Error/?error=Inget Id angett för Activity");
             }
+
+            if (FindCourse() == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
+
             Activity activity = FindActivity((int)id);
             User user = FindUser();
             if (file != null && file.ContentLength > 0)
@@ -230,6 +247,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Activity(int? id)
         {
+            if (FindCourse() == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
+
             if (id == null)
             {
                 return Redirect("~/Error/?error=Inget Id angett för Activity");
@@ -250,6 +272,7 @@ namespace LMS.Controllers
             }
 
             MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/"+ module.Id });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
@@ -266,6 +289,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Module(int? id)
         {
+            if (FindCourse() == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
+
             if (id == null)
             {
                 return Redirect("~/Error/?error=Inget Id angett för Modulen");
@@ -279,6 +307,7 @@ namespace LMS.Controllers
             }
 
             MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
             items.Items.Add(new MenyItem { Text = "Se äldre aktiviteter för " + module.Name, Link = "~/Student/OldActivities/" + module.Id });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
@@ -298,6 +327,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult OldActivities(int? id)
         {
+            if (FindCourse() == null)
+            {
+                return View("~/Views/Student/NoKnown.cshtml");
+            }
+
             if (id == null)
             {
                 return Redirect("~/Error/?error=Inget Id angett för Modulen");
@@ -310,7 +344,7 @@ namespace LMS.Controllers
             }
 
             MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Se modulen " + module.Name, Link = "~/Student/Module/" + module.Id });
+            items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 

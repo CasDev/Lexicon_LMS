@@ -5,5 +5,4 @@
 
 <h2>Gamla moduler för @Model.Name</h2>
 <p>kursen är/var aktiv mellan <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> -och <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
-<br />
 @Html.Partial("ModulesTable", Model.Modules)

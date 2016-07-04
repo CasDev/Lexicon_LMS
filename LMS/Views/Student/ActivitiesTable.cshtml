@@ -1,20 +1,24 @@
 ﻿@model IEnumerable<Activity>
-<table>
-    <tr>
-        <th>Aktiviteter</th>
-        <th></th>
-        <th>@Html.DisplayNameFor(model => model.StartDate)</th>
-        <th></th>
-        <th>@Html.DisplayNameFor(model => model.EndDate)</th>
-    </tr>
-    @foreach (Activity activity in Model)
-    {
+@if (Model.Count() > 0)
+{
+    <hr />
+    <table>
         <tr>
-            <td><a href="@Url.Content("~/Student/Activity/"+@activity.Id)">@activity.Name</a></td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>@(activity.StartDate != null ? ((DateTime)activity.StartDate).ToString(" yyyy-MM-dd ") : "Inget startdatum")</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>@(activity.EndDate != null ? ((DateTime)activity.EndDate).ToString(" yyyy-MM-dd ") : "Inget stopdatum")</td>
+            <th>Aktiviteter</th>
+            <th></th>
+            <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+            <th></th>
+            <th>@Html.DisplayNameFor(model => model.EndDate)</th>
         </tr>
-    }
-</table>
+        @foreach (Activity activity in Model)
+        {
+            <tr>
+                <td><a href="@Url.Content("~/Student/Activity/" + @activity.Id)">@activity.Name</a></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>@(activity.StartDate != null ? ((DateTime)activity.StartDate).ToString(" yyyy-MM-dd ") : "Inget startdatum")</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>@(activity.EndDate != null ? ((DateTime)activity.EndDate).ToString(" yyyy-MM-dd ") : "Inget stopdatum")</td>
+            </tr>
+        }
+    </table>
+}

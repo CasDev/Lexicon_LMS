@@ -1,20 +1,24 @@
 ﻿@model IEnumerable<Module>
-<table>
-    <tr>
-        <th>Moduler</th>
-        <th></th>
-        <th>@Html.DisplayNameFor(model => model.StartDate)</th>
-        <th></th>
-        <th>@Html.DisplayNameFor(model => model.EndDate)</th>
-    </tr>
-    @foreach (Module module in Model)
-    {
+@if (Model.Count() > 0)
+{
+    <hr />
+    <table>
         <tr>
-            <td><a href="@Url.Content("~/Student/Module/"+ module.Id)">@module.Name</a></td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>@module.StartDate.ToString(" yyyy-MM-dd ")</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>@module.EndDate.ToString(" yyyy-MM-dd ")</td>
+            <th>Moduler</th>
+            <th></th>
+            <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+            <th></th>
+            <th>@Html.DisplayNameFor(model => model.EndDate)</th>
         </tr>
-    }
-</table>
+        @foreach (Module module in Model)
+        {
+            <tr>
+                <td><a href="@Url.Content("~/Student/Module/" + module.Id)">@module.Name</a></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>@module.StartDate.ToString(" yyyy-MM-dd ")</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>@module.EndDate.ToString(" yyyy-MM-dd ")</td>
+            </tr>
+        }
+    </table>
+}
