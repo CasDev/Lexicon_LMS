@@ -10,9 +10,9 @@
 <p>För denna övningsuppgift så är inlämningstiden satt till: @Model.Deadline</p>
 @if (!HasFile && Model.Deadline > DateTime.Now)
 {
-    <p class="warning">Deadline för denna aktivitet har passerat för denna inlämningsuppgift</p>
+    <h4 class="warning">Deadline för denna aktivitet har passerat för denna inlämningsuppgift</h4>
 }
-@if (!HasFile && Model.Deadline < DateTime.Now)
+@if (!HasFile)
 {
     using (Html.BeginForm("Activity", "Student", new { id = Model.Id.ToString() }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-2", role = "form", enctype = "multipart/form-data" }))
     {
@@ -30,10 +30,6 @@
             </div>
         </div>
     }
-} else if (!HasFile && Model.Deadline >= DateTime.Now)
-{
-    <h4>Du har missat din deadline.</h4>
-    <h6>Du kan alltid försöka kontakta läraren direkt.</h6>
 } else if (HasFile)
 {
     <h2>Du har redan lämnat in denna övning :)</h2>

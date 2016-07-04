@@ -12,11 +12,13 @@ namespace LMS.Models
         public static Document FindAssignment(User user, Activity activity, ApplicationDbContext db, HttpServerUtilityBase server)
         {
             string folder = server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/");
-            if (Directory.Exists(folder)) {
-                return db.Documents.FirstOrDefault(d => (d.Name == "Inlämning för " + user.FirstName + " " + user.LastName &&
-                    d.FileFolder == folder));
-            }
-            return null;
+            string name = "Inlämning för " + user.FirstName + " " + user.LastName;
+            return FindDocument(folder, name, db);
+        }
+
+        public static bool HasDocument(string folder, string name)
+        {
+            return File.Exists(folder + name);
         }
 
         public static Document FindDocument(string folder, string name, ApplicationDbContext db)

@@ -1,11 +1,39 @@
 ﻿@model IEnumerable<Activity>
+@using LMS.Models.DataAccess
 @{
-    ViewBag.Title = "Assignments";
+    ViewBag.Title = "Övningsuppgifter";
+    ApplicationDbContext db = new ApplicationDbContext();
+    User user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 }
 
-<h2>Assignments</h2>
+<h2>Övningsuppgifter för</h2>
+<h2>@user.FirstName @user.LastName</h2>
 
-@foreach (Activity activity in Model)
-{
-    <p>@activity.Name </p>
-}
+<table>
+    <tr>
+        <th>Ämne</th>
+        <th></th>
+        <th>Inlämnat</th>
+        <th></th>
+        <th>Ej inlämnat</th>
+        <th></th>
+        <th>Försenat</th>
+    </tr>
+    @foreach (Activity activity in Model)
+    {
+        Document doc = DocumentCRUD.FindAssignment(user, activity, db, Server);
+        bool done = (doc != null);
+        bool isLeft = (done == false);
+        bool delayed = ((!done && DateTime.Now > activity.Deadline) || (done && doc != null && doc.UploadTime > activity.Deadline));
+
+        <tr>
+            <td>@activity.Name</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td class="centralize">@(done ? " X " : "")</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td class="centralize">@(isLeft ? " X " : "")</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td class="centralize">@(delayed ? " X " : "")</td>
+        </tr>
+    }
+</table>
