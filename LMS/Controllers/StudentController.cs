@@ -71,6 +71,7 @@ namespace LMS.Controllers
             return Activities;
         }
 
+        [HttpGet]
         [Authorize(Roles = "Student")]
         public ActionResult Index()
         {
@@ -96,12 +97,13 @@ namespace LMS.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Student")]
-        public ActionResult Assignments()
+        public ActionResult Assignments(string sort)
         {
             List<Activity> assignments = FindAllDeadlines(FindAllOldAndCurrentActivities(FindCourse()));
             return View(assignments);
         }
 
+        [HttpGet]
         [Authorize(Roles = "Student")]
         public ActionResult OldModules()
         {
@@ -122,60 +124,8 @@ namespace LMS.Controllers
 
             return View(course);
         }
-
-
-        //Marie Hansson och Ari skapar funktion, för att hämta pågående och forna aktiviteter kopplade till moduler och kurs. FindOldAndCurrentActivity(Course)
-        //[Authorize(Roles = "Student")]
-        //public ActionResult Activity()
-        //{
-        //    Activity activity = FindAllDeadlines();
-        //    if (activity == null)
-        //    {
-        //        return View("~/Views/Student/NoKnown.cshtml");
-        //    }
-
-        //    MenyItems items = new MenyItems();
-        //    items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
-        //    items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
-        //    items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
-        //    ViewBag.Menu = items;
-
-        //    course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
-        //    course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
-
-        //    ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToCourse(course.Id, db);
-
-        //    return View(course);
-        //}
-
-        //[Authorize(Roles = "Student")]
-        //public ActionResult ActivitiesTable()
-        //{
-        //    Course course = FindCourse();
-        //    if (course == null)
-        //    {
-        //        return View("~/Views/Student/NoKnown.cshtml");
-        //    }
-
-        //    MenyItems items = new MenyItems();
-        //    items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
-        //    items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
-        //    items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
-        //    ViewBag.Menu = items;
-
-        //    course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
-        //    course.Modules = course.Modules.Where(m => m.EndDate < DateTime.Now).OrderBy(m => m.EndDate).Reverse().ToList();
-
-        //    return View(course);
-        //}
-
-
-        //Här slutar de funktioner som Marie och Ari arbetar med, för att hämta aktiviteter
-
-
-
-
-
+        
+        [HttpGet]
         [Authorize(Roles = "Student")]
         public ActionResult Participants(string sort)
         {
@@ -248,7 +198,8 @@ namespace LMS.Controllers
                 ModelState.AddModelError("", "En fil med innehåll måste erhållas");
             }
 
-            return View("~/Views/Student/Activity.cshtml", activity);
+            return Redirect("~/Student/Activity/"+ id);
+//            return View("~/Views/Student/Activity.cshtml", activity);
         }
 
         [HttpGet]
@@ -275,7 +226,6 @@ namespace LMS.Controllers
             }
 
             MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Se äldre aktiviteter för " + activity.Module.Name, Link = "~/Student/OldActivities/" + activity.Module.Id });
             items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
@@ -288,6 +238,7 @@ namespace LMS.Controllers
             return View(activity);
         }
 
+        [HttpGet]
         [Authorize(Roles = "Student")]
         public ActionResult Module(int? id)
         {
@@ -303,10 +254,43 @@ namespace LMS.Controllers
                 return Redirect("~/Error/?error=Ingen Modul funnen");
             }
 
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Se äldre aktiviteter för " + module.Name, Link = "~/Student/OldActivities/" + module.Id });
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
 
             Course course = module.Course;
 
+            if (course.Id != FindCourse().Id)
+            {
+                return Redirect("~/Error/?error=Du har ej tillgång hit.");
+            }
+
+            return View(module);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Student")]
+        public ActionResult OldActivities(int? id)
+        {
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för Modulen");
+            }
+
+            Module module = db.Modules.Where(m => m.Id == id).FirstOrDefault();
+            if (module == null)
+            {
+                return Redirect("~/Error/?error=Ingen Modul funnen");
+            }
+
+            MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Se modulen " + module.Name, Link = "~/Student/Module/" + module.Id });
+            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
+            ViewBag.Menu = items;
+
+            Course course = module.Course;
             if (course.Id != FindCourse().Id)
             {
                 return Redirect("~/Error/?error=Du har ej tillgång hit.");

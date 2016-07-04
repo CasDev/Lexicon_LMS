@@ -2,10 +2,6 @@
 @{
     ViewBag.Title = "Index";
 }
-@if (ViewBag.Documents != null)
-{
-    @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)
-}
 <p></p>
 <h4>@Model.Name</h4>
 <p>@Model.Description</p>
@@ -15,6 +11,10 @@
 }
 <p>Detta är en @Model.Type-aktivitet</p>
 <p>Denna tillhör module: @Model.Module.Name</p>
+@if (ViewBag.Documents != null)
+{
+    @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)
+}
 @if (Model.Deadline != null)
 {
     @Html.Partial("Assignment")

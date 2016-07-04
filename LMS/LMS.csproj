@@ -338,6 +338,7 @@
     <Content Include="Views\Student\Module.cshtml" />
     <Content Include="Views\Student\ActivitiesTable.cshtml" />
     <Content Include="Views\Student\Assignments.cshtml" />
+    <Content Include="Views\Student\OldActivities.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
