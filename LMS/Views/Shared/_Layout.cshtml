@@ -22,6 +22,12 @@
                     @Html.Partial("Menu", ((MenyItems)ViewBag.Menu))
                     }
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Logga ut", "LogOff", "Home")</li>
+                    }
+                </ul>
             </div>
         </div>
     </div>

@@ -150,7 +150,6 @@ namespace LMS.Controllers
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Se studenter för "+ course.Name, Link = "~/Student/Participants/" });
             items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
-            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
@@ -198,7 +197,6 @@ namespace LMS.Controllers
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
-            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
             return View(checker);
@@ -217,7 +215,6 @@ namespace LMS.Controllers
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
             items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
@@ -239,7 +236,6 @@ namespace LMS.Controllers
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
             items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
-            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
             bool _sort = (sort != null && sort == "FirstName" ? false : true);
@@ -339,7 +335,6 @@ namespace LMS.Controllers
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/"+ module.Id });
-            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
 
@@ -375,7 +370,6 @@ namespace LMS.Controllers
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
             items.Items.Add(new MenyItem { Text = "Se äldre aktiviteter för " + module.Name, Link = "~/Student/OldActivities/" + module.Id });
-            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
 
@@ -411,7 +405,6 @@ namespace LMS.Controllers
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
-            items.Items.Add(new MenyItem { Text = "Logga ut", Link = "~/Home/LogOff/" });
             ViewBag.Menu = items;
 
             Course course = module.Course;
