@@ -13,11 +13,11 @@
     <tr>
         <th>Ämne</th>
         <th></th>
-        <th>Inlämnat</th>
+        <th>@Html.ActionLink("Inlämnat", "Assignments", new { sort = "done" })</th>
         <th></th>
-        <th>Ej inlämnat</th>
+        <th>@Html.ActionLink("Ej inlämnat", "Assignments", new { sort = "isLeft" })</th>
         <th></th>
-        <th>Försenat</th>
+        <th>@Html.ActionLink("Försenat", "Assignments", new { sort = "delayed" })</th>
     </tr>
     @foreach (Activity activity in Model)
     {
