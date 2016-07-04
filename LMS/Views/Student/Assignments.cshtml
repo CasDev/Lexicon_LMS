@@ -1,9 +1,8 @@
-﻿@model IEnumerable<Activity>
+﻿@model IEnumerable<AssignmentCheck>
 @using LMS.Models.DataAccess
 @{
     ViewBag.Title = "Övningsuppgifter";
-    ApplicationDbContext db = new ApplicationDbContext();
-    User user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+    User user = new ApplicationDbContext().Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 }
 
 <h2>Övningsuppgifter för</h2>
@@ -19,21 +18,16 @@
         <th></th>
         <th>@Html.ActionLink("Försenat", "Assignments", new { sort = "delayed" })</th>
     </tr>
-    @foreach (Activity activity in Model)
+    @foreach (AssignmentCheck assignment in Model)
     {
-        Document doc = DocumentCRUD.FindAssignment(user, activity, db, Server);
-        bool done = (doc != null);
-        bool isLeft = (done == false);
-        bool delayed = ((!done && DateTime.Now > activity.Deadline) || (done && doc != null && doc.UploadTime > activity.Deadline));
-
         <tr>
-            <td>@activity.Name</td>
+            <td>@assignment.Activity.Name</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td class="centralize">@(done ? " X " : "")</td>
+            <td class="centralize">@(assignment.Done ? " X " : "")</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td class="centralize">@(isLeft ? " X " : "")</td>
+            <td class="centralize">@(assignment.IsLeft ? " X " : "")</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td class="centralize">@(delayed ? " X " : "")</td>
+            <td class="centralize">@(assignment.Delayed ? " X " : "")</td>
         </tr>
     }
 </table>

@@ -99,8 +99,32 @@ namespace LMS.Controllers
         [Authorize(Roles = "Student")]
         public ActionResult Assignments(string sort)
         {
-            List<Activity> assignments = FindAllDeadlines(FindAllOldAndCurrentActivities(FindCourse()));
-            return View(assignments);
+            User user = FindUser();
+            List<AssignmentCheck> checker = new List<AssignmentCheck>();
+            foreach (Activity activity in FindAllDeadlines(FindAllOldAndCurrentActivities(FindCourse())))
+            {
+                Document doc = DocumentCRUD.FindAssignment(user, activity, db, Server);
+                bool done = (doc != null);
+                bool isLeft = (done == false);
+                bool delayed = ((!done && DateTime.Now > activity.Deadline) || (done && doc != null && doc.UploadTime > activity.Deadline));
+
+                checker.Add(new AssignmentCheck { Activity = activity, Delayed = delayed, Done = done, IsLeft = isLeft });
+            }
+            if (sort != null)
+            {
+                switch (sort.ToLower()) {
+                    case "delayed":
+                        checker = checker.OrderBy(c => c.Delayed).Reverse().ToList();
+                        break;
+                    case "isleft":
+                        checker = checker.OrderBy(c => c.IsLeft).Reverse().ToList();
+                        break;
+                    default:
+                        checker = checker.OrderBy(c => c.Done).Reverse().ToList();
+                        break;
+                }
+            }
+            return View(checker);
         }
 
         [HttpGet]

@@ -234,6 +234,7 @@
       <DependentUpon>201607011413005_Update_User_Course.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AssignmentCheck.cs" />
     <Compile Include="Models\ViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Course.cs" />
