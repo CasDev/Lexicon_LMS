@@ -13,4 +13,4 @@
     @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)
 }
 <br />
-@Html.Partial("ActivitiesTable", Model.Activities.Where(a => (a.StartDate == null || a.StartDate > DateTime.Now)))
+@Html.Partial("ActivitiesTable", Model.Activities.Where(a => (a.StartDate == null || DateTime.Now > a.StartDate) && (a.EndDate == null || a.EndDate > DateTime.Now)))
