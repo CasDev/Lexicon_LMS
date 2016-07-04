@@ -6,7 +6,7 @@
     <ul>
         @foreach (Document Doc in Model)
         {
-            <li>@Doc.Name</li>
+            <li>@Html.ActionLink(Doc.Name, "Download", new { id = Doc.Id });</li>
         }
     </ul>
 }
