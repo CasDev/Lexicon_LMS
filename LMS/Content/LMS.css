@@ -31,3 +31,7 @@ a.none {
 .centralize {
     text-align: center;
 }
+
+ul.none-listed {
+    list-style-type: none;
+}
