@@ -34,7 +34,8 @@ namespace LMS.Controllers
 
         public Course FindCourse(int id)
         {
-            return db.Courses.FirstOrDefault(c => c.Id == id); //Behåll denna. Bättre kod än att använda Where, vilket blir överflödigt (redundant). (John Hellman har hjälpt oss.) 
+            // Behåll denna. Bättre kod än att använda Where, vilket blir överflödigt (redundant). (John Hellman har hjälpt oss.) 
+            return db.Courses.FirstOrDefault(c => c.Id == id);
         }                                           
 
         public ICollection<User> FindParticipants(int id)
