@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<p></p>
+<div class="leftalize fortywidth center">
 <h4>@Model.Name</h4>
 <p>@Model.Description</p>
 @if (Model.StartDate != null && Model.EndDate != null)
@@ -11,6 +11,7 @@
 }
 <p>Detta är en @Model.Type-aktivitet</p>
 <p>Denna tillhör modulen: @Model.Module.Name</p>
+</div>
 @if (ViewBag.Documents != null)
 {
     @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)
