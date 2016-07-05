@@ -5,7 +5,7 @@
 }
 
 <hr />
-<h2>Övningsuppgift för @Model.Name</h2>
+<h3>Övningsuppgift för @Model.Name</h3>
 <br />
 <p>För denna övningsuppgift så är inlämningstiden satt till: @Model.Deadline</p>
 @if (!HasFile && Model.Deadline > DateTime.Now)
@@ -32,5 +32,5 @@
     }
 } else if (HasFile)
 {
-    <h2>Du har redan lämnat in denna övning :)</h2>
+    <h3>Du har redan lämnat in denna övning :)</h3>
 }
