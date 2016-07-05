@@ -10,7 +10,7 @@
 <p>mellan <time datetime="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.StartDate).ToString(" yyyy-MM-dd "))</time> -och <time datetime="@(((DateTime)Model.EndDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.EndDate).ToString(" yyyy-MM-dd "))</time></p>
 }
 <p>Detta är en @Model.Type-aktivitet</p>
-<p>Denna tillhör modulen: @Model.Module.Name</p>
+<p>Den tillhör modulen: @Model.Module.Name</p>
 </div>
 @if (ViewBag.Documents != null)
 {
