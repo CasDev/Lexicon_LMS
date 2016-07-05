@@ -149,8 +149,8 @@ namespace LMS.Controllers
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Se inlämningsuppgifter", Link = "~/Student/Assignments/" });
-            items.Items.Add(new MenyItem { Text = "Se studenter för "+ course.Name, Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
+            items.Items.Add(new MenyItem { Text = "Se studenter", Link = "~/Student/Participants/" });
+            items.Items.Add(new MenyItem { Text = "Se äldre moduler", Link = "~/Student/OldModules/" });
             ViewBag.Menu = items;
 
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
@@ -215,7 +215,7 @@ namespace LMS.Controllers
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
-            items.Items.Add(new MenyItem { Text = "Se studenter för " + course.Name, Link = "~/Student/Participants/" });
+            items.Items.Add(new MenyItem { Text = "Se studenter", Link = "~/Student/Participants/" });
             ViewBag.Menu = items;
 
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
@@ -236,7 +236,7 @@ namespace LMS.Controllers
 
             MenyItems items = new MenyItems();
             items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
-            items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
+            items.Items.Add(new MenyItem { Text = "Se äldre moduler", Link = "~/Student/OldModules/" });
             ViewBag.Menu = items;
 
             bool _sort = (sort != null && sort == "FirstName" ? false : true);
