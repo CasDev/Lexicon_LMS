@@ -2,15 +2,16 @@
 @{
     ViewBag.Title = "Index";
 }
-<p></p>
-<h4>@Model.Name</h4>
-<p>@Model.Description</p>
-@if (Model.StartDate != null && Model.EndDate != null)
-{
-<p>mellan <time datetime="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.StartDate).ToString(" yyyy-MM-dd "))</time> -och <time datetime="@(((DateTime)Model.EndDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.EndDate).ToString(" yyyy-MM-dd "))</time></p>
-}
-<p>Detta är en @Model.Type-aktivitet</p>
-<p>Denna tillhör module: @Model.Module.Name</p>
+<div class="leftalize fortywidth center">
+    <h4>@Model.Name</h4>
+    <p>@Model.Description</p>
+    @if (Model.StartDate != null && Model.EndDate != null)
+    {
+        <p>mellan <time datetime="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.StartDate).ToString(" yyyy-MM-dd "))</time> -och <time datetime="@(((DateTime)Model.EndDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.EndDate).ToString(" yyyy-MM-dd "))</time></p>
+    }
+    <p>Detta är en @Model.Type-aktivitet</p>
+    <p>Denna tillhör module: @Model.Module.Name</p>
+</div>
 @if (ViewBag.Documents != null)
 {
     @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)

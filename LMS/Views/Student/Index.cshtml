@@ -4,10 +4,12 @@
     LMS.Models.User LoggedIn = Model.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 }
 
-<h3>Hej @LoggedIn.FirstName</h3>
-<h4>@Model.Name</h4>
-<p>@Model.Description</p>
-<p>mellan <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> -och <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
+<div class="leftalize fortywidth center">
+    <h3>Hej @LoggedIn.FirstName</h3>
+    <h4>@Model.Name</h4>
+    <p>@Model.Description</p>
+    <p>mellan <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> -och <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
+</div>
 @if (ViewBag.Documents != null)
 {
     @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)

@@ -8,9 +8,9 @@
 <h2>Övningsuppgifter för</h2>
 <h2>@user.FirstName @user.LastName</h2>
 
-<table>
+<table class="center">
     <tr>
-        <th>Ämne</th>
+        <th></th>
         <th></th>
         <th>@Html.ActionLink("Inlämnat", "Assignments", new { sort = "done" })</th>
         <th></th>
@@ -21,8 +21,8 @@
     @foreach (AssignmentCheck assignment in Model)
     {
         <tr>
-            <td>@assignment.Activity.Name</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <th>@assignment.Activity.Name</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
             <td class="centralize">@(assignment.Done ? " X " : "")</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td class="centralize">@(assignment.IsLeft ? " X " : "")</td>
