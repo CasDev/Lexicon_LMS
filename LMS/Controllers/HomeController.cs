@@ -131,7 +131,7 @@ namespace LMS.Controllers
                 return View(model);
             }
 
-            User user = db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
+            User user = db.Users.FirstOrDefault(u => u.Email == model.Email);
             if (user != null)
             {
                 // This doesn't count login failures towards account lockout
@@ -140,8 +140,8 @@ namespace LMS.Controllers
                 switch (result)
                 {
                     case SignInStatus.Success:
-                        IdentityRole teacher = db.Roles.Where(r => r.Name == "Teacher").FirstOrDefault();
-                        IdentityRole student = db.Roles.Where(r => r.Name == "Student").FirstOrDefault();
+                        IdentityRole teacher = db.Roles.FirstOrDefault(r => r.Name == "Teacher");
+                        IdentityRole student = db.Roles.FirstOrDefault(r => r.Name == "Student");
                         if (teacher == null || student == null)
                         {
                             ModelState.AddModelError("", "Roles has become unstable, and the system has been closed.");

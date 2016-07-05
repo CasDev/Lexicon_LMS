@@ -3,6 +3,6 @@
     ViewBag.Title = "Äldre activiteter";
 }
 
-<h2>Gamla aktiviteter för @Model.Name</h2>
+<h2>Tidigare aktiviteter för @Model.Name</h2>
 <p>kursen är/var aktiv mellan <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> -och <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
 @Html.Partial("ActivitiesTable", Model.Activities.Where(a => (a.EndDate == null || DateTime.Now > a.EndDate)))
