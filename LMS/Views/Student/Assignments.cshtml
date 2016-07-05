@@ -21,7 +21,7 @@
     @foreach (AssignmentCheck assignment in Model)
     {
         <tr>
-            <th>@assignment.Activity.Name</th>
+            <th>@Html.ActionLink(assignment.Activity.Name, "Activity", new { id = assignment.Activity.Id }, new { @class = "none" })</th>
             <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
             <td class="centralize">@(assignment.Done ? " X " : "")</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

@@ -96,16 +96,7 @@ namespace LMS.Controllers
                 return Redirect("~/Error/?error=Du har ej tillgång hit");
             }
 
-            if (doc.ActivityId != null)
-            {
-                Activity _activity = db.Activities.FirstOrDefault(m => m.Id == doc.ModuleId);
-                Module _module = _activity.Module;
-                Course _course = _module.Course;
-                if (_course.Id != course.Id)
-                {
-                    return Redirect("~/Error/?error=Du har ej tillgång hit");
-                }
-            } else if (doc.CourseId != null)
+            if (doc.CourseId != null)
             {
                 Course _course = db.Courses.FirstOrDefault(m => m.Id == doc.ModuleId);
                 if (_course.Id != course.Id)
@@ -115,6 +106,15 @@ namespace LMS.Controllers
             } else if (doc.ModuleId != null)
             {
                 Module _module = db.Modules.FirstOrDefault(m => m.Id == doc.ModuleId);
+                Course _course = _module.Course;
+                if (_course.Id != course.Id)
+                {
+                    return Redirect("~/Error/?error=Du har ej tillgång hit");
+                }
+            } else if (doc.ActivityId != null)
+            {
+                Activity _activity = db.Activities.FirstOrDefault(m => m.Id == doc.ModuleId);
+                Module _module = _activity.Module;
                 Course _course = _module.Course;
                 if (_course.Id != course.Id)
                 {
@@ -148,6 +148,7 @@ namespace LMS.Controllers
             }
 
             MenyItems items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = "Se inlämningsuppgifter", Link = "~/Student/Assignments/" });
             items.Items.Add(new MenyItem { Text = "Se studenter för "+ course.Name, Link = "~/Student/Participants/" });
             items.Items.Add(new MenyItem { Text = "Se äldre moduler för " + course.Name, Link = "~/Student/OldModules/" });
             ViewBag.Menu = items;
