@@ -5,7 +5,12 @@ using System.Web;
 
 namespace LMS.Models
 {
-    public class AssignmentCheck
+    /// <summary>
+    /// Menad att hållas som en "övningsuppgift". Håller koll på vilken aktivitet som övningsuppgiften tillhör
+    /// och om den är färdig ( done ), ej inlämnad ( isleft ) eller försenad ( delayed ), antingen inlämnad eller
+    /// ej inlämnad
+    /// </summary>
+    public class AssignmentStatus
     {
         public Activity Activity { get; set; }
         public bool Done { get; set; }

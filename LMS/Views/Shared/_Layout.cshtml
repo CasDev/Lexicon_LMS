@@ -25,6 +25,9 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (Request.IsAuthenticated)
                     {
+                        //User user = new LMS.Models.DataAccess.ApplicationDbContext().Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                        //<li>Inloggad som: @user.FirstName @user.LastName</li>
                         <li>@Html.ActionLink("Logga ut", "LogOff", "Home")</li>
                     }
                 </ul>

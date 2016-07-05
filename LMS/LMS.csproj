@@ -233,6 +233,10 @@
     <Compile Include="Migrations\201607011413005_Update_User_Course.Designer.cs">
       <DependentUpon>201607011413005_Update_User_Course.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607051455550_Update_Document_ModifyUserId.cs" />
+    <Compile Include="Migrations\201607051455550_Update_Document_ModifyUserId.Designer.cs">
+      <DependentUpon>201607051455550_Update_Document_ModifyUserId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AssignmentCheck.cs" />
     <Compile Include="Models\ViewModels.cs" />
@@ -376,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607011413005_Update_User_Course.resx">
       <DependentUpon>201607011413005_Update_User_Course.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607051455550_Update_Document_ModifyUserId.resx">
+      <DependentUpon>201607051455550_Update_Document_ModifyUserId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -164,7 +164,7 @@ namespace LMS.Migrations
                     Document.UploadTime = DateTime.Now;
                     Document.ActivityId = null;
                     Document.CourseId = null;
-                    Document.ModifyUserId = 0;
+                    Document.ModifyUserId = null;
                     Document.ModuleId = 5;
                     Document.UserId = user.Id;
                     context.Documents.AddOrUpdate(d => d.Name, Document);

@@ -11,6 +11,10 @@ a.none {
     text-decoration: none;
 }
 
+.form-group input {
+    margin: 3px 0;
+}
+
 ul.none-listed {
     list-style-type: none;
 }
@@ -29,7 +33,7 @@ ul.none-listed {
 }
 
 .center {
-    margin: 0 auto;
+    margin: 0 auto !important;
 }
 
 .leftalize {

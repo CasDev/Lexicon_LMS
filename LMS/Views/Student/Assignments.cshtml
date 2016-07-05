@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AssignmentCheck>
+﻿@model IEnumerable<AssignmentStatus>
 @using LMS.Models.DataAccess
 @{
     ViewBag.Title = "Övningsuppgifter";
@@ -18,10 +18,10 @@
         <th></th>
         <th>@Html.ActionLink("Försenat", "Assignments", new { sort = "delayed" })</th>
     </tr>
-    @foreach (AssignmentCheck assignment in Model)
+    @foreach (AssignmentStatus assignment in Model)
     {
         <tr>
-            <th>@Html.ActionLink(assignment.Activity.Name, "Activity", new { id = assignment.Activity.Id }, new { @class = "none" })</th>
+            <th>@Html.ActionLink(assignment.Activity.Name, "Activity", new { id = assignment.Activity.Id })</th>
             <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
             <td class="centralize">@(assignment.Done ? " X " : "")</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
