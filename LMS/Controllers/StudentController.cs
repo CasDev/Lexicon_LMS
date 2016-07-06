@@ -160,6 +160,10 @@ namespace LMS.Controllers
 
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToCourse(course.Id, db);
 
+            items = new MenyItems();
+            items.Items.Add(new MenyItem { Text = course.Name, Link = "~/Student/" });
+            ViewBag.BreadCrumbs = items;
+
             return View(course);
         }
         
@@ -191,6 +195,9 @@ namespace LMS.Controllers
                         break;
                     case "isleft":
                         assignments = assignments.OrderBy(c => c.IsLeft).Reverse().ToList();
+                        break;
+                    case "deadline":
+                        assignments = assignments.OrderBy(c => c.Activity.Deadline).Reverse().ToList();
                         break;
                     default:
                         assignments = assignments.OrderBy(c => c.Done).Reverse().ToList();
@@ -385,6 +392,7 @@ namespace LMS.Controllers
             items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
             items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
             items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
+            items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
 

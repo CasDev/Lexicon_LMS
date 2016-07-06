@@ -11,6 +11,10 @@ a.none {
     text-decoration: none;
 }
 
+ul#breadcrumbs li {
+    display: inline;
+}
+
 .form-group input {
     margin: 3px 0;
 }
@@ -52,6 +56,14 @@ ul.none-listed {
     font-size: x-small;
 }
 
+.delimiter {
+    color: #428bca;
+}
+
 #myCarousel{
     margin:0 0 20px 0;
+}
+
+#breadcrumbs {
+    list-style-type: none;
 }

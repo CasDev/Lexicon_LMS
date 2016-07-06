@@ -32,6 +32,17 @@
                     }
                 </ul>
             </div>
+
+            @if (ViewBag.BreadCrumbs != null)
+            {
+                <ul id="breadcrumbs">
+                    @foreach (MenyItem Item in ((MenyItems)ViewBag.BreadCrumbs).Items)
+                {
+                        <li><a href="@Url.Content(Item.Link)">@Item.Text</a></li>
+                        <li class="delimiter">/</li>
+                    }
+                </ul>
+            }
         </div>
     </div>
     <div class="container body-content lmsbackground center centralize">
