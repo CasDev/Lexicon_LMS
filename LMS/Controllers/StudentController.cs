@@ -98,7 +98,7 @@ namespace LMS.Controllers
 
             if (doc.CourseId != null)
             {
-                Course _course = db.Courses.FirstOrDefault(m => m.Id == doc.ModuleId);
+                Course _course = db.Courses.FirstOrDefault(m => m.Id == doc.CourseId);
                 if (_course.Id != course.Id)
                 {
                     return Redirect("~/Error/?error=Du har ej tillgång hit");
@@ -113,7 +113,7 @@ namespace LMS.Controllers
                 }
             } else if (doc.ActivityId != null)
             {
-                Activity _activity = db.Activities.FirstOrDefault(m => m.Id == doc.ModuleId);
+                Activity _activity = db.Activities.FirstOrDefault(m => m.Id == doc.ActivityId);
                 Module _module = _activity.Module;
                 Course _course = _module.Course;
                 if (_course.Id != course.Id)
