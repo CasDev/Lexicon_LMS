@@ -169,6 +169,32 @@ namespace LMS.Migrations
                     Document.UserId = user.Id;
                     context.Documents.AddOrUpdate(d => d.Name, Document);
                 }
+                Document = DocumentCRUD.SaveDocument(MapPath("~/documents/course/1/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
+                if (Document != null)
+                {
+                    Document.Name = name;
+                    Document.Description = name;
+                    Document.UploadTime = DateTime.Now;
+                    Document.ActivityId = null;
+                    Document.CourseId = 1;
+                    Document.ModifyUserId = null;
+                    Document.ModuleId = null;
+                    Document.UserId = user.Id;
+                    context.Documents.AddOrUpdate(d => d.Name, Document);
+                }
+                Document = DocumentCRUD.SaveDocument(MapPath("~/documents/activity/3/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
+                if (Document != null)
+                {
+                    Document.Name = name;
+                    Document.Description = name;
+                    Document.UploadTime = DateTime.Now;
+                    Document.ActivityId = 3;
+                    Document.CourseId = null;
+                    Document.ModifyUserId = null;
+                    Document.ModuleId = null;
+                    Document.UserId = user.Id;
+                    context.Documents.AddOrUpdate(d => d.Name, Document);
+                }
             }
 
             user = uManager.FindByName("admin@mail.nu");
