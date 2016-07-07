@@ -94,6 +94,23 @@ namespace LMS.Models
         public int CourseId { get; set; }
     }
 
+    public class EditModuleViewModel
+    {
+        [Required(ErrorMessage = "Ett namn behövs på en modul")]
+        [Display(Name = "Namn")]
+        public string Name { get; set; }
+
+        [Display(Name = "Beskrivning")]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "Ett startdatum behövs på en modul")]
+        [Display(Name = "Startdatum")]
+        public DateTime StartDate { get; set; }
+
+        [Required(ErrorMessage = "Ett slutdatum behövs på en modul")]
+        [Display(Name = "Slutdatum")]
+        public DateTime EndDate { get; set; }
+    }
     public class LoginViewModel
     {
         [Required(ErrorMessage = "E-post måste fyllas i")]
