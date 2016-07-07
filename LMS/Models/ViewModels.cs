@@ -4,6 +4,39 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Models
 {
+    public class CreateUserViewModel
+    {
+        [Required( ErrorMessage = "Ett förnamn behövs på en användare" )]
+        [Display(Name = "Förnamn")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Ett efternamn behövs på en användare")]
+        [Display(Name = "Efternamn")]
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Ett lösenord behövs till en användare")]
+        [Display(Name = "Lösenord")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Ett lösenord behövs till en användare")]
+        [Display(Name = "Konfirmera lösenord")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "En roll behövs till en användare")]
+        [Display(Name = "Roll")]
+        public string Role { get; set; }
+
+        [Required(ErrorMessage = "En e-post måste fyllas i")]
+        [Display(Name = "Login")]
+        [EmailAddress(ErrorMessage = "E-post har felaktigt format")]
+        public string Email { get; set; }
+    }
+
+    public class AddUserToCourseViewModel
+    {
+
+    }
+
     public class CreateCourseViewModel
     {
         [Required(ErrorMessage = "Ett namn behövs på en kurs")]
@@ -20,7 +53,7 @@ namespace LMS.Models
         [Required(ErrorMessage = "Ett startdatum behövs för en kurs")]
         [Display(Name = "Slutdatum")]
         public DateTime EndDate { get; set; }
-    } 
+    }
 
     public class EditCourseViewModel
     {
