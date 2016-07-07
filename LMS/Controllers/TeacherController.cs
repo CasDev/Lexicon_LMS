@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using LMS.Models;
 using LMS.Models.DataAccess;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LMS.Controllers
 {
@@ -163,7 +165,7 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateUser(FormCollection Collection)
+        public ActionResult CreateUser(CreateUserViewModel model)
         {
             // skillnaderna mellan en vymodel såsom LoginViewModel och en FormCollection
             //LoginViewModel Model = new LoginViewModel();
@@ -197,8 +199,36 @@ namespace LMS.Controllers
             //{
             //    // OK
             //}
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-            return View();
+            bool HasError = false;
+            if (model.Password != model.ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Det konfirmerande lösenordet är ej detsamma som lösenordet du har angett");
+                HasError = true;
+            }
+            if (model.Role != "Teacher" && model.Role != "Student")
+            {
+                ModelState.AddModelError("Role", "Användare kan enbart vara av roll lärare eller elev");
+            }
+            if (HasError)
+            {
+                return View(model);
+            }
+
+            var uStore = new UserStore<User>(db);
+            var uManager = new UserManager<User>(uStore);
+
+            User user = new User { FirstName = model.FirstName, LastName = model.LastName, Email = model.Email, UserName = model.Email };
+            uManager.Create(user, model.Password);
+
+            user = uManager.FindByName(model.Email);
+            uManager.AddToRole(user.Id, model.Role);
+
+            return Redirect("~/Teacher/");
         }
 
         // GET: Teacher
