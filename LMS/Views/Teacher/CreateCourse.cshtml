@@ -1,7 +1,46 @@
-﻿
+﻿@model CreateCourseViewModel
 @{
     ViewBag.Title = "CreateCourse";
 }
-
-<h2>CreateCourse</h2>
-
+<div>
+    <div class="row">
+        <div class="col-md-8">
+            <section id="loginform">
+                @using (Html.BeginForm("CreateCourse", "Teacher", new { }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-7", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Namn", autofocus = "autofocus" })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Description, new { @class = "form-control", placeholder = "Beskrivning" })
+                            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.StartDate, new { type = "date", @class = "form-control, datepicker", @Value = DateTime.Today.AddDays(1).ToString("yyyy/MM/dd") })
+                            @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.EndDate, new { type = "date", @class = "form-control, datepicker", @Value = DateTime.Today.AddDays(2).ToString("yyyy/MM/dd") })
+                            @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="submit" value="Skicka in" class="btn btn-default" />
+                        </div>
+                    </div>
+                }
+             </section>
+        </div>
+    </div>
+</div>
