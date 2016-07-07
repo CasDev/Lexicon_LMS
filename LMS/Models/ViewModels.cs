@@ -108,15 +108,15 @@ namespace LMS.Models
         public string Name { get; set; }            //Marie 
 
         [Display(Name = "Beskrivning")]
-        [Required(ErrorMessage = "Kursbeskrivning")]
+        [Required(ErrorMessage = "Beskrivning")]
         public string Description { get; set; }     //Marie
 
         [Display(Name = "Startdatum")]              //Marie
-        [Required(ErrorMessage = "Kursdatum")]
+        [Required(ErrorMessage = "Startdatum")]
         public DateTime? StartDate { get; set; }
 
         [Display(Name = "Slutdatum")]               //Marie 
-        [Required (ErrorMessage = "Slutdatum")]
+        [Required(ErrorMessage = "Slutdatum")]
         public DateTime? EndDate { get; set; }
 
         [Display(Name = "Inlämningsdatum")]         //Marie 
@@ -124,6 +124,7 @@ namespace LMS.Models
         public DateTime? Deadline { get; set; }
 
         [Required]
+        [Display(Name = "Modul")]                   //Marie 
         public int? ModuleId { get; set; }
     }
 
@@ -153,5 +154,10 @@ namespace LMS.Models
     public class DeleteActivityViewModel
     {
           public bool Confirm { get; set; }
+    }
+
+    public class DeleteModuleViewModel
+    {
+        public bool Confirm { get; set; }
     }
 }
