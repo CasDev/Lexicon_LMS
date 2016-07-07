@@ -240,6 +240,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AssignmentCheck.cs" />
+    <Compile Include="Models\CreateActivity.cs" />
     <Compile Include="Models\ViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Course.cs" />
@@ -360,6 +361,7 @@
     <Content Include="Views\Teacher\CreateModule.cshtml" />
     <Content Include="Views\Teacher\EditModule.cshtml" />
     <Content Include="Views\Teacher\EditCourse.cshtml" />
+    <Content Include="Views\Teacher\Course.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
