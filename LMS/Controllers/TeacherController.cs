@@ -156,7 +156,7 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateActivity(FormCollection Collection)
+        public ActionResult CreateActivity(CreateActivityViewModel model)
         {
             return View();
         }

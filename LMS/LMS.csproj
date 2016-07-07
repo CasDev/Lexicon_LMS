@@ -361,6 +361,7 @@
     <Content Include="Views\Teacher\EditModule.cshtml" />
     <Content Include="Views\Teacher\EditCourse.cshtml" />
     <Content Include="Views\Teacher\Course.cshtml" />
+    <Content Include="Views\Teacher\CreateActivity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
