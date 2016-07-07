@@ -8,7 +8,7 @@
 <h3>Övningsuppgift för @Model.Name</h3>
 <br />
 <p>För denna övningsuppgift så är inlämningstiden satt till: @Model.Deadline</p>
-@if (!HasFile && Model.Deadline > DateTime.Now)
+@if (!HasFile && DateTime.Now > Model.Deadline)
 {
     <h4 class="warning">Deadline för denna aktivitet har passerat för denna inlämningsuppgift</h4>
 }
