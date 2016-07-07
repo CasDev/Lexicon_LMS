@@ -66,13 +66,33 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult CreateModule()
         {
+            FetchAllCourses();  
+
             return View();
+        }
+
+        public void FetchAllCourses()
+        {
+            List<SelectListItem> courses = new List<SelectListItem>();
+            foreach (Course c in db.Courses)
+            {
+                courses.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
+            }
+
+            ViewBag.Courses = courses;
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateModule(FormCollection collection)
+        public ActionResult CreateModule(CreateModuleViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                FetchAllCourses();
+
+                return View(model);
+            }
+
             return View();
         }
 

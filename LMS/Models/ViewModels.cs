@@ -20,7 +20,28 @@ namespace LMS.Models
         [Required(ErrorMessage = "Ett startdatum behövs för en kurs")]
         [Display(Name = "Slutdatum")]
         public DateTime EndDate { get; set; }
-    } 
+    }
+
+    public class CreateModuleViewModel
+    {
+        [Required(ErrorMessage = "Ett namn behövs på en modul")]
+        [Display(Name = "Namn")]
+        public string Name { get; set; }
+
+        [Display(Name = "Beskrivning")]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "Ett startdatum behövs på en modul")]
+        [Display(Name = "Startdatum")]
+        public DateTime StartDate { get; set; }
+
+        [Required(ErrorMessage = "Ett slutdatum behövs på en modul")]
+        [Display(Name = "Slutdatum")]
+        public DateTime EndDate { get; set; }
+
+        [Required(ErrorMessage = "En modul måste tillhöra en kurs")]
+        public int CourseId { get; set; }
+    }
 
     public class LoginViewModel
     {
