@@ -355,6 +355,12 @@
     <Content Include="Views\Teacher\ListActivities.cshtml" />
     <Content Include="Views\Teacher\CreateUser.cshtml" />
     <Content Include="Views\Teacher\ListModules.cshtml" />
+    <Content Include="Views\Teacher\EditActivity.cshtml" />
+    <Content Include="Views\Teacher\OldCourses.cshtml" />
+    <Content Include="Views\Teacher\Assignment.cshtml" />
+    <Content Include="Views\Teacher\CreateModule.cshtml" />
+    <Content Include="Views\Teacher\EditModule.cshtml" />
+    <Content Include="Views\Teacher\EditCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
