@@ -37,6 +37,17 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.Type, new List<SelectListItem>
+                            {
+                                new SelectListItem { Value = "Lecture", Text = "Föreläsning" },
+                                new SelectListItem { Value = "E-learning", Text = "E-learning" },
+                                new SelectListItem { Value = "Excercise", Text = "Övning" },
+                            }, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
                             <input type="submit" value="Skicka in" class="btn btn-default" />
                         </div>
                     </div>
