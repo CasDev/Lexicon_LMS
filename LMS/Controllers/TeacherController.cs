@@ -138,7 +138,12 @@ namespace LMS.Controllers
                 return View(model);
             }
 
-            return View();
+
+            Module module = new Module { Name = model.Name, Description = (model.Description != null ? model.Description : ""), StartDate = model.StartDate, EndDate = model.EndDate, CourseId = model.CourseId };
+            db.Modules.Add(module);
+            db.SaveChanges();
+
+            return Redirect("~/Teacher/Module/" + module.Id);
         }
 
         [HttpGet]
