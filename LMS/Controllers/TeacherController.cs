@@ -60,7 +60,27 @@ namespace LMS.Controllers
                 return View(model);
             }
 
-            return View();
+            bool hasError = false;
+            if (model.StartDate < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
+                hasError = true;
+            }
+            if (model.EndDate < model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
+                hasError = true;
+            }
+            if (hasError)
+            {
+                return View(model);
+            }
+
+            Course course = new Course { Name = model.Name, Description = (model.Description != null ? model.Description : ""), StartDate = model.StartDate, EndDate = model.EndDate };
+            db.Courses.Add(course);
+            db.SaveChanges();
+
+            return Redirect("~/Teacher/Course/"+ course.Id);
         }
 
         [HttpGet]
@@ -87,6 +107,31 @@ namespace LMS.Controllers
         public ActionResult CreateModule(CreateModuleViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                FetchAllCourses();
+
+                return View(model);
+            }
+
+            bool hasError = false;
+            if (model.StartDate < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
+                hasError = true;
+            }
+            if (model.EndDate < model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
+                hasError = true;
+            }
+            Course course = db.Courses.FirstOrDefault(c => c.Id == model.CourseId);
+            if (course == null)
+            {
+                ModelState.AddModelError("CourseId", "Kursen kan ej hittas");
+                hasError = true;
+            }
+            
+            if (hasError)
             {
                 FetchAllCourses();
 
@@ -259,6 +304,7 @@ namespace LMS.Controllers
             ViewBag.CoursesId = new SelectList(db.Courses, "Id", "Name", user.CoursesId);
             return View(user);
         }
+
 
         // POST: Teacher/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
