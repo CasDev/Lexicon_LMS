@@ -53,8 +53,13 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateCourse(FormCollection collection)
+        public ActionResult CreateCourse(CreateCourseViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             return View();
         }
 
