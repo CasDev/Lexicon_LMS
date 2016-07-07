@@ -240,7 +240,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AssignmentCheck.cs" />
-    <Compile Include="Models\CreateActivity.cs" />
     <Compile Include="Models\ViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Course.cs" />
