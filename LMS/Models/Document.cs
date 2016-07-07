@@ -21,7 +21,7 @@ namespace LMS.Models
         public DateTime UploadTime { get; set; }
 
         [Display(Name = "Ändrad av")]
-        public int ModifyUserId { get; set; }
+        public string ModifyUserId { get; set; }
 
         [Display(Name = "Ändrat uppladdningsdatum")]
         public DateTime? ModifyUploadTime { get; set; }

@@ -6,28 +6,64 @@ hr {
     border: 1px solid white;
 }
 
-.lmsbackground {
-    background-color: #eee !important;
-    padding: 10px;
-}
-
 a.none {
     color: inherit;
     text-decoration: none;
 }
 
-#myCarousel{
-    margin:0 0 20px 0;
+ul#breadcrumbs li {
+    display: inline;
+}
+
+.form-group input {
+    margin: 3px 0;
+}
+
+ul.none-listed {
+    list-style-type: none;
+}
+
+.lmsbackground {
+    background-color: #eee !important;
+    padding: 10px;
 }
 
 .text-danger {
     font-size: initial;
 }
 
-.form-group input {
-    margin: 2px 0;
-}
-
 .centralize {
     text-align: center;
+}
+
+.center {
+    margin: 0 auto !important;
+}
+
+.leftalize {
+    text-align: left;
+}
+
+.fortywidth {
+    width: 40%;
+}
+
+.hundredwidth {
+    width: 100%;
+}
+
+.smaller {
+    font-size: x-small;
+}
+
+.delimiter {
+    color: #428bca;
+}
+
+#myCarousel{
+    margin:0 0 20px 0;
+}
+
+#breadcrumbs {
+    list-style-type: none;
 }

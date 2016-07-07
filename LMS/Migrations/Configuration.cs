@@ -7,8 +7,10 @@ namespace LMS.Migrations
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.IO;
     using System.Linq;
-
+    using System.Web;
+    using System.Web.Hosting;
     internal sealed class Configuration : DbMigrationsConfiguration<LMS.Models.DataAccess.ApplicationDbContext>
     {
         public Configuration()
@@ -66,10 +68,25 @@ namespace LMS.Migrations
             Course.Users.Add(user);
             user = uManager.FindByName("castell_john@hotmail.com");
             Course.Users.Add(user);
+            if (user.CoursesId == null || user.CoursesId <= 0)
+            {
+                user.CoursesId = Course.Id;
+                context.Users.AddOrUpdate(u => u.UserName, user);
+            }
             user = uManager.FindByName("ari.kylmanen@comhem.se");
             Course.Users.Add(user);
+            if (user.CoursesId == null || user.CoursesId <= 0)
+            {
+                user.CoursesId = Course.Id;
+                context.Users.AddOrUpdate(u => u.UserName, user);
+            }
             user = uManager.FindByName("mariehansson10@hotmail.com");
             Course.Users.Add(user);
+            if (user.CoursesId == null || user.CoursesId <= 0)
+            {
+                user.CoursesId = Course.Id;
+                context.Users.AddOrUpdate(u => u.UserName, user);
+            }
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
             context.SaveChanges();
@@ -85,6 +102,11 @@ namespace LMS.Migrations
 
                 uManager.AddToRole(user.Id, "Student");
                 Course.Users.Add(user);
+                if (user.CoursesId == null || user.CoursesId <= 0)
+                {
+                    user.CoursesId = Course.Id;
+                    context.Users.AddOrUpdate(u => u.UserName, user);
+                }
             }
             
             Module Module = new Module { Name = "C#", Description = "Learning C#", StartDate = new DateTime(2016, 3, 2), EndDate = new DateTime(2016, 3, 28) };
@@ -131,13 +153,65 @@ namespace LMS.Migrations
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
 
-            Document Document = new Document { Name = "Maries Fil", Description = "Marie har en fil.", FileFolder = "/", FileName = "Marie.txt", FileExtention = ".txt", UserId = user.Id, UploadTime = DateTime.Today, ModifyUserId = 0, ModuleId = Module.Id };
-            context.Documents.AddOrUpdate(d => d.Name, Document);
-
+            foreach (string file in Directory.GetFiles(MapPath("~/documents/modules/-1/").Replace("%20", " "))) {
+                string extention = System.IO.Path.GetExtension(file);
+                string name = System.IO.Path.GetFileNameWithoutExtension(file);
+                Document Document = DocumentCRUD.SaveDocument(MapPath("~/documents/modules/5/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
+                if (Document != null)
+                {
+                    Document.Name = name;
+                    Document.Description = name;
+                    Document.UploadTime = DateTime.Now;
+                    Document.ActivityId = null;
+                    Document.CourseId = null;
+                    Document.ModifyUserId = null;
+                    Document.ModuleId = 5;
+                    Document.UserId = user.Id;
+                    context.Documents.AddOrUpdate(d => d.Name, Document);
+                }
+                Document = DocumentCRUD.SaveDocument(MapPath("~/documents/course/1/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
+                if (Document != null)
+                {
+                    Document.Name = name;
+                    Document.Description = name;
+                    Document.UploadTime = DateTime.Now;
+                    Document.ActivityId = null;
+                    Document.CourseId = 1;
+                    Document.ModifyUserId = null;
+                    Document.ModuleId = null;
+                    Document.UserId = user.Id;
+                    context.Documents.AddOrUpdate(d => d.Name, Document);
+                }
+                Document = DocumentCRUD.SaveDocument(MapPath("~/documents/activity/3/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
+                if (Document != null)
+                {
+                    Document.Name = name;
+                    Document.Description = name;
+                    Document.UploadTime = DateTime.Now;
+                    Document.ActivityId = 3;
+                    Document.CourseId = null;
+                    Document.ModifyUserId = null;
+                    Document.ModuleId = null;
+                    Document.UserId = user.Id;
+                    context.Documents.AddOrUpdate(d => d.Name, Document);
+                }
+            }
 
             user = uManager.FindByName("admin@mail.nu");
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);
+        }
+
+        private string MapPath(string seedFile)
+        {
+            if (HttpContext.Current != null)
+                return HostingEnvironment.MapPath(seedFile);
+
+            var absolutePath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).AbsolutePath;
+            var directoryName = Path.GetDirectoryName(absolutePath);
+            var path = Path.Combine(directoryName, ".." + seedFile.TrimStart('~').Replace('/', '\\'));
+
+            return path;
         }
     }
 }

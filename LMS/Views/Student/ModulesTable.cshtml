@@ -2,9 +2,10 @@
 @if (Model.Count() > 0)
 {
     <hr />
-    <table>
+    <h4>Moduler</h4>
+    <table class="center">
         <tr>
-            <th>Moduler</th>
+            <th></th>
             <th></th>
             <th>@Html.DisplayNameFor(model => model.StartDate)</th>
             <th></th>
@@ -16,7 +17,7 @@
                 <td><a href="@Url.Content("~/Student/Module/" + module.Id)">@module.Name</a></td>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                 <td>@module.StartDate.ToString(" yyyy-MM-dd ")</td>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> 
                 <td>@module.EndDate.ToString(" yyyy-MM-dd ")</td>
             </tr>
         }

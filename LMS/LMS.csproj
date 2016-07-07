@@ -198,6 +198,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -232,6 +233,10 @@
     <Compile Include="Migrations\201607011413005_Update_User_Course.cs" />
     <Compile Include="Migrations\201607011413005_Update_User_Course.Designer.cs">
       <DependentUpon>201607011413005_Update_User_Course.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607051455550_Update_Document_ModifyUserId.cs" />
+    <Compile Include="Migrations\201607051455550_Update_Document_ModifyUserId.Designer.cs">
+      <DependentUpon>201607051455550_Update_Document_ModifyUserId.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AssignmentCheck.cs" />
@@ -308,7 +313,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -340,6 +344,22 @@
     <Content Include="Views\Student\ActivitiesTable.cshtml" />
     <Content Include="Views\Student\Assignments.cshtml" />
     <Content Include="Views\Student\OldActivities.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Teacher\Create.cshtml" />
+    <Content Include="Views\Teacher\Delete.cshtml" />
+    <Content Include="Views\Teacher\Details.cshtml" />
+    <Content Include="Views\Teacher\Edit.cshtml" />
+    <Content Include="Views\Teacher\Index.cshtml" />
+    <Content Include="Views\Teacher\CreateCourse.cshtml" />
+    <Content Include="Views\Teacher\ListActivities.cshtml" />
+    <Content Include="Views\Teacher\CreateUser.cshtml" />
+    <Content Include="Views\Teacher\ListModules.cshtml" />
+    <Content Include="Views\Teacher\EditActivity.cshtml" />
+    <Content Include="Views\Teacher\OldCourses.cshtml" />
+    <Content Include="Views\Teacher\Assignment.cshtml" />
+    <Content Include="Views\Teacher\CreateModule.cshtml" />
+    <Content Include="Views\Teacher\EditModule.cshtml" />
+    <Content Include="Views\Teacher\EditCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -376,6 +396,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607011413005_Update_User_Course.resx">
       <DependentUpon>201607011413005_Update_User_Course.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607051455550_Update_Document_ModifyUserId.resx">
+      <DependentUpon>201607051455550_Update_Document_ModifyUserId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
