@@ -16,10 +16,74 @@ namespace LMS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [HttpGet]
+        public ActionResult Assignment(int? id)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult OldCourses()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult Course(int? id)
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult Module(int? id)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Activity(int? id)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult CreateCourse()
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult CreateCourse(FormCollection collection)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult CreateModule()
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult CreateModule(FormCollection collection)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult CreateActivity()
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult CreateActivity(FormCollection Collection)
+        {
+            return View();
+        }
+
 
         [HttpGet]
         public ActionResult CreateUser()
@@ -33,6 +97,12 @@ namespace LMS.Controllers
         {
             // skillnaderna mellan en vymodel såsom LoginViewModel och en FormCollection
             //LoginViewModel Model = new LoginViewModel();
+            //
+            //if (!ModelState.IsValid)
+            //{
+            //    // här händer nåt
+            //}
+            //
             //var epost = Model.Email;
             //var password = Model.Password;
             //bool Remember = Model.RememberMe;
@@ -107,6 +177,47 @@ namespace LMS.Controllers
             ViewBag.CoursesId = new SelectList(db.Courses, "Id", "Name", user.CoursesId);
             return View(user);
         }
+
+        [HttpGet]
+        public ActionResult EditCourse(int? id)
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult EditCourse(FormCollection collection)
+        {
+            return View();
+        }
+
+    
+        [HttpGet]
+        public ActionResult EditModule(int? id)
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult EditModule(FormCollection collection)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult EditActivity(int? id)
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult EditActivity(FormCollection collection)
+        {
+            return View();
+        }
+
 
         // GET: Teacher/Edit/5
         public ActionResult Edit(string id)
