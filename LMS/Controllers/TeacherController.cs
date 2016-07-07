@@ -86,13 +86,58 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult CreateModule()
         {
+            FetchAllCourses();  
+
             return View();
+        }
+
+        public void FetchAllCourses()
+        {
+            List<SelectListItem> courses = new List<SelectListItem>();
+            foreach (Course c in db.Courses)
+            {
+                courses.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
+            }
+
+            ViewBag.Courses = courses;
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateModule(FormCollection collection)
+        public ActionResult CreateModule(CreateModuleViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                FetchAllCourses();
+
+                return View(model);
+            }
+
+            bool hasError = false;
+            if (model.StartDate < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
+                hasError = true;
+            }
+            if (model.EndDate < model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
+                hasError = true;
+            }
+            Course course = db.Courses.FirstOrDefault(c => c.Id == model.CourseId);
+            if (course == null)
+            {
+                ModelState.AddModelError("CourseId", "Kursen kan ej hittas");
+                hasError = true;
+            }
+            
+            if (hasError)
+            {
+                FetchAllCourses();
+
+                return View(model);
+            }
+
             return View();
         }
 
