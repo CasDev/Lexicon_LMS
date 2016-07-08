@@ -22,7 +22,7 @@ namespace LMS.Controllers
         //John Hellman tyckte detta var jätteroligt! 
         public Course FindCourse(User user)
         {
-            return db.Courses.FirstOrDefault(c => c.Id==user.CoursesId);
+            return db.Courses.FirstOrDefault(c => c.Id == user.CoursesId);
             //return db.Courses.Where(c => c.Users.Where(u => u.Id == user.Id).Count() > 0).FirstOrDefault();
             //Where ska man bara ha om man vill ha en lista, d v s ej då man bara vill plocka ut 1 item. 
         }
@@ -111,7 +111,8 @@ namespace LMS.Controllers
                     return View("~/Views/Error/Index.cshtml");
 //                    return Redirect("~/Error/?error=Du har ej tillgång hit");
                 }
-            } else if (doc.ModuleId != null)
+            }
+            else if (doc.ModuleId != null)
             {
                 Module _module = db.Modules.FirstOrDefault(m => m.Id == doc.ModuleId);
                 Course _course = _module.Course;
@@ -121,7 +122,8 @@ namespace LMS.Controllers
                     return View("~/Views/Error/Index.cshtml");
                     //                    return Redirect("~/Error/?error=Du har ej tillgång hit");
                 }
-            } else if (doc.ActivityId != null)
+            }
+            else if (doc.ActivityId != null)
             {
                 Activity _activity = db.Activities.FirstOrDefault(m => m.Id == doc.ActivityId);
                 Module _module = _activity.Module;
@@ -216,7 +218,8 @@ namespace LMS.Controllers
             }
             if (sort != null)
             {
-                switch (sort.ToLower()) {
+                switch (sort.ToLower())
+                {
                     case "delayed":
                         assignments = assignments.OrderBy(c => c.Delayed).Reverse().ToList();
                         break;
@@ -275,7 +278,7 @@ namespace LMS.Controllers
                 course.Users = course.Users.OrderBy(u => u.LastName).ToList();
             }
             else {
-                course.Users =  course.Users.OrderBy(u => u.FirstName).ToList();
+                course.Users = course.Users.OrderBy(u => u.FirstName).ToList();
             }
             int id = (course != null ? course.Id : 0);
 
@@ -314,11 +317,12 @@ namespace LMS.Controllers
             if (file != null && file.ContentLength > 0)
             {
                 string extention = System.IO.Path.GetExtension(file.FileName);
-                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id +"/"), "ovning", extention, file);
+                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"), "ovning", extention, file);
                 if (Document == null)
                 {
                     ModelState.AddModelError("", "Din inlämningsuppgift har ej sparats");
-                } else
+                }
+                else
                 {
                     Document.Name = "Inlämning för " + user.FirstName + " " + user.LastName;
                     Document.Description = "Inlämning för " + user.FirstName + " " + user.LastName;
@@ -332,12 +336,13 @@ namespace LMS.Controllers
                     db.Documents.Add(Document);
                     db.SaveChanges();
                 }
-            } else
+            }
+            else
             {
                 ModelState.AddModelError("", "En fil med innehåll måste erhållas");
             }
 
-            return Redirect("~/Student/Activity/"+ id);
+            return Redirect("~/Student/Activity/" + id);
 //            return View("~/Views/Student/Activity.cshtml", activity);
         }
 
@@ -366,13 +371,20 @@ namespace LMS.Controllers
             Module module = activity.Module;
             Course course = module.Course;
 
-            if(course.Id != FindCourse().Id)
+            if (course.Id != FindCourse().Id)
             {
                 ViewBag.Error = "Du har ej tillgång hit";
                 return View("~/Views/Error/Index.cshtml");
                 //return Redirect("~/Error/?error=Du har ej tillgång hit.");
             }
 
+            //Adrian föreslog en annan lösning på nedanstående kod. Se nedanför detta stycke, för hans ändring. 
+            //MenyItems items = new MenyItems();
+            //items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
+            //items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
+            //items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
+            //items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
+            //ViewBag.Menu = items;
             createMenu(Home: true, Back: new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
 
@@ -406,6 +418,15 @@ namespace LMS.Controllers
             {
                 return Redirect("~/Error/?error=Ingen Modul funnen");
             }
+
+            //Adrian föreslog en annan lösning även på denna kod. Se nedanför detta stycke. 
+            //MenyItems items = new MenyItems();
+            //items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
+            //items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
+            //items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
+            //items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
+            //items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" + module.Id });
+            //ViewBag.Menu = items;
 
             createMenu(Home: true, Back: new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" });
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
