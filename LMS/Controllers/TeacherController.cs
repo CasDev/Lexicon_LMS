@@ -137,9 +137,21 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreateModule()
+        public ActionResult CreateModule(int? id)
         {
-            FetchAllCourses();  
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för Modulen");
+            }
+
+            Course course = db.Courses.FirstOrDefault(m => m.Id == (int)id);
+            if (course == null)
+            {
+                return Redirect("~/Error/?error=Ingen course funnen");
+            }
+
+            ViewBag.Course = (int)id;
+//            FetchAllCourses();  
 
             return View();
         }
@@ -157,16 +169,23 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateModule(CreateModuleViewModel model)
+        public ActionResult CreateModule(CreateModuleViewModel model, int? id)
         {
+            bool hasError = false;
+            if (id == null)
+            {
+                ModelState.AddModelError("", "Inget id funnet, var god återge vilken kurs du vill använda");
+                hasError = true;
+            }
+
             if (!ModelState.IsValid)
             {
-                FetchAllCourses();
+                ViewBag.Course = (id != null ? (int) id : 0);
+                //FetchAllCourses();
 
                 return View(model);
             }
 
-            bool hasError = false;
             if (model.StartDate < DateTime.Today.AddDays(1))
             {
                 ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
@@ -180,13 +199,14 @@ namespace LMS.Controllers
             Course course = db.Courses.FirstOrDefault(c => c.Id == model.CourseId);
             if (course == null)
             {
-                ModelState.AddModelError("CourseId", "Kursen kan ej hittas");
+                ModelState.AddModelError("", "Kursen kan ej hittas");
                 hasError = true;
             }
             
             if (hasError)
             {
-                FetchAllCourses();
+                ViewBag.Course = (id != null ? (int)id : 0);
+                //FetchAllCourses();
 
                 return View(model);
             }
