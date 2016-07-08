@@ -11,13 +11,5 @@ namespace LMS.Models
         public string Link { get; set; }
     }
 
-    public class MenyItems 
-    {
-        public List<MenyItem> Items { get; set; }
-
-        public MenyItems()
-        {
-            this.Items = new List<MenyItem>();
-        }
-    }
+    public class MenyItems : List<MenyItem> { }
 }
