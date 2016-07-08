@@ -150,12 +150,13 @@ namespace LMS.Controllers
                 return Redirect("~/Error/?error=Ingen course funnen");
             }
 
-            ViewBag.Course = (int)id;
+            CreateModuleViewModel model = new CreateModuleViewModel { CourseId = (int)id };
 //            FetchAllCourses();  
 
-            return View();
+            return View(model);
         }
 
+        // var i första delen när man valde kurs genom en dropdown-lista
         public void FetchAllCourses()
         {
             List<SelectListItem> courses = new List<SelectListItem>();
@@ -180,7 +181,7 @@ namespace LMS.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Course = (id != null ? (int) id : 0);
+                model.CourseId = (id != null ? (int) id : 0);
                 //FetchAllCourses();
 
                 return View(model);
@@ -205,7 +206,7 @@ namespace LMS.Controllers
             
             if (hasError)
             {
-                ViewBag.Course = (id != null ? (int)id : 0);
+                model.CourseId = (id != null ? (int)id : 0);
                 //FetchAllCourses();
 
                 return View(model);
