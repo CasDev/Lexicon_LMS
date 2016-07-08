@@ -162,14 +162,61 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult CreateActivity()
         {
+            FetchAllModules();        //Anrop till metoden FetchAllModules.   
             return View();
+        }
+
+        public void FetchAllModules()       //Denna metod ser till att man kan välja modul, då man skapar en aktivitet. 
+        {
+            List<SelectListItem> courses = new List<SelectListItem>();
+            foreach (Module c in db.Modules)
+            {
+                courses.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
+            }
+
+            ViewBag.Modules = courses;
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult CreateActivity(CreateActivityViewModel model)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                FetchAllModules();        //Anrop till metoden FetchAllModules.   
+                return View(model);
+            }
+
+            bool hasError = false;
+            if (model.StartDate < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
+                hasError = true;
+            }
+            if (model.EndDate < model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
+                hasError = true;
+            }
+            Module module = db.Modules.FirstOrDefault(c => c.Id == model.ModuleId);
+            if (module == null)
+            {
+                ModelState.AddModelError("ModuleId", "Kursen kan ej hittas");
+                hasError = true;
+            }
+            if (hasError)
+            {
+                FetchAllCourses();
+
+                return View(model);
+            }
+
+
+            Activity activity = new Activity { Name = model.Name, Description = (model.Description != null ? model.Description : ""), StartDate = model.StartDate, EndDate = model.EndDate, ModuleId = model.ModuleId, Deadline = model.Deadline };
+            db.Activities.Add(activity);
+            db.SaveChanges();
+
+            return Redirect("~/Teacher/Activity/" + activity.Id); //Skickar vidare till vy med information om den aktivitet som vi just har skapat. 
         }
 
 
