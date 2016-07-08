@@ -403,8 +403,8 @@ namespace LMS.Controllers
 
         public ActionResult Index()
         {
-            var users = db.Users.Include(u => u.Courses);
-            return View(users.ToList());
+            var courses = db.Courses.Where(c => c.EndDate > DateTime.Now); 
+            return View(courses.ToList());
         }
 
         [HttpGet]
