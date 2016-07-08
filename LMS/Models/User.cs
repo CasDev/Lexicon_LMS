@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using LMS.Models.DataAccess;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,6 +28,21 @@ namespace LMS.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
+        }
+
+        public bool IsTeacher()
+        {
+            IdentityRole teacher = new ApplicationDbContext().Roles.FirstOrDefault(r => r.Name == "Teacher");
+
+            return (this.Roles.FirstOrDefault(r => r.RoleId == teacher.Id) != null);
+        }
+
+        public bool IsStudent()
+        {
+            IdentityRole student = new ApplicationDbContext().Roles.FirstOrDefault(r => r.Name == "Student");
+
+            return (this.Roles.FirstOrDefault(r => r.RoleId == student.Id) != null);
+
         }
     }
 }

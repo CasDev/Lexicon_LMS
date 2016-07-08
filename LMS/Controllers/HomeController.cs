@@ -89,27 +89,17 @@ namespace LMS.Controllers
                 User user = db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
                 if (user != null)
                 {
-                    IdentityRole teacher = db.Roles.Where(r => r.Name == "Teacher").FirstOrDefault();
-                    IdentityRole student = db.Roles.Where(r => r.Name == "Student").FirstOrDefault();
-                    if (teacher == null || student == null)
-                    {
-                        ModelState.AddModelError("", "Roles has become unstable, and the system has been closed.");
-                        ModelState.AddModelError("", "Please contact an administrative personal.");
-                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                    }
-                    else if (user.Roles.Where(r => r.RoleId == student.Id).Count() > 0)
+                    if (user.IsStudent())
                     {
                         return Redirect("~/Student/");
                     }
-                    else if (user.Roles.Where(r => r.RoleId == teacher.Id).Count() > 0)
+                    else if (user.IsTeacher())
                     {
-                        ModelState.AddModelError("", "Teacher not implemented yet.");
-                        ModelState.AddModelError("", "Logout initiated.");
-                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        return Redirect("~/Teacher/");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Inloggad användare ej funnen.");
+                        ModelState.AddModelError("", "Felaktig inloggning.");
                         AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     }
                 }
@@ -140,24 +130,13 @@ namespace LMS.Controllers
                 switch (result)
                 {
                     case SignInStatus.Success:
-                        IdentityRole teacher = db.Roles.FirstOrDefault(r => r.Name == "Teacher");
-                        IdentityRole student = db.Roles.FirstOrDefault(r => r.Name == "Student");
-                        if (teacher == null || student == null)
-                        {
-                            ModelState.AddModelError("", "Roles has become unstable, and the system has been closed.");
-                            ModelState.AddModelError("", "Please contact an administrative personal.");
-                            ModelState.AddModelError("", "Logout initiated.");
-                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                        }
-                        else if (user.Roles.Where(r => r.RoleId == student.Id).Count() > 0)
+                        if (user.IsStudent())
                         {
                             return Redirect("~/Student/");
                         }
-                        else if (user.Roles.Where(r => r.RoleId == teacher.Id).Count() > 0)
+                        else if (user.IsTeacher())
                         {
-                            ModelState.AddModelError("", "Teacher not implemented yet.");
-                            ModelState.AddModelError("", "Logout initiated.");
-                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                            return Redirect("~/Teacher/");
                         }
                         else
                         {
