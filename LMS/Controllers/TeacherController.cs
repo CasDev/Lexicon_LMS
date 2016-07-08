@@ -38,7 +38,18 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult Module(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för Modulen");
+            }
+
+            Module module = db.Modules.FirstOrDefault(m => m.Id == (int)id);
+            if (module == null)
+            {
+                return Redirect("~/Error/?error=Ingen module funnen");
+            }
+
+            return View(module);
         }
 
         [HttpGet]
