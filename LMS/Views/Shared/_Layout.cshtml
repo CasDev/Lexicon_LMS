@@ -36,8 +36,8 @@
             @if (ViewBag.BreadCrumbs != null)
             {
                 <ul id="breadcrumbs">
-                    @foreach (MenyItem Item in ((MenyItems)ViewBag.BreadCrumbs).Items)
-                {
+                    @foreach (MenyItem Item in ((MenyItems)ViewBag.BreadCrumbs))
+                    {
                         <li><a href="@Url.Content(Item.Link)">@Item.Text</a></li>
                         <li class="delimiter">/</li>
                     }
