@@ -15,14 +15,14 @@ namespace LMS.Controllers
 
         public User FindUser()
         {
-//            return db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault(); //Redundant, överflödig kod. Where ej nödvändigt. 
+            //            return db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault(); //Redundant, överflödig kod. Where ej nödvändigt. 
             return db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
         }
 
         //John Hellman tyckte detta var jätteroligt! 
         public Course FindCourse(User user)
         {
-            return db.Courses.FirstOrDefault(c => c.Id==user.CoursesId);
+            return db.Courses.FirstOrDefault(c => c.Id == user.CoursesId);
             //return db.Courses.Where(c => c.Users.Where(u => u.Id == user.Id).Count() > 0).FirstOrDefault();
             //Where ska man bara ha om man vill ha en lista, d v s ej då man bara vill plocka ut 1 item. 
         }
@@ -35,7 +35,7 @@ namespace LMS.Controllers
         public Course FindCourse(int id)
         {
             return db.Courses.FirstOrDefault(c => c.Id == id); //Behåll denna. Bättre kod än att använda Where, vilket blir överflödigt (redundant). (John Hellman har hjälpt oss.) 
-        }                                           
+        }
 
         public ICollection<User> FindParticipants(int id)
         {
@@ -47,10 +47,10 @@ namespace LMS.Controllers
             course = (course != null ? course : new Course());
             return (course.Users != null ? course.Users : new List<User>());
         }
-        
+
         public List<Activity> FindAllDeadlines(IEnumerable<Activity> list)
         {
-             // hittar alla med en deadline, ur en fördefinierad lista
+            // hittar alla med en deadline, ur en fördefinierad lista
             return list.Where(x => x.Deadline != null).ToList(); //Här är det bra med Where, eftersom man vill ha en lista. 
         }
 
@@ -103,7 +103,8 @@ namespace LMS.Controllers
                 {
                     return Redirect("~/Error/?error=Du har ej tillgång hit");
                 }
-            } else if (doc.ModuleId != null)
+            }
+            else if (doc.ModuleId != null)
             {
                 Module _module = db.Modules.FirstOrDefault(m => m.Id == doc.ModuleId);
                 Course _course = _module.Course;
@@ -111,7 +112,8 @@ namespace LMS.Controllers
                 {
                     return Redirect("~/Error/?error=Du har ej tillgång hit");
                 }
-            } else if (doc.ActivityId != null)
+            }
+            else if (doc.ActivityId != null)
             {
                 Activity _activity = db.Activities.FirstOrDefault(m => m.Id == doc.ActivityId);
                 Module _module = _activity.Module;
@@ -166,7 +168,7 @@ namespace LMS.Controllers
 
             return View(course);
         }
-        
+
         [HttpGet]
         [Authorize(Roles = "Student")]
         public ActionResult Assignments(string sort)
@@ -189,7 +191,8 @@ namespace LMS.Controllers
             }
             if (sort != null)
             {
-                switch (sort.ToLower()) {
+                switch (sort.ToLower())
+                {
                     case "delayed":
                         assignments = assignments.OrderBy(c => c.Delayed).Reverse().ToList();
                         break;
@@ -237,7 +240,7 @@ namespace LMS.Controllers
 
             return View(course);
         }
-        
+
         [HttpGet]
         [Authorize(Roles = "Student")]
         public ActionResult Participants(string sort)
@@ -263,7 +266,7 @@ namespace LMS.Controllers
                 course.Users = course.Users.OrderBy(u => u.LastName).ToList();
             }
             else {
-                course.Users =  course.Users.OrderBy(u => u.FirstName).ToList();
+                course.Users = course.Users.OrderBy(u => u.FirstName).ToList();
             }
             int id = (course != null ? course.Id : 0);
 
@@ -295,11 +298,12 @@ namespace LMS.Controllers
             if (file != null && file.ContentLength > 0)
             {
                 string extention = System.IO.Path.GetExtension(file.FileName);
-                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id +"/"), "ovning", extention, file);
+                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"), "ovning", extention, file);
                 if (Document == null)
                 {
                     ModelState.AddModelError("", "Din inlämningsuppgift har ej sparats");
-                } else
+                }
+                else
                 {
                     Document.Name = "Inlämning för " + user.FirstName + " " + user.LastName;
                     Document.Description = "Inlämning för " + user.FirstName + " " + user.LastName;
@@ -313,13 +317,14 @@ namespace LMS.Controllers
                     db.Documents.Add(Document);
                     db.SaveChanges();
                 }
-            } else
+            }
+            else
             {
                 ModelState.AddModelError("", "En fil med innehåll måste erhållas");
             }
 
-            return Redirect("~/Student/Activity/"+ id);
-//            return View("~/Views/Student/Activity.cshtml", activity);
+            return Redirect("~/Student/Activity/" + id);
+            //            return View("~/Views/Student/Activity.cshtml", activity);
         }
 
         [HttpGet]
@@ -345,7 +350,7 @@ namespace LMS.Controllers
             Module module = activity.Module;
             Course course = module.Course;
 
-            if(course.Id != FindCourse().Id)
+            if (course.Id != FindCourse().Id)
             {
                 return Redirect("~/Error/?error=Du har ej tillgång hit.");
             }
@@ -354,7 +359,7 @@ namespace LMS.Controllers
             items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
             items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
             items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/"+ module.Id });
+            items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
 
@@ -392,7 +397,7 @@ namespace LMS.Controllers
             items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
             items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
             items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/"+ module.Id });
+            items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" + module.Id });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
 

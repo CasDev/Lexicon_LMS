@@ -11,7 +11,7 @@ namespace LMS.Models
         public string Link { get; set; }
     }
 
-    public class MenyItems
+    public class MenyItems 
     {
         public List<MenyItem> Items { get; set; }
 
