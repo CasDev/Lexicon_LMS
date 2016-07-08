@@ -133,27 +133,25 @@ namespace LMS.Models
     public class CreateActivityViewModel
     {
         [Display(Name = "Typ")]
-        [Required (ErrorMessage = "Kurstyp")]
+        [Required (ErrorMessage = "Kurstyp behövs för en aktivitet")]
         public string Type { get; set; }            //Marie 
 
         [Display(Name = "Namn")]
-        [Required(ErrorMessage = "Kursnamn")]
+        [Required(ErrorMessage = "Kursnamn behövs för en aktivitet")]
         public string Name { get; set; }            //Marie 
 
         [Display(Name = "Beskrivning")]
-        [Required(ErrorMessage = "Beskrivning")]
         public string Description { get; set; }     //Marie
 
         [Display(Name = "Startdatum")]              //Marie
-        [Required(ErrorMessage = "Startdatum")]
-        public DateTime? StartDate { get; set; }
+        [Required(ErrorMessage = "Startdatum behövs för aktivitet")]
+        public DateTime StartDate { get; set; }
 
         [Display(Name = "Slutdatum")]               //Marie 
-        [Required(ErrorMessage = "Slutdatum")]
-        public DateTime? EndDate { get; set; }
+        [Required(ErrorMessage = "Slutdatum behövs för aktivitet")]
+        public DateTime EndDate { get; set; }
 
         [Display(Name = "Inlämningsdatum")]         //Marie 
-        [Required(ErrorMessage = "Inlämningsdatum")]
         public DateTime? Deadline { get; set; }
 
         [Required]

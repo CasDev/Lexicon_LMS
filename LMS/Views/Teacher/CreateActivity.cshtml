@@ -37,6 +37,12 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Deadline, new { type = "date", @class = "form-control, datepicker" })
+                            @Html.ValidationMessageFor(m => m.Deadline, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
                             @Html.DropDownListFor(m => m.Type, new List<SelectListItem>
                             {
                                 new SelectListItem { Value = "Lecture", Text = "Föreläsning" },
@@ -44,6 +50,12 @@
                                 new SelectListItem { Value = "Excercise", Text = "Övning" },
                             }, new { @class = "form-control" })
                             @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.ModuleId, (IEnumerable<SelectListItem>)ViewBag.Modules, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ModuleId, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
