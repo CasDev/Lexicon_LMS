@@ -1,0 +1,14 @@
+﻿@model Activity
+@{
+    ViewBag.Title = "Aktivitet " + Model.Name;
+}
+<div class="leftalize fortywidth center">
+    <h4>@Model.Name</h4>
+    <p>@Model.Description</p>
+    @if (Model.StartDate != null && Model.EndDate != null)
+    {
+        <p>mellan <time datetime="@(((DateTime)Model.StartDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.StartDate).ToString(" yyyy-MM-dd "))</time> och <time datetime="@(((DateTime)Model.EndDate).ToString("yyyy-MM-dd"))">@(((DateTime)Model.EndDate).ToString(" yyyy-MM-dd "))</time></p>
+    }
+    <!-- <p>Detta är en @Model.Type-aktivitet</p> -->
+    <p>Denna tillhör modulen: @Model.Module.Name</p>
+</div>

@@ -18,6 +18,22 @@ namespace LMS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [HttpGet]
+        public ActionResult ShowUser(string id)
+        {
+            if (id == null)
+            {
+               return Redirect("~/Error/?error=Inget Id angett för Användaren");
+            }
+
+            User user = db.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return Redirect("~/Error/?error=Ingen användare funnen");
+            }
+
+            return View(user);
+        }
+        [HttpGet]
         public ActionResult Assignment(int? id)
         {
             return View();
@@ -32,7 +48,20 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult Course(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för kursen");
+            }
+
+            Course course = db.Courses.FirstOrDefault(m => m.Id == (int)id);
+            if (course == null)
+            {
+                return Redirect("~/Error/?error=Ingen kurs funnen");
+            }
+            course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
+            course.Modules = course.Modules.Where(m => m.EndDate > DateTime.Now).OrderBy(m => m.StartDate).ToList();
+
+            return View(course);
         }
 
         [HttpGet]
@@ -55,7 +84,18 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult Activity(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för aktiviteten");
+            }
+
+            Activity activity = db.Activities.FirstOrDefault(m => m.Id == (int)id);
+            if (activity == null)
+            {
+                return Redirect("~/Error/?error=Ingen activitet funnen");
+            }
+
+            return View(activity);
         }
 
         [HttpGet]
@@ -97,13 +137,26 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreateModule()
+        public ActionResult CreateModule(int? id)
         {
-            FetchAllCourses();  
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för Modulen");
+            }
 
-            return View();
+            Course course = db.Courses.FirstOrDefault(m => m.Id == (int)id);
+            if (course == null)
+            {
+                return Redirect("~/Error/?error=Ingen course funnen");
+            }
+
+            CreateModuleViewModel model = new CreateModuleViewModel { CourseId = (int)id };
+//            FetchAllCourses();  
+
+            return View(model);
         }
 
+        // var i första delen när man valde kurs genom en dropdown-lista
         public void FetchAllCourses()
         {
             List<SelectListItem> courses = new List<SelectListItem>();
@@ -117,16 +170,23 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateModule(CreateModuleViewModel model)
+        public ActionResult CreateModule(CreateModuleViewModel model, int? id)
         {
+            bool hasError = false;
+            if (id == null)
+            {
+                ModelState.AddModelError("", "Inget id funnet, var god återge vilken kurs du vill använda");
+                hasError = true;
+            }
+
             if (!ModelState.IsValid)
             {
-                FetchAllCourses();
+                model.CourseId = (id != null ? (int) id : 0);
+                //FetchAllCourses();
 
                 return View(model);
             }
 
-            bool hasError = false;
             if (model.StartDate < DateTime.Today.AddDays(1))
             {
                 ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
@@ -140,13 +200,14 @@ namespace LMS.Controllers
             Course course = db.Courses.FirstOrDefault(c => c.Id == model.CourseId);
             if (course == null)
             {
-                ModelState.AddModelError("CourseId", "Kursen kan ej hittas");
+                ModelState.AddModelError("", "Kursen kan ej hittas");
                 hasError = true;
             }
             
             if (hasError)
             {
-                FetchAllCourses();
+                model.CourseId = (id != null ? (int)id : 0);
+                //FetchAllCourses();
 
                 return View(model);
             }
