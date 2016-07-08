@@ -18,6 +18,22 @@ namespace LMS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [HttpGet]
+        public ActionResult ShowUser(string id)
+        {
+            if (id == null)
+            {
+               return Redirect("~/Error/?error=Inget Id angett för Användaren");
+            }
+
+            User user = db.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return Redirect("~/Error/?error=Ingen användare funnen");
+            }
+
+            return View(user);
+        }
+        [HttpGet]
         public ActionResult Assignment(int? id)
         {
             return View();
