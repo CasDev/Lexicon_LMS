@@ -1,1 +1,12 @@
 ﻿@model IEnumerable<Module>
+@if (Model.Count() > 0)
+{
+    <hr />
+    <h5>Relaterade moduler:</h5>
+    <ul>
+        @foreach (Module module in Model)
+        {
+        <li>@Html.ActionLink(module.Name, "/Teacher/Module/", new { id = module.Id }, new { })</li>
+        }
+    </ul>
+}

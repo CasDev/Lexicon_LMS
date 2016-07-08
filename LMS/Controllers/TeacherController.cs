@@ -48,7 +48,20 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult Course(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för kursen");
+            }
+
+            Course course = db.Courses.FirstOrDefault(m => m.Id == (int)id);
+            if (course == null)
+            {
+                return Redirect("~/Error/?error=Ingen kurs funnen");
+            }
+            course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
+            course.Modules = course.Modules.Where(m => m.EndDate > DateTime.Now).OrderBy(m => m.StartDate).ToList();
+
+            return View(course);
         }
 
         [HttpGet]
@@ -71,7 +84,18 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult Activity(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för aktiviteten");
+            }
+
+            Activity activity = db.Activities.FirstOrDefault(m => m.Id == (int)id);
+            if (activity == null)
+            {
+                return Redirect("~/Error/?error=Ingen activitet funnen");
+            }
+
+            return View(activity);
         }
 
         [HttpGet]
