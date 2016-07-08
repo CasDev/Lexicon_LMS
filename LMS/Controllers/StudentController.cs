@@ -392,7 +392,7 @@ namespace LMS.Controllers
             items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
             items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
             items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" });
+            items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/"+ module.Id });
             ViewBag.Menu = items;
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
 

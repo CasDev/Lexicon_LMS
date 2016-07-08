@@ -171,7 +171,7 @@ namespace LMS.Controllers
             List<SelectListItem> courses = new List<SelectListItem>();
             foreach (Module c in db.Modules)
             {
-                courses.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
+                courses.Add(new SelectListItem { Text = c.Name +" ( "+ c.StartDate.ToString("yyyy-MM-dd") +" - "+ c.EndDate.ToString("yyyy-MM-dd") + " )", Value = c.Id.ToString() });
             }
 
             ViewBag.Modules = courses;
@@ -183,36 +183,82 @@ namespace LMS.Controllers
         {
             if (!ModelState.IsValid)
             {
-                FetchAllModules();        //Anrop till metoden FetchAllModules.   
+                model.ModuleId = null;
+                model.Type = null;
+                FetchAllModules();        //Anrop till metoden FetchAllModules.  
+
                 return View(model);
             }
 
             bool hasError = false;
-            if (model.StartDate < DateTime.Today.AddDays(1))
+            if (model.StartDate != null && model.StartDate < DateTime.Today.AddDays(1))
             {
                 ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
                 hasError = true;
             }
-            if (model.EndDate < model.StartDate)
+            if (model.EndDate != null && model.StartDate != null && model.EndDate < model.StartDate)
             {
                 ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
+                hasError = true;
+            }
+            if (model.EndDate != null && model.EndDate < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("EndDate", "Slutdatum kan ej vara innan morgondagen");
+                hasError = true;
+            }
+            if (model.Deadline != null && model.StartDate != null && model.Deadline < model.StartDate)
+            {
+                ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan startdatumet");
+                hasError = true;
+            }
+            if (model.Deadline != null && model.EndDate != null && model.Deadline > model.EndDate)
+            {
+                ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara efter slutdatumet");
+                hasError = true;
+            }
+            if (model.Deadline != null && model.Deadline < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan morgondagen");
                 hasError = true;
             }
             Module module = db.Modules.FirstOrDefault(c => c.Id == model.ModuleId);
             if (module == null)
             {
-                ModelState.AddModelError("ModuleId", "Kursen kan ej hittas");
+                ModelState.AddModelError("ModuleId", "Modulen kan ej hittas");
                 hasError = true;
+            } else
+            {
+                if (model.StartDate != null && model.StartDate < module.StartDate)
+                {
+                    ModelState.AddModelError("StartDate", "Startdatum kan ej starta innan modulen");
+                    hasError = true;
+                }
+                if (model.EndDate != null && model.EndDate > module.EndDate)
+                {
+                    ModelState.AddModelError("EndDate", "Slutdatum kan ej sluta efter modulen");
+                    hasError = true;
+                }
+                if (model.Deadline != null && model.Deadline < module.StartDate)
+                {
+                    ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan modulens startdatum");
+                    hasError = true;
+                }
+                if (model.Deadline != null && model.Deadline > module.EndDate)
+                {
+                    ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara efter modulens slutdatumet");
+                    hasError = true;
+                }
             }
             if (hasError)
             {
-                FetchAllCourses();
+                model.ModuleId = null;
+                model.Type = null;
+                FetchAllModules();
 
                 return View(model);
             }
 
-
-            Activity activity = new Activity { Name = model.Name, Description = (model.Description != null ? model.Description : ""), StartDate = model.StartDate, EndDate = model.EndDate, ModuleId = model.ModuleId, Deadline = model.Deadline };
+            Activity activity = new Activity { Name = model.Name, Description = (model.Description != null ? model.Description : ""), StartDate = model.StartDate, EndDate = model.EndDate, ModuleId = model.ModuleId, Deadline = model.Deadline, Type = model.Type };
             db.Activities.Add(activity);
             db.SaveChanges();
 
