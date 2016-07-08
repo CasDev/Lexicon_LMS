@@ -410,12 +410,31 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult EditCourse(int? id)
         {
-            return View();
+            if (id == null )
+            {
+                ViewBag.Error = "Inget id har angivits";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            var course = db.Courses.FirstOrDefault(c => c.Id == id);
+            if (course == null)
+            {
+                ViewBag.Error = "Ingen kurs har hittats";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            EditCourseViewModel model = new EditCourseViewModel();
+            model.Description = course.Description; 
+            model.Name = course.Name;
+            model.StartDate = course.StartDate;
+            model.EndDate = course.EndDate;
+
+            return View(model);
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult EditCourse(FormCollection collection)
+        public ActionResult EditCourse(EditCourseViewModel model)
         {
             return View();
         }
