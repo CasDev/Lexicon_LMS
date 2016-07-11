@@ -191,9 +191,41 @@ namespace LMS.Controllers
             return View(user);
         }
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult Assignment(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Id saknas för Inlämningsuppgiften");
+            }
+
+            Activity activity = db.Activities.FirstOrDefault(a => a.Id == (int)id);
+            if (activity == null)
+            {
+                return Redirect("~/Error/?error=Aktivitet saknas för Inlämningsuppgiften");
+            }
+
+            if (activity.Deadline == null)
+            {
+                return Redirect("~/Error/?error=Aktivitet saknar Inlämningsuppgift");
+            }
+
+            ViewBag.Activity = activity;
+
+            List<AssignmentStatus> assignment = new List<AssignmentStatus>();
+            Course course = activity.Module.Course;
+
+            foreach (User user in course.Users)
+            {
+                Document doc = DocumentCRUD.FindAssignment(user, activity, db, Server);
+                bool done = (doc != null);
+                bool isLeft = (done == false);
+                bool delayed = ((!done && DateTime.Now > activity.Deadline) || (done && doc != null && doc.UploadTime > activity.Deadline));
+
+                assignment.Add(new AssignmentStatus {User = user, Activity = activity, Delayed = delayed, Done = done, IsLeft = isLeft });
+            }
+
+            return View(assignment);
         }
 
         [HttpGet]
