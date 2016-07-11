@@ -229,6 +229,42 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
+        public ActionResult Download(int? id)
+        {
+            if (id == null)
+            {
+                ViewBag.Error = "Inget Id angett for denna download";
+                return View("~/Views/Error/Index.cshtml");
+                //                return Redirect("~/Error/?error=Inget Id angett för denna download");
+            }
+
+            Document doc = db.Documents.FirstOrDefault(d => d.Id == id);
+            if (doc == null)
+            {
+                ViewBag.Error = "Inget document funnet";
+                return View("~/Views/Error/Index.cshtml");
+                //                return Redirect("~/Error/?error=Inget document funnet");
+            }
+
+            // from here and to return File(filedata, contentType)
+            // http://stackoverflow.com/questions/5826649/returning-a-file-to-view-download-in-asp-net-mvc
+            string filepath = doc.FileFolder + doc.FileName;
+            byte[] filedata = System.IO.File.ReadAllBytes(filepath);
+            string contentType = MimeMapping.GetMimeMapping(filepath);
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = doc.FileName,
+                Inline = false,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
+            return File(filedata, contentType);
+        }
+
+        [HttpGet]
         public ActionResult OldCourses()
         {
             return View(db.Courses.Where(c => c.EndDate < DateTime.Now).ToList());
