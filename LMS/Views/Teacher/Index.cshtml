@@ -26,7 +26,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            <a href="@Url.Content("~/Teacher/Course/"+ item.Id)" class="none">@item.Name</a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.StartDate)

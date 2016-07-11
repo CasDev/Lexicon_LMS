@@ -42,7 +42,7 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult OldCourses()
         {
-            return View();
+            return View(db.Courses.Where(c => c.EndDate < DateTime.Now).ToList());
         }
 
         [HttpGet]
@@ -221,10 +221,23 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreateActivity()
+        public ActionResult CreateActivity(int? id)
         {
-            FetchAllModules();        //Anrop till metoden FetchAllModules.   
-            return View();
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för Modulen");
+            }
+
+            Module module = db.Modules.FirstOrDefault(m => m.Id == (int)id);
+            if (module == null)
+            {
+                return Redirect("~/Error/?error=Ingen module funnen");
+            }
+
+            //            FetchAllModules();        //Anrop till metoden FetchAllModules.   
+            CreateActivityViewModel model = new CreateActivityViewModel();
+            model.ModuleId = (int)id;
+            return View(model);
         }
 
         public void FetchAllModules()       //Denna metod ser till att man kan välja modul, då man skapar en aktivitet. 
@@ -240,13 +253,13 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult CreateActivity(CreateActivityViewModel model)
+        public ActionResult CreateActivity(CreateActivityViewModel model, int? id)
         {
             if (!ModelState.IsValid)
             {
-                model.ModuleId = null;
+                model.ModuleId = (id == null ? 0 : id);
                 model.Type = null;
-                FetchAllModules();        //Anrop till metoden FetchAllModules.  
+//                FetchAllModules();        //Anrop till metoden FetchAllModules.  
 
                 return View(model);
             }
@@ -285,7 +298,7 @@ namespace LMS.Controllers
             Module module = db.Modules.FirstOrDefault(c => c.Id == model.ModuleId);
             if (module == null)
             {
-                ModelState.AddModelError("ModuleId", "Modulen kan ej hittas");
+                ModelState.AddModelError("", "Modulen kan ej hittas");
                 hasError = true;
             } else
             {
@@ -312,9 +325,9 @@ namespace LMS.Controllers
             }
             if (hasError)
             {
-                model.ModuleId = null;
+                model.ModuleId = (id == null ? 0 : id); ;
                 model.Type = null;
-                FetchAllModules();
+//                FetchAllModules();
 
                 return View(model);
             }
@@ -468,6 +481,7 @@ namespace LMS.Controllers
             if (model.Role != "Teacher" && model.Role != "Student")
             {
                 ModelState.AddModelError("Role", "Användare kan enbart vara av roll lärare eller elev");
+                HasError = true;
             }
             if (HasError)
             {
