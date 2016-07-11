@@ -549,11 +549,21 @@ namespace LMS.Controllers
                 ModelState.AddModelError("", "Finns kurs id");
                 hasError = true;
             }
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid)        //MVC kollar om modellen har några fel själv, t ex det som är required; att strängen har en viss längd m m. 
             {
                 hasError = true;
             }
-            if (hasError)
+            if (model.StartDate < DateTime.Today.AddDays(1))       //Vi kollar att den inte är mindre än morgondagen. D v s vi lägger till 1 till i dag, för att få morgondagen. Kollar att startdatumet ligger i framtiden. 
+            {
+                ModelState.AddModelError("StartDate", "Kursen kan inte starta före morgondagens datum.");
+                hasError = true;
+            }
+            if (model.EndDate < model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Kursen kan inte sluta före kursens startdatum. ");
+                hasError = true; //D v s nu har det inträffat ett Error. 
+            }
+                if (hasError)
             {
                 ViewBag.id = id != null ? (int)id : 0;            //Parameter castas om till en int. //Om id inte är null, så skickar vi id som parametern ViewBag = id. Annars om id är null, så sätter vi ViewBag till 0 per default. 
                 return View(model);                               //Skickar tillbaka till samma vy, nu med alla felmeddelanden. 
