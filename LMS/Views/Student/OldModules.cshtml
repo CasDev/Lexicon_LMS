@@ -5,4 +5,4 @@
 
 <h2>Tidigare moduler för @Model.Name</h2>
 <p>Kursen pågick från den <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> till den <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
-@Html.Partial("ModulesTable", Model.Modules)
+@Html.Partial("ModulesTablePartialView", Model.Modules)

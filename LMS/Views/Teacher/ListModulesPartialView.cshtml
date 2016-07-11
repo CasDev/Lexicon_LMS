@@ -6,7 +6,7 @@
     <ul>
         @foreach (Module module in Model)
         {
-        <li><a href="@Url.Content("~/Teacher/Module/"+ module.Id)">@module.Name</a></li>
+            <li><a href="@Url.Content("~/Teacher/Module/"+ module.Id)">@module.Name</a></li>
         }
     </ul>
 }

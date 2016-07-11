@@ -10,4 +10,4 @@
 
     <p>Från <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> till och med <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
 </div>
-@Html.Partial("ListActivities", Model.Activities)
+@Html.Partial("ListActivitiesPartialView", Model.Activities)

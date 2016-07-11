@@ -12,6 +12,6 @@
 </div>
 @if (ViewBag.Documents != null)
 {
-    @Html.Partial("AllDocs", (IEnumerable<Document>)ViewBag.Documents)
+    @Html.Partial("AllDocsPartialView", (IEnumerable<Document>)ViewBag.Documents)
 }
-@Html.Partial("ActivitiesTable", Model.Activities.Where(a => (a.EndDate == null || a.EndDate > DateTime.Now)))
+@Html.Partial("ActivitiesTablePartialView", Model.Activities.Where(a => (a.EndDate == null || a.EndDate > DateTime.Now)))

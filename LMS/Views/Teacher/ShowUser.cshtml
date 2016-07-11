@@ -2,13 +2,10 @@
     @using Microsoft.AspNet.Identity.EntityFramework;
     @{ 
         ViewBag.Title = "Användare";
-        LMS.Models.DataAccess.ApplicationDbContext db = new LMS.Models.DataAccess.ApplicationDbContext();
-        IdentityRole teacher = db.Roles.FirstOrDefault(r => r.Name == "Teacher");
-        IdentityRole student = db.Roles.Where(r => r.Name == "Student").FirstOrDefault();
     }
 <h2>@Model.FirstName @Model.LastName</h2>
 <h5>@Model.Email</h5>
-<p>@(Model.Roles.FirstOrDefault(r => r.RoleId == teacher.Id) != null ? "Lärare" : (Model.Roles.FirstOrDefault(r => r.RoleId == student.Id) != null ? "Student" : "Ingen roll funnen"))</p>
+<p>@(Model.IsTeacher() ? "Lärare" : (Model.IsStudent() ? "Student" : "Ingen roll funnen"))</p>
 <!--<table class="center">
    <tr>
         <th>Roll</th>
@@ -19,7 +16,7 @@
          Lärare
       </td>
         <td>
-           @(Model.Roles.FirstOrDefault(r => r.RoleId == teacher.Id)!=null ?"Ja":"Nej")
+           @(Model.IsTeacher() ? "Ja" : "Nej" )
           </td>
     </tr>
     <tr>
@@ -27,7 +24,7 @@
             Student
         </td>
         <td>
-            @(Model.Roles.FirstOrDefault(r => r.RoleId == student.Id) != null ? "Ja" : "Nej")
+            @(Model.IsStudent() ? "Ja" : "Nej")
         </td>
     </tr>
 </table>-->
