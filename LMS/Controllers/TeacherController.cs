@@ -17,6 +17,163 @@ namespace LMS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateDocument(int? id, string type, CreateDocumentViewModule model)
+        {
+            bool HasError = false;
+            if (id == null)
+            {
+                ModelState.AddModelError("", "Ingen id har engets");
+                HasError = true;
+            }
+            if (type == null)
+            {
+                ModelState.AddModelError("", "Ingen type har engets, som dokumentet skall tillgå till");
+                HasError = true;
+            }
+            if (model.File != null && model.File.ContentLength <= 0)
+            {
+                ModelState.AddModelError("File", "Filen måste ha ett innehåll");
+                HasError = true;
+            }
+
+            ViewBag.Id = id != null ? (int)id : 0;
+            ViewBag.Type = type != null ? type : "none";
+
+            if (!ModelState.IsValid)
+            {
+                HasError = true;
+            }
+            if (HasError)
+            {
+                return View(model);
+            }
+
+            int? courseId = null;
+            int? moduleId = null;
+            int? activityId = null;
+            string GoTo = "";
+
+            switch (type.ToLower())
+            {
+                case "course":
+                    Course course = db.Courses.FirstOrDefault(c => c.Id == (int)id);
+                    if (course == null)
+                    {
+                        ModelState.AddModelError("", "Kursen som letas efter har ej hittats");
+                        HasError = true;
+                    } else
+                    {
+                        courseId = course.Id;
+                        GoTo = "Course/"+ courseId;
+                    }
+                    break;
+                case "module":
+                    Module module = db.Modules.FirstOrDefault(c => c.Id == (int)id);
+                    if (module == null)
+                    {
+                        ModelState.AddModelError("", "Modulen som letas efter har ej hittats");
+                        HasError = true;
+                    }
+                    else
+                    {
+                        moduleId = module.Id;
+                        GoTo = "Module/" + moduleId;
+                    }
+                    break;
+                case "activity":
+                    Activity activity = db.Activities.FirstOrDefault(c => c.Id == (int)id);
+                    if (activity == null)
+                    {
+                        ModelState.AddModelError("", "Activititeten som letas efter har ej hittats");
+                        HasError = true;
+                    }
+                    else
+                    {
+                        activityId = activity.Id;
+                        GoTo = "Activity/" + activityId;
+                    }
+                    break;
+                default:
+                    ModelState.AddModelError("", "Typen är ej igenkänd som en giltig entitet");
+                    HasError = true;
+                    break;
+            }
+
+            if (!HasError)
+            {
+                string extention = System.IO.Path.GetExtension(model.File.FileName);
+                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/" + type.ToLower() + "/" + (int)id +"/"), model.Name.ToLower(), extention, model.File);
+                if (Document == null) {
+                    ModelState.AddModelError("File", "Dokumentet har ej sparats");
+                }
+                else
+                {
+                    Document.Name = model.Name;
+                    Document.Description = model.Description != null ? model.Description : "";
+                    Document.UploadTime = DateTime.Now;
+                    Document.ModifyUserId = null;
+                    Document.CourseId = courseId;
+                    Document.ModuleId = moduleId;
+                    Document.ActivityId = activityId;
+                    Document.UserId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
+
+                    db.Documents.Add(Document);
+                    db.SaveChanges();
+
+                    return Redirect("~/Teacher/"+ GoTo);
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult CreateDocument(int? id, string type)
+        {
+            if (id == null)
+            {
+                return Redirect("~/Error/?error=Inget Id angett för documentets föräldrar entitet");
+            }
+            if (type == null)
+            {
+                return Redirect("~/Error/?error=Inget typ angett för document");
+            }
+
+            ViewBag.Id = (int)id;
+            ViewBag.Type = type;
+
+            switch (type.ToLower())
+            {
+                case "course":
+                    Course course = db.Courses.FirstOrDefault(c => c.Id == (int)id);
+                    if (course == null)
+                    {
+                        return Redirect("~/Error/?error=Ingen kurs funnen");
+                    }
+                    break;
+                case "module":
+                    Module module = db.Modules.FirstOrDefault(c => c.Id == (int)id);
+                    if (module == null)
+                    {
+                        return Redirect("~/Error/?error=Ingen module funnen");
+                    }
+                    break;
+                case "activity":
+                    Activity activity = db.Activities.FirstOrDefault(c => c.Id == (int)id);
+                    if (activity == null)
+                    {
+                        return Redirect("~/Error/?error=Ingen activitet funnen");
+                    }
+                    break;
+                default:
+                    return Redirect("~/Error/?error=Fel typ angett för document");
+            }
+
+            return View();
+        }
+
         [HttpGet]
         public ActionResult ShowUser(string id)
         {
