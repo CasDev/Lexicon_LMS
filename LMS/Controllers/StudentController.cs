@@ -428,7 +428,7 @@ namespace LMS.Controllers
             //items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" + module.Id });
             //ViewBag.Menu = items;
 
-            createMenu(Home: true, Back: new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" });
+            createMenu(Home: true, Back: new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/"+ module.Id });
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
 
             Course course = module.Course;
