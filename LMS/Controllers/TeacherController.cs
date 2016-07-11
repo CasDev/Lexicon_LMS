@@ -588,7 +588,7 @@ namespace LMS.Controllers
             if (module == null)
             {
                 ModelState.AddModelError("", "Ingen module funnen");
-                hasError = false;
+                hasError = true;
             }
 
             if (model.StartDate < DateTime.Today.AddDays(1))
@@ -670,7 +670,7 @@ namespace LMS.Controllers
             if (activity == null)
             {
                 ModelState.AddModelError("", "Ingen activitet funnen");
-                hasError = false;
+                hasError = true;
             }
 
             if (model.StartDate != null && model.StartDate < DateTime.Today.AddDays(1))
