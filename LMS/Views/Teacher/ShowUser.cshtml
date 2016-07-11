@@ -1,0 +1,30 @@
+﻿@model User
+    @using Microsoft.AspNet.Identity.EntityFramework;
+    @{ 
+        ViewBag.Title = "Användare";
+    }
+<h2>@Model.FirstName @Model.LastName</h2>
+<h5>@Model.Email</h5>
+<p>@(Model.IsTeacher() ? "Lärare" : (Model.IsStudent() ? "Student" : "Ingen roll funnen"))</p>
+<!--<table class="center">
+   <tr>
+        <th>Roll</th>
+        <th>Ja/Nej</th>
+   </tr>
+    <tr>
+      <td>
+         Lärare
+      </td>
+        <td>
+           @(Model.IsTeacher() ? "Ja" : "Nej" )
+          </td>
+    </tr>
+    <tr>
+        <td>
+            Student
+        </td>
+        <td>
+            @(Model.IsStudent() ? "Ja" : "Nej")
+        </td>
+    </tr>
+</table>-->

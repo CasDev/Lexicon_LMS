@@ -22,7 +22,7 @@ namespace LMS.Controllers
         // John Hellman tyckte detta var jätteroligt! 
         public Course FindCourse(User user)
         {
-            return db.Courses.FirstOrDefault(c => c.Id==user.CoursesId);
+            return db.Courses.FirstOrDefault(c => c.Id == user.CoursesId);
             //return db.Courses.Where(c => c.Users.Where(u => u.Id == user.Id).Count() > 0).FirstOrDefault();
             //Where ska man bara ha om man vill ha en lista, d v s ej då man bara vill plocka ut 1 item. 
         }
@@ -78,7 +78,9 @@ namespace LMS.Controllers
         {
             if (id == null)
             {
-                return Redirect("~/Error/?error=Inget Id angett för denna download");
+                ViewBag.Error = "Inget Id angett for denna download";
+                return View("~/Views/Error/Index.cshtml");
+//                return Redirect("~/Error/?error=Inget Id angett för denna download");
             }
 
             Course course = FindCourse();
@@ -90,11 +92,15 @@ namespace LMS.Controllers
             Document doc = db.Documents.FirstOrDefault(d => d.Id == id);
             if (doc == null)
             {
-                return Redirect("~/Error/?error=Inget document funnet");
+                ViewBag.Error = "Inget document funnet";
+                return View("~/Views/Error/Index.cshtml");
+//                return Redirect("~/Error/?error=Inget document funnet");
             }
             if (doc.ActivityId == null && doc.CourseId == null && doc.ModuleId == null)
             {
-                return Redirect("~/Error/?error=Du har ej tillgång hit");
+                ViewBag.Error = "Du har ej tillgång hit";
+                return View("~/Views/Error/Index.cshtml");
+                //                return Redirect("~/Error/?error=Du har ej tillgång hit");
             }
 
             if (doc.CourseId != null)
@@ -102,24 +108,32 @@ namespace LMS.Controllers
                 Course _course = db.Courses.FirstOrDefault(m => m.Id == doc.CourseId);
                 if (_course.Id != course.Id)
                 {
-                    return Redirect("~/Error/?error=Du har ej tillgång hit");
+                    ViewBag.Error = "Du har ej tillgång hit";
+                    return View("~/Views/Error/Index.cshtml");
+//                    return Redirect("~/Error/?error=Du har ej tillgång hit");
                 }
-            } else if (doc.ModuleId != null)
+            }
+            else if (doc.ModuleId != null)
             {
                 Module _module = db.Modules.FirstOrDefault(m => m.Id == doc.ModuleId);
                 Course _course = _module.Course;
                 if (_course.Id != course.Id)
                 {
-                    return Redirect("~/Error/?error=Du har ej tillgång hit");
+                    ViewBag.Error = "Du har ej tillgång hit";
+                    return View("~/Views/Error/Index.cshtml");
+                    //                    return Redirect("~/Error/?error=Du har ej tillgång hit");
                 }
-            } else if (doc.ActivityId != null)
+            }
+            else if (doc.ActivityId != null)
             {
                 Activity _activity = db.Activities.FirstOrDefault(m => m.Id == doc.ActivityId);
                 Module _module = _activity.Module;
                 Course _course = _module.Course;
                 if (_course.Id != course.Id)
                 {
-                    return Redirect("~/Error/?error=Du har ej tillgång hit");
+                    ViewBag.Error = "Du har ej tillgång hit";
+                    return View("~/Views/Error/Index.cshtml");
+                    //                    return Redirect("~/Error/?error=Du har ej tillgång hit");
                 }
             }
 
@@ -150,24 +164,39 @@ namespace LMS.Controllers
                 return View("~/Views/Student/NoKnown.cshtml");
             }
 
-            MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
-            items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            ViewBag.Menu = items;
+            createMenu();
 
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.StartDate >= DateTime.Now || m.EndDate >= DateTime.Now).OrderBy(m => m.StartDate).ToList();
 
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToCourse(course.Id, db);
 
-            items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = course.Name, Link = "~/Student/" });
+            MenyItems items = new MenyItems {
+                new MenyItem { Text = course.Name, Link = "~/Student/" }
+            };
             ViewBag.BreadCrumbs = items;
 
             return View(course);
         }
         
+        private void createMenu(bool Home = false, MenyItem Back = null)
+        {
+            MenyItems items = new MenyItems();
+            if (Home) {
+                items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
+            }
+            items.AddRange(new List<MenyItem> {
+                new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" },
+                new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" },
+                new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" }
+            });
+            if (Back != null)
+            {
+                items.Add(Back);
+            }
+            ViewBag.Menu = items;
+        }
+
         [HttpGet]
         [Authorize(Roles = "Student")]
         public ActionResult Assignments(string sort)
@@ -190,7 +219,8 @@ namespace LMS.Controllers
             }
             if (sort != null)
             {
-                switch (sort.ToLower()) {
+                switch (sort.ToLower())
+                {
                     case "delayed":
                         assignments = assignments.OrderBy(c => c.Delayed).Reverse().ToList();
                         break;
@@ -206,12 +236,7 @@ namespace LMS.Controllers
                 }
             }
 
-            MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
-            items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
-            items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            ViewBag.Menu = items;
+            createMenu(Home: true);
 
             return View(assignments);
         }
@@ -226,12 +251,7 @@ namespace LMS.Controllers
                 return View("~/Views/Student/NoKnown.cshtml");
             }
 
-            MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
-            items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
-            items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            ViewBag.Menu = items;
+            createMenu(Home: true);
 
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.EndDate < DateTime.Now).OrderBy(m => m.EndDate).Reverse().ToList();
@@ -249,12 +269,7 @@ namespace LMS.Controllers
                 return View("~/Views/Student/NoKnown.cshtml");
             }
 
-            MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
-            items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
-            items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            ViewBag.Menu = items;
+            createMenu(Home: true);
 
             bool _sort = (sort != null && sort == "FirstName" ? false : true);
 
@@ -264,7 +279,7 @@ namespace LMS.Controllers
                 course.Users = course.Users.OrderBy(u => u.LastName).ToList();
             }
             else {
-                course.Users =  course.Users.OrderBy(u => u.FirstName).ToList();
+                course.Users = course.Users.OrderBy(u => u.FirstName).ToList();
             }
             int id = (course != null ? course.Id : 0);
 
@@ -283,7 +298,9 @@ namespace LMS.Controllers
         {
             if (id == null)
             {
-                return Redirect("~/Error/?error=Inget Id angett för Activity");
+                ViewBag.Error = "Inget Id anget för aktivitet, ingen aktivitet kan åtkommas.";
+                return View("~/Views/Error/Index.cshtml");
+//                return Redirect("~/Error/?error=Inget Id angett för Activity");
             }
 
             if (FindCourse() == null)
@@ -292,15 +309,21 @@ namespace LMS.Controllers
             }
 
             Activity activity = FindActivity((int)id);
+            if (activity == null)
+            {
+                ViewBag.Error = "Aktiviteten har ej hittats";
+                return View("~/Views/Error/Index.cshtml");
+            }
             User user = FindUser();
             if (file != null && file.ContentLength > 0)
             {
                 string extention = System.IO.Path.GetExtension(file.FileName);
-                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/"+ activity.Id +"/"+ user.Id +"/"), "ovning", extention, file);
+                Document Document = DocumentCRUD.SaveDocument(Server.MapPath("~/documents/ovning/" + activity.Id + "/" + user.Id + "/"), "ovning", extention, file);
                 if (Document == null)
                 {
                     ModelState.AddModelError("", "Din inlämningsuppgift har ej sparats");
-                } else
+                }
+                else
                 {
                     Document.Name = "Inlämning för " + user.FirstName + " " + user.LastName;
                     Document.Description = "Inlämning för " + user.FirstName + " " + user.LastName;
@@ -314,12 +337,13 @@ namespace LMS.Controllers
                     db.Documents.Add(Document);
                     db.SaveChanges();
                 }
-            } else
+            }
+            else
             {
                 ModelState.AddModelError("", "En fil med innehåll måste erhållas");
             }
 
-            return Redirect("~/Student/Activity/"+ id);
+            return Redirect("~/Student/Activity/" + id);
 //            return View("~/Views/Student/Activity.cshtml", activity);
         }
 
@@ -334,7 +358,9 @@ namespace LMS.Controllers
 
             if (id == null)
             {
-                return Redirect("~/Error/?error=Inget Id angett för Activity");
+                ViewBag.Error = "Inget Id har angets";
+                return View("~/Views/Error/Index.cshtml");
+                //return Redirect("~/Error/?error=Inget Id angett för Activity");
             }
             Activity activity = FindActivity((int)id);
 
@@ -346,17 +372,21 @@ namespace LMS.Controllers
             Module module = activity.Module;
             Course course = module.Course;
 
-            if(course.Id != FindCourse().Id)
+            if (course.Id != FindCourse().Id)
             {
-                return Redirect("~/Error/?error=Du har ej tillgång hit.");
+                ViewBag.Error = "Du har ej tillgång hit";
+                return View("~/Views/Error/Index.cshtml");
+                //return Redirect("~/Error/?error=Du har ej tillgång hit.");
             }
 
-            MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
-            items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/"+ module.Id });
-            ViewBag.Menu = items;
+            //Adrian föreslog en annan lösning på nedanstående kod. Se nedanför detta stycke, för hans ändring. 
+            //MenyItems items = new MenyItems();
+            //items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
+            //items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
+            //items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
+            //items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
+            //ViewBag.Menu = items;
+            createMenu(Home: true, Back: new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
 
             if (activity.Deadline != null)
@@ -378,7 +408,9 @@ namespace LMS.Controllers
 
             if (id == null)
             {
-                return Redirect("~/Error/?error=Inget Id angett för Modulen");
+                ViewBag.Error = "Inget Id har angets för modulen";
+                return View("~/Views/Error/Index.cshtml");
+                //return Redirect("~/Error/?error=Inget Id angett för Modulen");
             }
 
             Module module = db.Modules.FirstOrDefault(m => m.Id == id);
@@ -388,20 +420,25 @@ namespace LMS.Controllers
                 return Redirect("~/Error/?error=Ingen Modul funnen");
             }
 
-            MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
-            items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
-            items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" });
-            ViewBag.Menu = items;
+            //Adrian föreslog en annan lösning även på denna kod. Se nedanför detta stycke. 
+            //MenyItems items = new MenyItems();
+            //items.Items.Add(new MenyItem { Text = "Hem", Link = "~/Student/" });
+            //items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
+            //items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
+            //items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
+            //items.Items.Add(new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/" + module.Id });
+            //ViewBag.Menu = items;
+
+            createMenu(Home: true, Back: new MenyItem { Text = "Äldre aktiviteter", Link = "~/Student/OldActivities/"+ module.Id });
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule((int)id, db);
 
             Course course = module.Course;
 
             if (course.Id != FindCourse().Id)
             {
-                return Redirect("~/Error/?error=Du har ej tillgång hit.");
+                ViewBag.Error = "Du har ej tillgång hit";
+                return View("~/Views/Error/Index.cshtml");
+//                return Redirect("~/Error/?error=Du har ej tillgång hit.");
             }
 
             return View(module);
@@ -418,26 +455,27 @@ namespace LMS.Controllers
 
             if (id == null)
             {
-                return Redirect("~/Error/?error=Inget Id angett för Modulen");
+                ViewBag.Error = "Inget Id har angets för modulen";
+                return View("~/Views/Error/Index.cshtml");
+//                return Redirect("~/Error/?error=Inget Id angett för Modulen");
             }
 
             Module module = db.Modules.FirstOrDefault(m => m.Id == id);
             if (module == null)
             {
-                return Redirect("~/Error/?error=Ingen Modul funnen");
+                ViewBag.Error = "Ingen modul funnen";
+                return View("~/Views/Error/Index.cshtml");
+//                return Redirect("~/Error/?error=Ingen Modul funnen");
             }
 
-            MenyItems items = new MenyItems();
-            items.Items.Add(new MenyItem { Text = "Inlämningsuppgifter", Link = "~/Student/Assignments/" });
-            items.Items.Add(new MenyItem { Text = "Studenter", Link = "~/Student/Participants/" });
-            items.Items.Add(new MenyItem { Text = "Äldre moduler", Link = "~/Student/OldModules/" });
-            items.Items.Add(new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
-            ViewBag.Menu = items;
+            createMenu();
 
             Course course = module.Course;
             if (course.Id != FindCourse().Id)
             {
-                return Redirect("~/Error/?error=Du har ej tillgång hit.");
+                ViewBag.Error = "Du har ej tillgång hit";
+                return View("~/Views/Error/Index.cshtml");
+//                return Redirect("~/Error/?error=Du har ej tillgång hit.");
             }
 
             return View(module);

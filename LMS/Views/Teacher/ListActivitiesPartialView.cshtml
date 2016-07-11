@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Activity>
+@if (Model.Count() > 0)
+{
+    <hr />
+    <h5>Relaterade aktiviteter:</h5>
+    <ul>
+        @foreach (Activity activity in Model)
+        {
+            <li><a href="@Url.Content("~/Teacher/Activity/"+ activity.Id)">@activity.Name</a></li>
+        }
+    </ul>
+}

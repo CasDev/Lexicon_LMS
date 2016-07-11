@@ -4,6 +4,46 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Models
 {
+    public class CreateUserViewModel
+    {
+        [Required( ErrorMessage = "Ett förnamn behövs på en användare" )]
+        [Display(Name = "Förnamn")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Ett efternamn behövs på en användare")]
+        [Display(Name = "Efternamn")]
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Ett lösenord behövs till en användare")]
+        [Display(Name = "Lösenord")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Ett lösenord behövs till en användare")]
+        [Display(Name = "Konfirmera lösenord")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "En roll behövs till en användare")]
+        [Display(Name = "Roll")]
+        public string Role { get; set; }
+
+        [Required(ErrorMessage = "En e-post måste fyllas i")]
+        [Display(Name = "Login")]
+        [EmailAddress(ErrorMessage = "E-post har felaktigt format")]
+        public string Email { get; set; }
+    }
+
+    public class EditUserViewModel
+    {
+        [Required(ErrorMessage = "En e-post måste fyllas i")]
+        [Display(Name = "Login")]
+        [EmailAddress(ErrorMessage = "E-post har felaktigt format")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Ett kursid måste tillhandahållas")]
+        [Display(Name = "Kursid")]
+        public int CourseId { get; set; }
+    }
+
     public class CreateCourseViewModel
     {
         [Required(ErrorMessage = "Ett namn behövs på en kurs")]
@@ -20,7 +60,7 @@ namespace LMS.Models
         [Required(ErrorMessage = "Ett startdatum behövs för en kurs")]
         [Display(Name = "Slutdatum")]
         public DateTime EndDate { get; set; }
-    } 
+    }
 
     public class EditCourseViewModel
     {
@@ -78,6 +118,7 @@ namespace LMS.Models
         [Display(Name = "Slutdatum")]
         public DateTime EndDate { get; set; }
     }
+
     public class LoginViewModel
     {
         [Required(ErrorMessage = "E-post måste fyllas i")]
@@ -100,30 +141,29 @@ namespace LMS.Models
     public class CreateActivityViewModel
     {
         [Display(Name = "Typ")]
-        [Required (ErrorMessage = "Kurstyp")]
+        [Required (ErrorMessage = "Kurstyp behövs för en aktivitet")]
         public string Type { get; set; }            //Marie 
 
         [Display(Name = "Namn")]
-        [Required(ErrorMessage = "Kursnamn")]
+        [Required(ErrorMessage = "Kursnamn behövs för en aktivitet")]
         public string Name { get; set; }            //Marie 
 
         [Display(Name = "Beskrivning")]
-        [Required(ErrorMessage = "Kursbeskrivning")]
         public string Description { get; set; }     //Marie
 
         [Display(Name = "Startdatum")]              //Marie
-        [Required(ErrorMessage = "Kursdatum")]
-        public DateTime? StartDate { get; set; }
+        [Required(ErrorMessage = "Startdatum behövs för aktivitet")]
+        public DateTime StartDate { get; set; }
 
         [Display(Name = "Slutdatum")]               //Marie 
-        [Required (ErrorMessage = "Slutdatum")]
-        public DateTime? EndDate { get; set; }
+        [Required(ErrorMessage = "Slutdatum behövs för aktivitet")]
+        public DateTime EndDate { get; set; }
 
         [Display(Name = "Inlämningsdatum")]         //Marie 
-        [Required(ErrorMessage = "Inlämningsdatum")]
         public DateTime? Deadline { get; set; }
 
         [Required]
+        [Display(Name = "Modul")]                   //Marie 
         public int? ModuleId { get; set; }
     }
 
@@ -134,24 +174,27 @@ namespace LMS.Models
         public string Name { get; set; }            //Marie 
 
         [Display(Name = "Beskrivning")]
-        [Required(ErrorMessage = "Ny beskrivning")]
         public string Description { get; set; }     //Marie
 
         [Display(Name = "Startdatum")]              //Marie
         [Required (ErrorMessage = "Nytt startdatum")]
-        public DateTime? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Display(Name = "Slutdatum")]               //Marie 
         [Required (ErrorMessage = "Nytt slutdatumdatum")]
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         [Display(Name = "Inlämningsdatum")]         //Marie 
-        [Required (ErrorMessage = "Nytt inlämningsdatum")] //Marie
         public DateTime? Deadline { get; set; }
     }
 
     public class DeleteActivityViewModel
     {
           public bool Confirm { get; set; }
+    }
+
+    public class DeleteModuleViewModel
+    {
+        public bool Confirm { get; set; }
     }
 }
