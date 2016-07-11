@@ -3,14 +3,14 @@
     ViewBag.Title = "EditCourse";
 }
 
-<h2>Skapa kurs</h2>
+<h2>Redigera kurs</h2>
 <div>
     <div class="row">
         <div class="col-md-8">
             <section id="loginform">
-                @using (Html.BeginForm("CreateCourse", "Teacher", new { }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-7", role = "form" }))
+                @using (Html.BeginForm("EditCourse", "Teacher", new {id = ViewBag.id }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-7", role = "form" })) //De 3 första variablerna syns i url:en. 
                 {
-                    @Html.AntiForgeryToken()
+                    @Html.AntiForgeryToken()                                            //Här skickar vi iväg en sträng till TeacherController. Den validerar att den kommer från rätt plats. 
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
                         <div class="col-md-10">
@@ -21,7 +21,7 @@
                     <div class="form-group">
                         <div class="col-md-10">
                             @Html.TextBoxFor(m => m.Description, new { @class = "form-control", placeholder = "Beskrivning" })
-                            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })                  <!--Kollar om det finns ev fel i Description. Om blankt (eller ev fel)?, så hamnar det i ValidationSummary, se ovan. -->
                         </div>
                     </div>
                     <div class="form-group">
@@ -38,7 +38,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
-                            <input type="submit" value="Skicka in" class="btn btn-default" />
+                            <input type="submit" value="Skicka in" class="btn btn-default" />   <!--Knappen för att mata in information.-->
                         </div>
                     </div>
                 }

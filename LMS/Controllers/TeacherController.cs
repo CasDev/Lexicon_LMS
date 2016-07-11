@@ -679,20 +679,60 @@ namespace LMS.Controllers
                 return View("~/Views/Error/Index.cshtml");
             }
 
-            EditCourseViewModel model = new EditCourseViewModel();
+            EditCourseViewModel model = new EditCourseViewModel();      //Vi lägger info om kursen i en ViewModel-modell. 
             model.Description = course.Description; 
             model.Name = course.Name;
             model.StartDate = course.StartDate;
             model.EndDate = course.EndDate;
+            ViewBag.id = course.Id;
 
             return View(model);
         }
 
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]  
         [HttpPost]
-        public ActionResult EditCourse(EditCourseViewModel model)
+        public ActionResult EditCourse(EditCourseViewModel model, int? id)      //Detta id hämtas från query-stringen.  
         {
-            return View();
+            bool hasError = false;
+            if (id == null)
+            {
+                ModelState.AddModelError("", "Finns inget id");
+                hasError = true;
+            }
+
+            var course = db.Courses.FirstOrDefault(c => c.Id == id);
+            if (course == null)
+            {
+                ModelState.AddModelError("", "Finns kurs id");
+                hasError = true;
+            }
+            if (!ModelState.IsValid)        //MVC kollar om modellen har några fel själv, t ex det som är required; att strängen har en viss längd m m. 
+            {
+                hasError = true;
+            }
+            if (model.StartDate < DateTime.Today.AddDays(1))       //Vi kollar att den inte är mindre än morgondagen. D v s vi lägger till 1 till i dag, för att få morgondagen. Kollar att startdatumet ligger i framtiden. 
+            {
+                ModelState.AddModelError("StartDate", "Kursen kan inte starta före morgondagens datum.");
+                hasError = true;
+            }
+            if (model.EndDate < model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Kursen kan inte sluta före kursens startdatum. ");
+                hasError = true; //D v s nu har det inträffat ett Error. 
+            }
+                if (hasError)
+            {
+                ViewBag.id = id != null ? (int)id : 0;            //Parameter castas om till en int. //Om id inte är null, så skickar vi id som parametern ViewBag = id. Annars om id är null, så sätter vi ViewBag till 0 per default. 
+                return View(model);                               //Skickar tillbaka till samma vy, nu med alla felmeddelanden. 
+            }
+            course.Description = model.Description;                 // Coursens Description sätts lika med modellens Description, för att modellen representerar det vi ändrat i kursen. 
+            course.Name = model.Name;
+            course.StartDate = model.StartDate;
+            course.EndDate = model.EndDate;
+            db.Entry(course).State = EntityState.Modified; //Vi säger till databasen att vi uppdaterar/modifierar något. Ska göras så, enligt Entity Framework. 
+            db.SaveChanges();
+
+            return Redirect("~/Teacher/Course/" + course.Id); //Skickar vidare till kursens vy, för att se våra uppdateringar. 
         }
 
     
