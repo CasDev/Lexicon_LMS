@@ -43,6 +43,17 @@ namespace LMS.Controllers
             }
 
             Activity activity = db.Activities.FirstOrDefault(a => a.Id == (int)id);
+            if (activity == null)
+            {
+                return Redirect("~/Error/?error=Aktivitet saknas för Inlämningsuppgiften");
+            }
+
+            if (activity.Deadline == null)
+            {
+                return Redirect("~/Error/?error=Aktivitet saknar Inlämningsuppgift");
+            }
+
+            ViewBag.Activity = activity;
 
             List<AssignmentStatus> assignment = new List<AssignmentStatus>();
             Course course = activity.Module.Course;

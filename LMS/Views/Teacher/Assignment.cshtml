@@ -1,7 +1,37 @@
 ﻿@model IEnumerable<AssignmentStatus>
 @{
     ViewBag.Title = "Assignment";
+    Activity activity = ViewBag.Activity;
 }
 
-<h2>Assignment</h2>
+<h2>Inlämningsuppgifter för aktivitet</h2>
+<h2>@activity.Name</h2>
+
+<table class="center">
+    <tr>
+        <th></th>
+        <th></th>
+        <th>@Html.ActionLink("Inlämnat", "Assignments", new { sort = "done" })</th>
+        <th></th>
+        <th>@Html.ActionLink("Ej inlämnat", "Assignments", new { sort = "isLeft" })</th>
+        <th></th>
+        <th>@Html.ActionLink("Försenat", "Assignments", new { sort = "delayed" })</th>
+        <th></th>
+        <th>@Html.ActionLink("Inlämning", "Assignments", new { sort = "deadline" })</th>
+    </tr>
+    @foreach (AssignmentStatus assignment in Model)
+    {
+        <tr>
+            <th>@assignment.User.FirstName @assignment.User.LastName</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <td class="centralize">@(assignment.Done ? " X " : "")</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td class="centralize">@(assignment.IsLeft ? " X " : "")</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td class="centralize">@(assignment.Delayed ? " X " : "")</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td class="centralize">@(assignment.Activity.Deadline != null ? ((DateTime)assignment.Activity.Deadline).ToString("yyyy-MM-dd HH:mm") : "")</td>
+        </tr>
+    }
+</table>
 
