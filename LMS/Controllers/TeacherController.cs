@@ -326,6 +326,91 @@ namespace LMS.Controllers
             return Redirect("~/Teacher/Activity/" + activity.Id); //Skickar vidare till vy med information om den aktivitet som vi just har skapat. 
         }
 
+        [HttpGet]
+        public ActionResult EditUser(string id)
+        {
+            if (id == null)
+            {
+                ViewBag.Error = "Inget id har angivits";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            var user = db.Users.FirstOrDefault(c => c.Id == id);
+            if (user == null)
+            {
+                ViewBag.Error = "Ingen användare har hittats";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            EditUserViewModel model = new EditUserViewModel();
+            model.CourseId = (user.CoursesId != null ? (int)user.CoursesId : 0);
+            model.Email = user.Email;
+
+            List<SelectListItem> ListItems = new List<SelectListItem>();
+            foreach (Course c in db.Courses.Where(c => c.EndDate > DateTime.Now).ToList())
+            {
+                ListItems.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString(), Selected = ((user.CoursesId != null ? user.CoursesId : 0) == c.Id) });
+            }
+
+            ViewBag.Id = user.Id;
+            ViewBag.CourseIds = ListItems;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EditUser(string id, EditUserViewModel model)
+        {
+            if (id == null)
+            {
+                ViewBag.Error = "Inget id har angivits";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            bool hasError = false;
+            var user = db.Users.FirstOrDefault(c => c.Id == id);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Ingen användare funnen");
+                hasError = true;
+            }
+
+            if (!ModelState.IsValid)
+            {
+                List<SelectListItem> ListItems = new List<SelectListItem>();
+                foreach (Course c in db.Courses.Where(c => c.EndDate > DateTime.Now).ToList())
+                {
+                    ListItems.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString(), Selected = ((user != null && user.CoursesId != null ? user.CoursesId : 0) == c.Id) });
+                }
+
+                ViewBag.Id = id;
+                ViewBag.CourseIds = ListItems;
+
+                return View(model);
+            }
+            var course = db.Courses.FirstOrDefault(c => c.Id == model.CourseId);
+            if (course == null)
+            {
+                ModelState.AddModelError("CourseId", "Kurs har ej hittats");
+                hasError = true;
+            }
+
+            if (hasError)
+            {
+                List<SelectListItem> ListItems = new List<SelectListItem>();
+                foreach (Course c in db.Courses.Where(c => c.EndDate > DateTime.Now).ToList())
+                {
+                    ListItems.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString(), Selected = ((user != null && user.CoursesId != null ? user.CoursesId : 0) == c.Id) });
+                }
+
+                ViewBag.Id = id;
+                ViewBag.CourseIds = ListItems;
+
+                return View(model);
+            }
+            
+            return View();
+        }
 
         [HttpGet]
         public ActionResult CreateUser()
@@ -443,27 +528,214 @@ namespace LMS.Controllers
         [HttpGet]
         public ActionResult EditModule(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                ViewBag.Error = "Inget id har angivits";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            var module = db.Modules.FirstOrDefault(c => c.Id == id);
+            if (module == null)
+            {
+                ViewBag.Error = "Ingen module har hittats";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            EditModuleViewModel model = new EditModuleViewModel();
+            model.Description = module.Description;
+            model.Name = module.Name;
+            model.StartDate = module.StartDate;
+            model.EndDate = module.EndDate;
+
+            ViewBag.Id = (int)id;
+
+            return View(model);
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult EditModule(FormCollection collection)
+        public ActionResult EditModule(EditModuleViewModel model, int? id)
         {
-            return View();
+            if (id == null)
+            {
+                ViewBag.Error = "Inget id har angivits";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Id = (int)id;
+
+                return View(model);
+            }
+
+            bool hasError = false;
+            var module = db.Modules.FirstOrDefault(c => c.Id == id);
+            if (module == null)
+            {
+                ModelState.AddModelError("", "Ingen module funnen");
+                hasError = false;
+            }
+
+            if (model.StartDate < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
+                hasError = true;
+            }
+            if (model.EndDate < model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
+                hasError = true;
+            }
+
+            if (hasError)
+            {
+                ViewBag.Id = (int)id;
+
+                return View(model);
+            }
+
+            module.Description = model.Description;
+            module.EndDate = model.EndDate;
+            module.StartDate = model.StartDate;
+            module.Name = model.Name;
+
+            db.Entry(module).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Redirect("~/Teacher/Module/"+ module.Id);
         }
 
         [HttpGet]
         public ActionResult EditActivity(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                ViewBag.Error = "Inget id har angivits";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            var activity = db.Activities.FirstOrDefault(c => c.Id == id);
+            if (activity == null)
+            {
+                ViewBag.Error = "Ingen activitet har hittats";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            EditActivityViewModel model = new EditActivityViewModel();
+            model.Description = activity.Description;
+            model.Name = activity.Name;
+            model.StartDate = (activity.StartDate != null ? (DateTime) activity.StartDate : DateTime.Today.AddDays(1));
+            model.EndDate = (activity.EndDate != null ? (DateTime) activity.EndDate : DateTime.Today.AddDays(2));
+            model.Deadline = activity.Deadline;
+
+            ViewBag.Id = (int)id;
+
+            return View(activity);
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult EditActivity(FormCollection collection)
+        public ActionResult EditActivity(EditActivityViewModel model, int? id)
         {
-            return View();
+            if (id == null)
+            {
+                ViewBag.Error = "Inget id har angivits";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Id = (int)id;
+
+                return View(model);
+            }
+
+            bool hasError = false;
+            var activity = db.Activities.FirstOrDefault(c => c.Id == id);
+            if (activity == null)
+            {
+                ModelState.AddModelError("", "Ingen activitet funnen");
+                hasError = false;
+            }
+
+            if (model.StartDate != null && model.StartDate < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan morgondagen, pga. planeringstid");
+                hasError = true;
+            }
+            if (model.EndDate != null && model.StartDate != null && model.EndDate < model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
+                hasError = true;
+            }
+            if (model.EndDate != null && model.EndDate < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("EndDate", "Slutdatum kan ej vara innan morgondagen");
+                hasError = true;
+            }
+            if (model.Deadline != null && model.StartDate != null && model.Deadline < model.StartDate)
+            {
+                ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan startdatumet");
+                hasError = true;
+            }
+            if (model.Deadline != null && model.EndDate != null && model.Deadline > model.EndDate)
+            {
+                ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara efter slutdatumet");
+                hasError = true;
+            }
+            if (model.Deadline != null && model.Deadline < DateTime.Today.AddDays(1))
+            {
+                ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan morgondagen");
+                hasError = true;
+            }
+            Module module = db.Modules.FirstOrDefault(c => c.Id == activity.Id);
+            if (module == null)
+            {
+                ModelState.AddModelError("", "Föräldrar modulen kan ej hittas");
+                hasError = true;
+            }
+            else
+            {
+                if (model.StartDate != null && model.StartDate < module.StartDate)
+                {
+                    ModelState.AddModelError("StartDate", "Startdatum kan ej starta innan modulen");
+                    hasError = true;
+                }
+                if (model.EndDate != null && model.EndDate > module.EndDate)
+                {
+                    ModelState.AddModelError("EndDate", "Slutdatum kan ej sluta efter modulen");
+                    hasError = true;
+                }
+                if (model.Deadline != null && model.Deadline < module.StartDate)
+                {
+                    ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan modulens startdatum");
+                    hasError = true;
+                }
+                if (model.Deadline != null && model.Deadline > module.EndDate)
+                {
+                    ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara efter modulens slutdatumet");
+                    hasError = true;
+                }
+            }
+
+            if (hasError)
+            {
+                ViewBag.Id = (int)id;
+
+                return View(model);
+            }
+
+            activity.Description = model.Description;
+            activity.EndDate = model.EndDate;
+            activity.StartDate = model.StartDate;
+            activity.Name = model.Name;
+            activity.Deadline = model.Deadline;
+
+            db.Entry(activity).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Redirect("~/Teacher/Activity/" + activity.Id);
         }
         
         protected override void Dispose(bool disposing)

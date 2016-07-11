@@ -32,9 +32,16 @@ namespace LMS.Models
         public string Email { get; set; }
     }
 
-    public class AddUserToCourseViewModel
+    public class EditUserViewModel
     {
+        [Required(ErrorMessage = "En e-post måste fyllas i")]
+        [Display(Name = "Login")]
+        [EmailAddress(ErrorMessage = "E-post har felaktigt format")]
+        public string Email { get; set; }
 
+        [Required(ErrorMessage = "Ett kursid måste tillhandahållas")]
+        [Display(Name = "Kursid")]
+        public int CourseId { get; set; }
     }
 
     public class CreateCourseViewModel
@@ -111,6 +118,7 @@ namespace LMS.Models
         [Display(Name = "Slutdatum")]
         public DateTime EndDate { get; set; }
     }
+
     public class LoginViewModel
     {
         [Required(ErrorMessage = "E-post måste fyllas i")]
@@ -166,19 +174,17 @@ namespace LMS.Models
         public string Name { get; set; }            //Marie 
 
         [Display(Name = "Beskrivning")]
-        [Required(ErrorMessage = "Ny beskrivning")]
         public string Description { get; set; }     //Marie
 
         [Display(Name = "Startdatum")]              //Marie
         [Required (ErrorMessage = "Nytt startdatum")]
-        public DateTime? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Display(Name = "Slutdatum")]               //Marie 
         [Required (ErrorMessage = "Nytt slutdatumdatum")]
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         [Display(Name = "Inlämningsdatum")]         //Marie 
-        [Required (ErrorMessage = "Nytt inlämningsdatum")] //Marie
         public DateTime? Deadline { get; set; }
     }
 

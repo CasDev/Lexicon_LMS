@@ -365,6 +365,7 @@
     <Content Include="Views\Teacher\ShowUser.cshtml" />
     <Content Include="Views\Teacher\Activity.cshtml" />
     <Content Include="Views\Teacher\Module.cshtml" />
+    <Content Include="Views\Teacher\EditUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
