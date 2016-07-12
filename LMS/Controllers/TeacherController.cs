@@ -61,6 +61,8 @@ namespace LMS.Controllers
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.EndDate > DateTime.Now).OrderBy(m => m.StartDate).ToList();
 
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToCourse(course.Id, db);
+
             return View(course);
         }
 
@@ -78,6 +80,8 @@ namespace LMS.Controllers
                 return Redirect("~/Error/?error=Ingen module funnen");
             }
 
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule(module.Id, db);
+
             return View(module);
         }
 
@@ -94,6 +98,8 @@ namespace LMS.Controllers
             {
                 return Redirect("~/Error/?error=Ingen activitet funnen");
             }
+
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity(activity.Id, db);
 
             return View(activity);
         }
