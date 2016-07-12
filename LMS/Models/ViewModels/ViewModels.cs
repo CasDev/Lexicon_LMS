@@ -1,9 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace LMS.Models
 {
+    public class CreateDocumentViewModule
+    {
+        [Display(Name = "Namn")]
+        [Required(ErrorMessage ="Ett dokument måste ha ett namn")]
+        public string Name { get; set; }
+
+        [Display(Name = "Beskrivning")]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "En fil behövs")]
+        [Display(Name = "Fil")]
+        public HttpPostedFileBase File { get; set; }
+    }
+
     public class CreateUserViewModel
     {
         [Required( ErrorMessage = "Ett förnamn behövs på en användare" )]

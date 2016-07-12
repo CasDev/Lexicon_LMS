@@ -1,0 +1,42 @@
+﻿@model CreateDocumentViewModule
+@{
+    ViewBag.Title = "CreateDocument";
+}
+
+<h2>Lägg till nytt dokument</h2>
+<div>
+    <div class="row">
+        <div class="col-md-8">
+            <section id="loginform">
+                @using (Html.BeginForm("CreateDocument", "Teacher", new { type = ViewBag.Type, id = ViewBag.Id }, FormMethod.Post, new { @class = "form-horizontal, col-md-offset-7", role = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Namn", autofocus = "autofocus" })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Description, new { @class = "form-control", placeholder = "Beskrivning" })
+                            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.File, new { type = "file", @class = "form-control", placeholder = "Beskrivning" })
+                            @Html.ValidationMessageFor(m => m.File, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="submit" value="Skicka in" class="btn btn-default" />
+                        </div>
+                    </div>
+                }
+            </section>
+        </div>
+    </div>
+</div>

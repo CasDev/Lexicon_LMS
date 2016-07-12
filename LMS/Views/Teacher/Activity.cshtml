@@ -11,4 +11,7 @@
     }
     <!-- <p>Detta är en @Model.Type-aktivitet</p> -->
     <p>Denna tillhör modulen: @Model.Module.Name</p>
+    <p>
+        @Html.ActionLink("Lägg till nytt dokument", "CreateDocument", new { type = "Activity", id = Model.Id })
+    </p>
 </div>

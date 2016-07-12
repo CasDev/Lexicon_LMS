@@ -305,6 +305,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Teacher\EditUser.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -333,10 +334,6 @@
     <Content Include="Views\Student\Assignments.cshtml" />
     <Content Include="Views\Student\OldActivities.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Teacher\Create.cshtml" />
-    <Content Include="Views\Teacher\Delete.cshtml" />
-    <Content Include="Views\Teacher\Details.cshtml" />
-    <Content Include="Views\Teacher\Edit.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Teacher\CreateCourse.cshtml" />
     <Content Include="Views\Teacher\ListActivitiesPartialView.cshtml" />
@@ -353,7 +350,7 @@
     <Content Include="Views\Teacher\ShowUser.cshtml" />
     <Content Include="Views\Teacher\Activity.cshtml" />
     <Content Include="Views\Teacher\Module.cshtml" />
-    <Content Include="Views\Teacher\EditUser.cshtml" />
+    <Content Include="Views\Teacher\CreateDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
