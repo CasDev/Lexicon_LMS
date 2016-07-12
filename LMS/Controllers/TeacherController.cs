@@ -444,6 +444,8 @@ namespace LMS.Controllers
             SetBreadcrumbs(
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" });
 
+            ViewBag.AtEarliest = DateTime.Today.AddDays(1);
+
             return View();
         }
 
@@ -452,6 +454,8 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateCourse(CreateCourseViewModel model)
         {
+            ViewBag.AtEarliest = DateTime.Today.AddDays(1);
+
             Menu(Home: true);
             SetBreadcrumbs(
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" });
@@ -471,6 +475,10 @@ namespace LMS.Controllers
             {
                 ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
                 hasError = true;
+            }
+            if (db.Courses.FirstOrDefault(c => c.Name == model.Name) != null)
+            {
+                ModelState.AddModelError("Name", "Namnet för denna kurs är redan upptagen");
             }
             if (hasError)
             {
@@ -575,7 +583,7 @@ namespace LMS.Controllers
                 ModelState.AddModelError("StartDate", "Kan ej starta innan kursen");
                 hasError = true;
             }
-            if (model.EndDate < course.EndDate)
+            if (model.EndDate > course.EndDate)
             {
                 ModelState.AddModelError("EndDate", "Kan ej sluta efter kursen");
                 hasError = true;

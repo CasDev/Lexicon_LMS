@@ -44,7 +44,7 @@ namespace LMS.Models
         public string Role { get; set; }
 
         [Required(ErrorMessage = "En e-post måste fyllas i")]
-        [Display(Name = "Login")]
+        [Display(Name = "Epost för login")]
         [EmailAddress(ErrorMessage = "E-post har felaktigt format")]
         public string Email { get; set; }
     }
