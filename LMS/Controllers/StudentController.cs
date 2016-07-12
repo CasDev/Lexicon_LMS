@@ -237,6 +237,12 @@ namespace LMS.Controllers
 
             createMenu(Home: true);
 
+            MenyItems items = new MenyItems {
+                new MenyItem { Text = FindCourse().Name, Link = "~/Student/" },
+                new MenyItem { Text = user.FirstName +" "+ user.LastName +" övningsuppgifter", Link = "~/Student/Assignments" },
+            };
+            ViewBag.BreadCrumbs = items;
+
             return View(assignments);
         }
 
@@ -254,6 +260,12 @@ namespace LMS.Controllers
 
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.EndDate < DateTime.Now).OrderBy(m => m.EndDate).Reverse().ToList();
+
+            MenyItems items = new MenyItems {
+                new MenyItem { Text = course.Name, Link = "~/Student/" },
+                new MenyItem { Text = course.Name +"'s äldre moduler", Link = "~/Student/OldModules" },
+            };
+            ViewBag.BreadCrumbs = items;
 
             return View(course);
         }
@@ -286,6 +298,12 @@ namespace LMS.Controllers
             {
                 ViewBag.Warning = "The ID of the Course was not able to be found";
             }
+
+            MenyItems items = new MenyItems {
+                new MenyItem { Text = course.Name, Link = "~/Student/" },
+                new MenyItem { Text = course.Name +"'s deltagare", Link = "~/Student/Participants" },
+            };
+            ViewBag.BreadCrumbs = items;
 
             return View(course);
         }
@@ -388,6 +406,13 @@ namespace LMS.Controllers
             createMenu(Home: true, Back: new MenyItem { Text = "Tillbaka till " + module.Name, Link = "~/Student/Module/" + module.Id });
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity((int)id, db);
 
+            MenyItems items = new MenyItems {
+                new MenyItem { Text = course.Name, Link = "~/Student/" },
+                new MenyItem { Text = module.Name, Link = "~/Student/Module/"+ module.Id },
+                new MenyItem { Text = activity.Name, Link = "~/Student/Activity/"+ activity.Id },
+            };
+            ViewBag.BreadCrumbs = items;
+
             if (activity.Deadline != null)
             {
                 ViewBag.HasFile = (DocumentCRUD.FindAssignment(FindUser(), activity, db, Server) != null ? true : false);
@@ -440,6 +465,12 @@ namespace LMS.Controllers
 //                return Redirect("~/Error/?error=Du har ej tillgång hit.");
             }
 
+            MenyItems items = new MenyItems {
+                new MenyItem { Text = course.Name, Link = "~/Student/" },
+                new MenyItem { Text = module.Name, Link = "~/Student/Module/"+ module.Id }
+            };
+            ViewBag.BreadCrumbs = items;
+
             return View(module);
         }
 
@@ -476,6 +507,13 @@ namespace LMS.Controllers
                 return View("~/Views/Error/Index.cshtml");
 //                return Redirect("~/Error/?error=Du har ej tillgång hit.");
             }
+
+            MenyItems items = new MenyItems {
+                new MenyItem { Text = course.Name, Link = "~/Student/" },
+                new MenyItem { Text = module.Name, Link = "~/Student/Module/"+ module.Id },
+                new MenyItem { Text = module.Name +"'s äldre aktiviteter", Link = "~/Student/OldActivities/"+ module.Id },
+            };
+            ViewBag.BreadCrumbs = items;
 
             return View(module);
         }
