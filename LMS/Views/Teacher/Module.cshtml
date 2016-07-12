@@ -6,11 +6,22 @@
     <h3>Modul</h3>
 
     <h4>@Model.Name</h4>
+    <p>@Html.ActionLink("Redigera", "EditModule", new { id = Model.Id })</p>
     <p>@Model.Description</p>
 
     <p>Från <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> till och med <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
 </div>
+@if (Model.EndDate > DateTime.Now)
+{
 <p>
-    @Html.ActionLink("Skapa ny activitet", "CreateActivity", new { id = Model.Id })
+    @Html.ActionLink("Lägg till nytt dokument", "CreateDocument", new { type = "Module", id = Model.Id })
+    @if (ViewBag.Documents != null)
+    {
+        @Html.Partial("AllDocsPartialView", (IEnumerable<Document>)ViewBag.Documents)
+    }
 </p>
-@Html.Partial("ListActivitiesPartialView", Model.Activities.Where(a => a.EndDate == null || a.EndDate < DateTime.Now).ToList())
+<p>
+    @Html.ActionLink("Skapa ny aktivitet", "CreateActivity", new { id = Model.Id })
+</p>
+}
+@Html.Partial("ListActivitiesPartialView", Model.Activities.Where(a => a.EndDate == null || a.EndDate > DateTime.Now).ToList())

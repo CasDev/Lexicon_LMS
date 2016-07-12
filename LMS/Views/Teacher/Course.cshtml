@@ -4,10 +4,21 @@
 }
 <div class="leftalize fortywidth center">
     <h4>@Model.Name</h4>
+    <p>@Html.ActionLink("Redigera", "EditCourse", new { id = Model.Id })</p>
     <p>@Model.Description</p>
     <p>mellan <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> och <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
 </div>
+@if (Model.EndDate > DateTime.Now)
+{
+<p>
+    @Html.ActionLink("Lägg till nytt dokument", "CreateDocument", new { type = "Course", id = Model.Id })
+    @if (ViewBag.Documents != null)
+    {
+        @Html.Partial("AllDocsPartialView", (IEnumerable<Document>)ViewBag.Documents)
+    }
+</p>
 <p>
     @Html.ActionLink("Skapa ny module", "CreateModule", new { id = Model.Id })
 </p>
+}
 @Html.Partial("ListModulesPartialView", Model.Modules)

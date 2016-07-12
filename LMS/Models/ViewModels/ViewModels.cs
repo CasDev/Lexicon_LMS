@@ -1,9 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace LMS.Models
 {
+    public class CreateDocumentViewModule
+    {
+        [Display(Name = "Namn")]
+        [Required(ErrorMessage ="Ett dokument måste ha ett namn")]
+        public string Name { get; set; }
+
+        [Display(Name = "Beskrivning")]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "En fil behövs")]
+        [Display(Name = "Fil")]
+        public HttpPostedFileBase File { get; set; }
+    }
+
     public class CreateUserViewModel
     {
         [Required( ErrorMessage = "Ett förnamn behövs på en användare" )]
@@ -16,10 +31,12 @@ namespace LMS.Models
 
         [Required(ErrorMessage = "Ett lösenord behövs till en användare")]
         [Display(Name = "Lösenord")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Ett lösenord behövs till en användare")]
         [Display(Name = "Konfirmera lösenord")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "En roll behövs till en användare")]
@@ -27,7 +44,7 @@ namespace LMS.Models
         public string Role { get; set; }
 
         [Required(ErrorMessage = "En e-post måste fyllas i")]
-        [Display(Name = "Login")]
+        [Display(Name = "Epost för login")]
         [EmailAddress(ErrorMessage = "E-post har felaktigt format")]
         public string Email { get; set; }
     }

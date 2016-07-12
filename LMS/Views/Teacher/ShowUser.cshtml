@@ -1,9 +1,10 @@
 ﻿@model User
-    @using Microsoft.AspNet.Identity.EntityFramework;
-    @{ 
-        ViewBag.Title = "Användare";
-    }
+@using Microsoft.AspNet.Identity.EntityFramework;
+@{ 
+    ViewBag.Title = "Användare";
+}
 <h2>@Model.FirstName @Model.LastName</h2>
+<p>@Html.ActionLink("Redigera", "EditUser", new { id = Model.Id })</p>
 <h5>@Model.Email</h5>
 <p>@(Model.IsTeacher() ? "Lärare" : (Model.IsStudent() ? "Student" : "Ingen roll funnen"))</p>
 <!--<table class="center">

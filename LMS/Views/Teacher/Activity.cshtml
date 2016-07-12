@@ -4,6 +4,7 @@
 }
 <div class="leftalize fortywidth center">
     <h4>@Model.Name</h4>
+    <p>@Html.ActionLink("Redigera", "EditActivity", new { id = Model.Id })</p>
     <p>@Model.Description</p>
     @if (Model.StartDate != null && Model.EndDate != null)
     {
@@ -11,4 +12,11 @@
     }
     <!-- <p>Detta är en @Model.Type-aktivitet</p> -->
     <p>Denna tillhör modulen: @Model.Module.Name</p>
+    <p>
+        @Html.ActionLink("Lägg till nytt dokument", "CreateDocument", new { type = "Activity", id = Model.Id })
+        @if (ViewBag.Documents != null)
+        {
+            @Html.Partial("AllDocsPartialView", (IEnumerable<Document>)ViewBag.Documents)
+        }
+    </p>
 </div>
