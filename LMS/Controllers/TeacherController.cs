@@ -363,6 +363,8 @@ namespace LMS.Controllers
             Menu(Home: true);
             SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two : new MenyItem { Link = "~/Teacher/Course/"+ id, Text = course.Name });
 
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToCourse(course.Id, db);
+
             return View(course);
         }
 
@@ -389,6 +391,8 @@ namespace LMS.Controllers
 
             Menu(Home: true);
             SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name }, three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name });
+
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToModule(module.Id, db);
 
             return View(module);
         }
@@ -425,6 +429,8 @@ namespace LMS.Controllers
                 two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },
                 three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name },
                 four: new MenyItem { Link = "~/Teacher/Activity/" + activity.Id, Text = activity.Name });
+
+            ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToActivity(activity.Id, db);
 
             return View(activity);
         }
@@ -493,7 +499,7 @@ namespace LMS.Controllers
             }
 
             CreateModuleViewModel model = new CreateModuleViewModel { CourseId = (int)id, StartDate = (DateTime.Now > course.StartDate ? DateTime.Today.AddDays(1) : course.StartDate), EndDate = course.EndDate };
-            //            FetchAllCourses();  
+//            FetchAllCourses();  
 
             Menu(Home: true);
             SetBreadcrumbs(
@@ -900,7 +906,7 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult Index()
         {
-            var courses = db.Courses.Where(c => c.EndDate > DateTime.Now);
+            var courses = db.Courses.Where(c => c.EndDate > DateTime.Now); 
 
             Menu();
             SetBreadcrumbs(
@@ -979,7 +985,7 @@ namespace LMS.Controllers
                 ModelState.AddModelError("EndDate", "Kursen kan inte sluta före kursens startdatum. ");
                 hasError = true; //D v s nu har det inträffat ett Error. 
             }
-            if (hasError)
+                if (hasError)
             {
                 ViewBag.id = id != null ? (int)id : 0;            //Parameter castas om till en int. //Om id inte är null, så skickar vi id som parametern ViewBag = id. Annars om id är null, så sätter vi ViewBag till 0 per default. 
                 return View(model);                               //Skickar tillbaka till samma vy, nu med alla felmeddelanden. 
