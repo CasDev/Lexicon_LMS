@@ -258,6 +258,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\LMS.css" />
     <Content Include="Doc till LMS\Entity Relations.xml" />
+    <Content Include="documents\module\-1\teextfil.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -293,6 +294,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="documents\module\-1\Övning 7- CSS - Lite skinn på skelettet.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -351,6 +353,8 @@
     <Content Include="Views\Teacher\Activity.cshtml" />
     <Content Include="Views\Teacher\Module.cshtml" />
     <Content Include="Views\Teacher\CreateDocument.cshtml" />
+    <Content Include="Views\Teacher\OldModules.cshtml" />
+    <Content Include="Views\Teacher\OldActivities.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <div class="col-md-10">
                             @Html.DisplayNameFor(m => m.StartDate)
-                            <p>Som tidigast kan modulen starta: @(((DateTime)ViewBag.AtEarliest).ToString("yyyy/MM/dd"))</p>
+                            <p>Som tidigast kan kursen starta: @(((DateTime)ViewBag.AtEarliest).ToString("yyyy/MM/dd"))</p>
                             @Html.TextBoxFor(m => m.StartDate, new { type = "date", @class = "form-control, datepicker", @Value = DateTime.Today.AddDays(1).ToString("yyyy/MM/dd") })
                             @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
                         </div>

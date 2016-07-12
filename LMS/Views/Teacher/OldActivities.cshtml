@@ -1,0 +1,13 @@
+﻿@model Module
+@{
+    ViewBag.Title = "Module";
+}
+<div class="leftalize fortywidth center">
+    <h3>Äldre aktiviteter</h3>
+
+    <h4>@Model.Name</h4>
+    <p>@Model.Description</p>
+
+    <p>Från <time datetime="@Model.StartDate.ToString("yyyy-MM-dd")">@Model.StartDate.ToString(" yyyy-MM-dd ")</time> till och med <time datetime="@Model.EndDate.ToString("yyyy-MM-dd")">@Model.EndDate.ToString(" yyyy-MM-dd ")</time></p>
+</div>
+@Html.Partial("ListActivitiesPartialView", Model.Activities.Where(a => a.EndDate == null || a.EndDate < DateTime.Now).ToList())
