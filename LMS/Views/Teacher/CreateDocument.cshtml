@@ -14,18 +14,21 @@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
                         <div class="col-md-10">
+                            @Html.DisplayNameFor(m => m.Name)
                             @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Namn", autofocus = "autofocus" })
                             @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
+                            @Html.DisplayNameFor(m => m.Description)
                             @Html.TextBoxFor(m => m.Description, new { @class = "form-control", placeholder = "Beskrivning" })
                             @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
+                            @Html.DisplayNameFor(m => m.File)
                             @Html.TextBoxFor(m => m.File, new { type = "file", @class = "form-control", placeholder = "Beskrivning" })
                             @Html.ValidationMessageFor(m => m.File, "", new { @class = "text-danger" })
                         </div>

@@ -31,10 +31,12 @@ namespace LMS.Models
 
         [Required(ErrorMessage = "Ett lösenord behövs till en användare")]
         [Display(Name = "Lösenord")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Ett lösenord behövs till en användare")]
         [Display(Name = "Konfirmera lösenord")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "En roll behövs till en användare")]

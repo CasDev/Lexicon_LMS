@@ -14,12 +14,14 @@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
                         <div class="col-md-10">
+                            @Html.DisplayNameFor(m => m.Email)
                             @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Beskrivning" })
                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
+                            @Html.DisplayNameFor(m => m.CourseId)
                             @Html.DropDownListFor(m => m.CourseId, (List<SelectListItem>) ViewBag.CourseIds, new { @class = "form-control" })
                             @Html.ValidationMessageFor(m => m.CourseId, "", new { @class = "text-danger" })
                         </div>

@@ -28,6 +28,7 @@
                     <div class="form-group">
                         <div class="col-md-10">
                             @Html.DisplayNameFor(m => m.StartDate)
+                            <p>Som tidigast kan modulen starta: @(((DateTime)ViewBag.AtEarliest).ToString("yyyy/MM/dd"))</p>
                             @Html.TextBoxFor(m => m.StartDate, new { type = "date", @class = "form-control, datepicker", @Value = Model.StartDate.ToString("yyyy-MM-dd")})
                             @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
                         </div>
@@ -35,6 +36,7 @@
                     <div class="form-group">
                         <div class="col-md-10">
                             @Html.DisplayNameFor(m => m.EndDate)
+                            <p>Som senast kan modulen sluta: @(((DateTime)ViewBag.AtLatest).ToString("yyyy/MM/dd"))</p>
                             @Html.TextBoxFor(m => m.EndDate, new { type = "date", @class = "form-control, datepicker", @Value = Model.EndDate.ToString("yyyy-MM-dd") })
                             @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
                         </div>
@@ -42,6 +44,8 @@
                     <div class="form-group">
                         <div class="col-md-10">
                             @Html.DisplayNameFor(m => m.Deadline)
+                            <p>Ej obligatoriskt</p>
+                            <p>Som senast kan övningsuppgiften komma in: @(((DateTime)ViewBag.AtLatest).ToString("yyyy/MM/dd"))</p>
                             @Html.TextBoxFor(m => m.Deadline, new { type = "date", @class = "form-control, datepicker" })
                             @Html.ValidationMessageFor(m => m.Deadline, "", new { @class = "text-danger" })
                         </div>

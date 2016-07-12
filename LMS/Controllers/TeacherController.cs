@@ -507,6 +507,9 @@ namespace LMS.Controllers
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
                 two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name });
 
+            ViewBag.AtEarliest = (DateTime.Today.AddDays(1) > course.StartDate ? DateTime.Today.AddDays(1) : course.StartDate);
+            ViewBag.AtLatest = (DateTime.Today.AddDays(2) < course.EndDate ? course.EndDate : DateTime.Today.AddDays(2));
+
             return View(model);
         }
 
@@ -527,6 +530,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateModule(CreateModuleViewModel model, int? id)
         {
+            Course course = db.Courses.FirstOrDefault(c => c.Id == model.CourseId);
+            ViewBag.AtEarliest = (course != null ? (DateTime.Today.AddDays(1) > course.StartDate ? DateTime.Today.AddDays(1) : course.StartDate) : DateTime.Today.AddDays(1));
+            ViewBag.AtLatest = (course != null ? (DateTime.Today.AddDays(2) < course.EndDate ? course.EndDate : DateTime.Today.AddDays(2)) : DateTime.Today.AddDays(2));
+
             Menu(Home: true);
             SetBreadcrumbs(
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
@@ -557,13 +564,23 @@ namespace LMS.Controllers
                 ModelState.AddModelError("EndDate", "Slutdatumet kan ej vara innan startdatumet");
                 hasError = true;
             }
-            Course course = db.Courses.FirstOrDefault(c => c.Id == model.CourseId);
+            
             if (course == null)
             {
                 ModelState.AddModelError("", "Kursen kan ej hittas");
                 hasError = true;
             }
-            
+            if (model.StartDate < course.StartDate)
+            {
+                ModelState.AddModelError("StartDate", "Kan ej starta innan kursen");
+                hasError = true;
+            }
+            if (model.EndDate < course.EndDate)
+            {
+                ModelState.AddModelError("EndDate", "Kan ej sluta efter kursen");
+                hasError = true;
+            }
+
             if (hasError)
             {
                 model.CourseId = (id != null ? (int)id : 0);
@@ -613,6 +630,9 @@ namespace LMS.Controllers
                 two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },
                 three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name });
 
+            ViewBag.AtEarliest = (DateTime.Today.AddDays(1) > module.StartDate ? DateTime.Today.AddDays(1) : module.StartDate);
+            ViewBag.AtLatest = (DateTime.Today.AddDays(2) < module.EndDate ? module.EndDate : DateTime.Today.AddDays(1));
+
             return View(model);
         }
 
@@ -632,6 +652,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateActivity(CreateActivityViewModel model, int? id)
         {
+            Module module = db.Modules.FirstOrDefault(c => c.Id == model.ModuleId);
+            ViewBag.AtEarliest = (module != null ? (DateTime.Today.AddDays(1) > module.StartDate ? DateTime.Today.AddDays(1) : module.StartDate) : DateTime.Today.AddDays(1));
+            ViewBag.AtLatest = (module != null ? (DateTime.Today.AddDays(2) < module.EndDate ? module.EndDate : DateTime.Today.AddDays(2)) : DateTime.Today.AddDays(2));
+
             Menu(Home: true);
             SetBreadcrumbs(
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
@@ -677,7 +701,7 @@ namespace LMS.Controllers
                 ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan morgondagen");
                 hasError = true;
             }
-            Module module = db.Modules.FirstOrDefault(c => c.Id == model.ModuleId);
+            
             if (module == null)
             {
                 ModelState.AddModelError("", "Modulen kan ej hittas");
@@ -1041,6 +1065,9 @@ namespace LMS.Controllers
                 two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },
                 three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name });
 
+            ViewBag.AtEarliest = (DateTime.Today.AddDays(1) > course.StartDate ? DateTime.Today.AddDays(1) : course.StartDate);
+            ViewBag.AtLatest = (DateTime.Today.AddDays(2) < course.EndDate ? course.EndDate : DateTime.Today.AddDays(2));
+
             return View(model);
         }
 
@@ -1049,6 +1076,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult EditModule(EditModuleViewModel model, int? id)
         {
+            var module = db.Modules.FirstOrDefault(c => c.Id == id);
+            ViewBag.AtEarliest = (module != null ? (DateTime.Today.AddDays(1) > module.StartDate ? DateTime.Today.AddDays(1) : module.StartDate) : DateTime.Today.AddDays(1));
+            ViewBag.AtLatest = (module != null ? (DateTime.Today.AddDays(2) < module.EndDate ? module.EndDate : DateTime.Today.AddDays(2)) : DateTime.Today.AddDays(2));
+
             Menu(Home: true);
             SetBreadcrumbs(
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
@@ -1068,7 +1099,6 @@ namespace LMS.Controllers
             }
 
             bool hasError = false;
-            var module = db.Modules.FirstOrDefault(c => c.Id == id);
             if (module == null)
             {
                 ModelState.AddModelError("", "Ingen module funnen");
@@ -1168,6 +1198,9 @@ namespace LMS.Controllers
                 two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },
                 three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name },
                 four: new MenyItem { Link = "~/Teacher/Activity/" + activity.Id, Text = activity.Name });
+            
+            ViewBag.AtEarliest = (DateTime.Today.AddDays(1) > module.StartDate ? DateTime.Today.AddDays(1) : module.StartDate);
+            ViewBag.AtLatest = (DateTime.Today.AddDays(2) < module.EndDate ? module.EndDate : DateTime.Today.AddDays(2));
 
             return View(model);
         }
@@ -1177,6 +1210,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult EditActivity(EditActivityViewModel model, int? id)
         {
+            var activity = db.Activities.FirstOrDefault(c => c.Id == id);
+            Module module = (activity != null ? db.Modules.FirstOrDefault(c => c.Id == activity.ModuleId) : null);
+            ViewBag.AtEarliest = (DateTime.Today.AddDays(1) > module.StartDate ? DateTime.Today.AddDays(1) : module.StartDate);
+            ViewBag.AtLatest = (DateTime.Today.AddDays(2) < module.EndDate ? module.EndDate : DateTime.Today.AddDays(2));
+
             Menu(Home: true);
             SetBreadcrumbs(
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
@@ -1196,7 +1234,6 @@ namespace LMS.Controllers
             }
 
             bool hasError = false;
-            var activity = db.Activities.FirstOrDefault(c => c.Id == id);
             if (activity == null)
             {
                 ModelState.AddModelError("", "Ingen activitet funnen");
@@ -1233,7 +1270,7 @@ namespace LMS.Controllers
                 ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan morgondagen");
                 hasError = true;
             }
-            Module module = db.Modules.FirstOrDefault(c => c.Id == activity.ModuleId);
+
             if (module == null)
             {
                 ModelState.AddModelError("", "Föräldrar modulen kan ej hittas");
