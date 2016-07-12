@@ -3,10 +3,46 @@
 {
     <hr />
     <h5>Relaterade aktiviteter:</h5>
-    <ul>
-        @foreach (Activity activity in Model)
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
         {
-            <li><a href="@Url.Content("~/Teacher/Activity/"+ activity.Id)">@activity.Name</a></li>
+            <tr>
+                <td>
+                    <a href="@Url.Content("~/Teacher/Activity/"+ item.Id)" class="none">@item.Name</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                @if (item.EndDate > DateTime.Now)
+                {
+                    <td>
+                        @Html.ActionLink("Redigera", "EditActivity", new { id = item.Id })
+                        |
+                        @Html.ActionLink("Information", "Activity", new { id = item.Id })
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
         }
-    </ul>
+
+    </table>
 }

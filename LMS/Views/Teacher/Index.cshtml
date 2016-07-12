@@ -34,10 +34,17 @@
         <td>
             @Html.DisplayFor(modelItem => item.EndDate)
         </td>
-        <td>
-            @Html.ActionLink("Redigera", "EditCourse", new { id = item.Id }) |
+        @if (item.EndDate > DateTime.Now) {
+            <td>
+            @Html.ActionLink("Redigera", "EditCourse", new { id = item.Id })
+            |
             @Html.ActionLink("Information", "Course", new { id = item.Id })
-        </td>
+            </td>
+        } else
+        {
+            <td>
+            </td>
+        }
     </tr>
 }
 

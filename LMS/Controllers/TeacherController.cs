@@ -19,6 +19,7 @@ namespace LMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateDocument(int? id, string type, CreateDocumentViewModule model)
         {
             bool HasError = false;
@@ -130,6 +131,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateDocument(int? id, string type)
         {
             if (id == null)
@@ -175,6 +177,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult ShowUser(string id)
         {
             if (id == null)
@@ -190,6 +193,7 @@ namespace LMS.Controllers
 
             return View(user);
         }
+
         [HttpGet]
         [Authorize(Roles = "Teacher")]
         public ActionResult Assignment(int? id)
@@ -230,6 +234,7 @@ namespace LMS.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher")]
         public ActionResult Download(int? id)
         {
             if (id == null)
@@ -265,12 +270,14 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult OldCourses()
         {
             return View(db.Courses.Where(c => c.EndDate < DateTime.Now).ToList());
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult Course(int? id)
         {
             if (id == null)
@@ -290,6 +297,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult Module(int? id)
         {
             if (id == null)
@@ -307,6 +315,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult Activity(int? id)
         {
             if (id == null)
@@ -324,6 +333,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateCourse()
         {
             return View();
@@ -331,6 +341,7 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateCourse(CreateCourseViewModel model)
         {
             if (!ModelState.IsValid)
@@ -362,6 +373,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateModule(int? id)
         {
             if (id == null)
@@ -375,7 +387,7 @@ namespace LMS.Controllers
                 return Redirect("~/Error/?error=Ingen course funnen");
             }
 
-            CreateModuleViewModel model = new CreateModuleViewModel { CourseId = (int)id };
+            CreateModuleViewModel model = new CreateModuleViewModel { CourseId = (int)id, StartDate = (DateTime.Now > course.StartDate ? DateTime.Today.AddDays(1) : course.StartDate), EndDate = course.EndDate };
 //            FetchAllCourses();  
 
             return View(model);
@@ -395,6 +407,7 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateModule(CreateModuleViewModel model, int? id)
         {
             bool hasError = false;
@@ -446,6 +459,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateActivity(int? id)
         {
             if (id == null)
@@ -462,6 +476,9 @@ namespace LMS.Controllers
             //            FetchAllModules();        //Anrop till metoden FetchAllModules.   
             CreateActivityViewModel model = new CreateActivityViewModel();
             model.ModuleId = (int)id;
+            model.StartDate = (DateTime.Now > module.StartDate ? DateTime.Today.AddDays(1) : module.StartDate);
+            model.EndDate = module.EndDate;
+
             return View(model);
         }
 
@@ -478,6 +495,7 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateActivity(CreateActivityViewModel model, int? id)
         {
             if (!ModelState.IsValid)
@@ -565,6 +583,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult EditUser(string id)
         {
             if (id == null)
@@ -597,6 +616,7 @@ namespace LMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public ActionResult EditUser(string id, EditUserViewModel model)
         {
             if (id == null)
@@ -651,6 +671,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateUser()
         {
             return View();
@@ -658,6 +679,7 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public ActionResult CreateUser(CreateUserViewModel model)
         {
             // skillnaderna mellan en vymodel såsom LoginViewModel och en FormCollection
@@ -725,6 +747,7 @@ namespace LMS.Controllers
             return Redirect("~/Teacher/");
         }
 
+        [Authorize(Roles = "Teacher")]
         public ActionResult Index()
         {
             var courses = db.Courses.Where(c => c.EndDate > DateTime.Now); 
@@ -732,6 +755,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult EditCourse(int? id)
         {
             if (id == null )
@@ -759,6 +783,7 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]  
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public ActionResult EditCourse(EditCourseViewModel model, int? id)      //Detta id hämtas från query-stringen.  
         {
             bool hasError = false;
@@ -788,23 +813,25 @@ namespace LMS.Controllers
                 ModelState.AddModelError("EndDate", "Kursen kan inte sluta före kursens startdatum. ");
                 hasError = true; //D v s nu har det inträffat ett Error. 
             }
-                if (hasError)
+            if (hasError)
             {
                 ViewBag.id = id != null ? (int)id : 0;            //Parameter castas om till en int. //Om id inte är null, så skickar vi id som parametern ViewBag = id. Annars om id är null, så sätter vi ViewBag till 0 per default. 
                 return View(model);                               //Skickar tillbaka till samma vy, nu med alla felmeddelanden. 
             }
+
             course.Description = model.Description;                 // Coursens Description sätts lika med modellens Description, för att modellen representerar det vi ändrat i kursen. 
             course.Name = model.Name;
             course.StartDate = model.StartDate;
             course.EndDate = model.EndDate;
+
             db.Entry(course).State = EntityState.Modified; //Vi säger till databasen att vi uppdaterar/modifierar något. Ska göras så, enligt Entity Framework. 
             db.SaveChanges();
 
             return Redirect("~/Teacher/Course/" + course.Id); //Skickar vidare till kursens vy, för att se våra uppdateringar. 
         }
 
-    
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult EditModule(int? id)
         {
             if (id == null)
@@ -833,6 +860,7 @@ namespace LMS.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public ActionResult EditModule(EditModuleViewModel model, int? id)
         {
             if (id == null)
@@ -867,6 +895,24 @@ namespace LMS.Controllers
                 hasError = true;
             }
 
+            Course course = db.Courses.FirstOrDefault(c => c.Id == module.CourseId);
+            if (course == null)
+            {
+                ModelState.AddModelError("", "Ingen tillhörande kurs funnen");
+                hasError = true;
+            }
+
+            if (model.StartDate < course.StartDate)
+            {
+                ModelState.AddModelError("StartDate", "Startdatum kan tyvärr ej starta innan kursen");
+                hasError = true;
+            }
+            if (model.EndDate > course.EndDate)
+            {
+                ModelState.AddModelError("EndDate", "Slutdatumet kan ej överstrida kursens slutdatum");
+                hasError = true;
+            }
+
             if (hasError)
             {
                 ViewBag.Id = (int)id;
@@ -886,6 +932,7 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult EditActivity(int? id)
         {
             if (id == null)
@@ -910,11 +957,12 @@ namespace LMS.Controllers
 
             ViewBag.Id = (int)id;
 
-            return View(activity);
+            return View(model);
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public ActionResult EditActivity(EditActivityViewModel model, int? id)
         {
             if (id == null)
@@ -968,7 +1016,7 @@ namespace LMS.Controllers
                 ModelState.AddModelError("Deadline", "Deadline för övningsuppgift kan ej vara innan morgondagen");
                 hasError = true;
             }
-            Module module = db.Modules.FirstOrDefault(c => c.Id == activity.Id);
+            Module module = db.Modules.FirstOrDefault(c => c.Id == activity.ModuleId);
             if (module == null)
             {
                 ModelState.AddModelError("", "Föräldrar modulen kan ej hittas");
