@@ -14,6 +14,7 @@ namespace LMS.Models
     {
         public User User { get; set; }
         public Activity Activity { get; set; }
+        public Document Doc { get; set; }
         public bool Done { get; set; }
         public bool IsLeft { get; set; }
         public bool Delayed { get; set; }

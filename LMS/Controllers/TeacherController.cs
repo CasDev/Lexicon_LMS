@@ -48,6 +48,7 @@ namespace LMS.Controllers
             }
             items.AddRange(new List<MenyItem> {
                 new MenyItem { Text = "Skapa ny kurs", Link = "~/Teacher/CreateCourse/" },
+                new MenyItem { Text = "Skapa ny användare", Link = "~/Teacher/CreateUser/" },
                 new MenyItem { Text = "Se äldre kurser", Link = "~/Teacher/OldCourses/" }
             });
             if (Back != null)
@@ -283,7 +284,7 @@ namespace LMS.Controllers
                 bool isLeft = (done == false);
                 bool delayed = ((!done && DateTime.Now > activity.Deadline) || (done && doc != null && doc.UploadTime > activity.Deadline));
 
-                assignment.Add(new AssignmentStatus {User = user, Activity = activity, Delayed = delayed, Done = done, IsLeft = isLeft });
+                assignment.Add(new AssignmentStatus {Doc = doc, User = user, Activity = activity, Delayed = delayed, Done = done, IsLeft = isLeft });
             }
 
             SetBreadcrumbs(
@@ -423,7 +424,7 @@ namespace LMS.Controllers
                 return Redirect("~/Error/?error=Ingen kursförälder funnen");
             }
 
-            Menu(Home: true);
+            Menu(Home: true, Back: (activity.Deadline != null ? new MenyItem { Link = "~/Teacher/Assignment/"+ activity.Id, Text = "Inlämningsuppgifter" } : null));
             SetBreadcrumbs(
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
                 two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },

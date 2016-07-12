@@ -24,7 +24,11 @@
         <tr>
             <th>@assignment.User.FirstName @assignment.User.LastName</th>
             <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-            <td class="centralize">@(assignment.Done ? " X " : "")</td>
+            <td class="centralize">
+            @if (assignment.Done) {
+                @Html.ActionLink(" HÄMTA ", "Download", new { id = assignment.Doc.Id })
+            }
+            </td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td class="centralize">@(assignment.IsLeft ? " X " : "")</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

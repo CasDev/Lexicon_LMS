@@ -4,6 +4,7 @@
 }
 <div class="leftalize fortywidth center">
     <h4>@Model.Name</h4>
+    <p>@Html.ActionLink("Redigera", "EditActivity", new { id = Model.Id })</p>
     <p>@Model.Description</p>
     @if (Model.StartDate != null && Model.EndDate != null)
     {
