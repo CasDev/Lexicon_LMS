@@ -17,11 +17,54 @@ namespace LMS.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        public void SetBreadcrumbs(MenyItem one = null, MenyItem two = null, MenyItem three = null, MenyItem four = null)
+        {
+            MenyItems items = new MenyItems();
+            if (one != null)
+            {
+                items.Add(one);
+            }
+            if (two != null)
+            {
+                items.Add(two);
+            }
+            if (three != null)
+            {
+                items.Add(three);
+            }
+            if (four != null)
+            {
+                items.Add(four);
+            }
+            ViewBag.BreadCrumbs = items;
+        }
+
+        public void Menu(bool Home = false, MenyItem Back = null)
+        {
+            MenyItems items = new MenyItems();
+            if (Home)
+            {
+                items.Add(new MenyItem { Text = "Hem", Link = "~/Teacher/" });
+            }
+            items.AddRange(new List<MenyItem> {
+                new MenyItem { Text = "Skapa ny kurs", Link = "~/Teacher/CreateCourse/" },
+                new MenyItem { Text = "Se äldre kurser", Link = "~/Teacher/OldCourses/" }
+            });
+            if (Back != null)
+            {
+                items.Add(Back);
+            }
+            ViewBag.Menu = items;
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateDocument(int? id, string type, CreateDocumentViewModule model)
         {
+            SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" });
+            Menu(Home: true);
+
             bool HasError = false;
             if (id == null)
             {
@@ -146,6 +189,8 @@ namespace LMS.Controllers
             ViewBag.Id = (int)id;
             ViewBag.Type = type;
 
+            MenyItem item = null;
+
             switch (type.ToLower())
             {
                 case "course":
@@ -154,6 +199,8 @@ namespace LMS.Controllers
                     {
                         return Redirect("~/Error/?error=Ingen kurs funnen");
                     }
+
+                    item = new MenyItem { Link = "~/Teacher/Course/" + id, Text = course.Name };
                     break;
                 case "module":
                     Module module = db.Modules.FirstOrDefault(c => c.Id == (int)id);
@@ -161,6 +208,8 @@ namespace LMS.Controllers
                     {
                         return Redirect("~/Error/?error=Ingen module funnen");
                     }
+
+                    item = new MenyItem { Link = "~/Teacher/Module/" + id, Text = module.Name };
                     break;
                 case "activity":
                     Activity activity = db.Activities.FirstOrDefault(c => c.Id == (int)id);
@@ -168,10 +217,15 @@ namespace LMS.Controllers
                     {
                         return Redirect("~/Error/?error=Ingen activitet funnen");
                     }
+
+                    item = new MenyItem { Link = "~/Teacher/Activity/" + id, Text = activity.Name };
                     break;
                 default:
                     return Redirect("~/Error/?error=Fel typ angett för document");
             }
+
+            SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two: item);
+            Menu(Home: true);
 
             return View();
         }
@@ -190,6 +244,9 @@ namespace LMS.Controllers
             {
                 return Redirect("~/Error/?error=Ingen användare funnen");
             }
+
+            SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two: new MenyItem { Link = "~/Teacher/ShowUser/"+ id, Text = user.FirstName +" "+ user.LastName });
+            Menu(Home: true);
 
             return View(user);
         }
@@ -228,6 +285,13 @@ namespace LMS.Controllers
 
                 assignment.Add(new AssignmentStatus {User = user, Activity = activity, Delayed = delayed, Done = done, IsLeft = isLeft });
             }
+
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/Course/"+ course.Id, Text = course.Name },
+                two: new MenyItem { Link = "~/Teacher/Module/"+ activity.ModuleId },
+                three: new MenyItem { Link = "~/Teacher/Activity/"+ activity.Id, Text = activity.Name },
+                four: new MenyItem { Link = "~/Teacher/Assignment/"+ id, Text = activity.Name +"'s inlämningsuppgifter" });
+            Menu(Home: true);
 
             return View(assignment);
         }
@@ -273,6 +337,9 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult OldCourses()
         {
+            Menu(Home: true);
+            SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla pågående kurser" });
+
             return View(db.Courses.Where(c => c.EndDate < DateTime.Now).ToList());
         }
 
@@ -293,6 +360,9 @@ namespace LMS.Controllers
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.EndDate > DateTime.Now).OrderBy(m => m.StartDate).ToList();
 
+            Menu(Home: true);
+            SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two : new MenyItem { Link = "~/Teacher/Course/"+ id, Text = course.Name });
+
             return View(course);
         }
 
@@ -310,6 +380,15 @@ namespace LMS.Controllers
             {
                 return Redirect("~/Error/?error=Ingen module funnen");
             }
+
+            Course course = module.Course;
+            if (course == null)
+            {
+                return Redirect("~/Error/?error=Ingen kursförälder funnen");
+            }
+
+            Menu(Home: true);
+            SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name }, three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name });
 
             return View(module);
         }
@@ -329,6 +408,24 @@ namespace LMS.Controllers
                 return Redirect("~/Error/?error=Ingen activitet funnen");
             }
 
+            Module module = activity.Module;
+            if (module == null)
+            {
+                return Redirect("~/Error/?error=Ingen moduleförälder funnen");
+            }
+            Course course = module.Course;
+            if (course == null)
+            {
+                return Redirect("~/Error/?error=Ingen kursförälder funnen");
+            }
+
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },
+                three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name },
+                four: new MenyItem { Link = "~/Teacher/Activity/" + activity.Id, Text = activity.Name });
+
             return View(activity);
         }
 
@@ -336,6 +433,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateCourse()
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" });
+
             return View();
         }
 
@@ -344,6 +445,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateCourse(CreateCourseViewModel model)
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" });
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -388,7 +493,12 @@ namespace LMS.Controllers
             }
 
             CreateModuleViewModel model = new CreateModuleViewModel { CourseId = (int)id, StartDate = (DateTime.Now > course.StartDate ? DateTime.Today.AddDays(1) : course.StartDate), EndDate = course.EndDate };
-//            FetchAllCourses();  
+            //            FetchAllCourses();  
+
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name });
 
             return View(model);
         }
@@ -410,6 +520,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateModule(CreateModuleViewModel model, int? id)
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/Course/" + id, Text = "Tillbaka till kurs" });
+
             bool hasError = false;
             if (id == null)
             {
@@ -479,6 +594,18 @@ namespace LMS.Controllers
             model.StartDate = (DateTime.Now > module.StartDate ? DateTime.Today.AddDays(1) : module.StartDate);
             model.EndDate = module.EndDate;
 
+            Course course = module.Course;
+            if (course == null)
+            {
+                return Redirect("~/Error/?error=Ingen kurs flrälder funnen");
+            }
+
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },
+                three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name });
+
             return View(model);
         }
 
@@ -498,6 +625,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateActivity(CreateActivityViewModel model, int? id)
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                three: new MenyItem { Link = "~/Teacher/Module/" + id, Text = "Tillbaka till modul" });
+
             if (!ModelState.IsValid)
             {
                 model.ModuleId = (id == null ? 0 : id);
@@ -612,6 +744,11 @@ namespace LMS.Controllers
             ViewBag.Id = user.Id;
             ViewBag.CourseIds = ListItems;
 
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/ShowUser/" + id, Text = user.FirstName +" "+ user.LastName });
+
             return View(model);
         }
 
@@ -619,6 +756,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult EditUser(string id, EditUserViewModel model)
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/ShowUser/"+ id, Text = "Tillbaka till användaren" });
+
             if (id == null)
             {
                 ViewBag.Error = "Inget id har angivits";
@@ -674,6 +816,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult CreateUser()
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" });
+
             return View();
         }
 
@@ -714,6 +860,10 @@ namespace LMS.Controllers
             //{
             //    // OK
             //}
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" });
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -750,7 +900,13 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult Index()
         {
-            var courses = db.Courses.Where(c => c.EndDate > DateTime.Now); 
+            var courses = db.Courses.Where(c => c.EndDate > DateTime.Now);
+
+            Menu();
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }
+            );
+
             return View(courses.ToList());
         }
 
@@ -778,6 +934,11 @@ namespace LMS.Controllers
             model.EndDate = course.EndDate;
             ViewBag.id = course.Id;
 
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name });
+
             return View(model);
         }
 
@@ -786,6 +947,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult EditCourse(EditCourseViewModel model, int? id)      //Detta id hämtas från query-stringen.  
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                three: new MenyItem { Link = "~/Teacher/Course/" + id, Text = "Tillbaka till kurs" });
+
             bool hasError = false;
             if (id == null)
             {
@@ -847,6 +1013,13 @@ namespace LMS.Controllers
                 return View("~/Views/Error/Index.cshtml");
             }
 
+            Course course = module.Course;
+            if (course == null)
+            {
+                ViewBag.Error = "Ingen kurs förälder har hittats";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
             EditModuleViewModel model = new EditModuleViewModel();
             model.Description = module.Description;
             model.Name = module.Name;
@@ -854,6 +1027,12 @@ namespace LMS.Controllers
             model.EndDate = module.EndDate;
 
             ViewBag.Id = (int)id;
+
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },
+                three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name });
 
             return View(model);
         }
@@ -863,6 +1042,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult EditModule(EditModuleViewModel model, int? id)
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                three: new MenyItem { Link = "~/Teacher/Module/" + id, Text = "Tillbaka till modul" });
+
             if (id == null)
             {
                 ViewBag.Error = "Inget id har angivits";
@@ -948,6 +1132,20 @@ namespace LMS.Controllers
                 return View("~/Views/Error/Index.cshtml");
             }
 
+            Module module = activity.Module;
+            if (module == null)
+            {
+                ViewBag.Error = "Ingen modul förälder har hittats";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
+            Course course = module.Course;
+            if (course == null)
+            {
+                ViewBag.Error = "Ingen kurs flrälder har hittats";
+                return View("~/Views/Error/Index.cshtml");
+            }
+
             EditActivityViewModel model = new EditActivityViewModel();
             model.Description = activity.Description;
             model.Name = activity.Name;
@@ -957,6 +1155,13 @@ namespace LMS.Controllers
 
             ViewBag.Id = (int)id;
 
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name },
+                three: new MenyItem { Link = "~/Teacher/Module/" + module.Id, Text = module.Name },
+                four: new MenyItem { Link = "~/Teacher/Activity/" + activity.Id, Text = activity.Name });
+
             return View(model);
         }
 
@@ -965,6 +1170,11 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult EditActivity(EditActivityViewModel model, int? id)
         {
+            Menu(Home: true);
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
+                three: new MenyItem { Link = "~/Teacher/Activity/" + id, Text = "Tillbaka till aktivitet" });
+
             if (id == null)
             {
                 ViewBag.Error = "Inget id har angivits";
