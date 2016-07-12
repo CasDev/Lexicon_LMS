@@ -1028,6 +1028,8 @@ namespace LMS.Controllers
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
                 two: new MenyItem { Link = "~/Teacher/Course/" + course.Id, Text = course.Name });
 
+            ViewBag.AtEarliest = DateTime.Today.AddDays(1);
+
             return View(model);
         }
 
@@ -1036,6 +1038,8 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher")]
         public ActionResult EditCourse(EditCourseViewModel model, int? id)      //Detta id hämtas från query-stringen.  
         {
+            ViewBag.AtEarliest = DateTime.Today.AddDays(1);
+
             Menu(Home: true);
             SetBreadcrumbs(
                 one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" },
