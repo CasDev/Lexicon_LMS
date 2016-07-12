@@ -9,6 +9,10 @@
 </div>
 <p>
     @Html.ActionLink("Lägg till nytt dokument", "CreateDocument", new { type = "Course", id = Model.Id })
+    @if (ViewBag.Documents != null)
+    {
+        @Html.Partial("AllDocsPartialView", (IEnumerable<Document>)ViewBag.Documents)
+    }
 </p>
 <p>
     @Html.ActionLink("Skapa ny module", "CreateModule", new { id = Model.Id })

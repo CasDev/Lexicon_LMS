@@ -12,8 +12,12 @@
 </div>
 <p>
     @Html.ActionLink("Lägg till nytt dokument", "CreateDocument", new { type = "Module", id = Model.Id })
+    @if (ViewBag.Documents != null)
+    {
+        @Html.Partial("AllDocsPartialView", (IEnumerable<Document>)ViewBag.Documents)
+    }
 </p>
 <p>
-    @Html.ActionLink("Skapa ny activitet", "CreateActivity", new { id = Model.Id })
+    @Html.ActionLink("Skapa ny aktivitet", "CreateActivity", new { id = Model.Id })
 </p>
 @Html.Partial("ListActivitiesPartialView", Model.Activities.Where(a => a.EndDate == null || a.EndDate < DateTime.Now).ToList())
