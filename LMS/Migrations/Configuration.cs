@@ -141,8 +141,6 @@ namespace LMS.Migrations
                 Activity);
             context.SaveChanges();
 
-            // TODO:
-
             Module = new Module { Name = "Identity", Description = "Går igenom Identity och Individual User Interface(?) med gästföreläsare", StartDate = new DateTime(2016, 5, 16), EndDate = new DateTime(2016, 5, 18, 23, 59, 0) };
             Module.CourseId = Course.Id;
             context.Modules.AddOrUpdate(m => m.Name,
@@ -169,6 +167,26 @@ namespace LMS.Migrations
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
             Activity = new Activity { Name = "JavaScript", Description = "En enkel applikation som skriver ut text i kommando-prompten", StartDate = null, EndDate = new DateTime(2016, 7, 2, 17, 0, 0), Deadline = new DateTime(2016, 7, 2, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+            context.SaveChanges();
+
+            Module = new Module { Name = "Slutprojekt", Description = "Jobba på slutprojekt i grupp", StartDate = new DateTime(2016, 7, 20), EndDate = new DateTime(2016, 8, 10, 23, 59, 0) };
+            Module.CourseId = Course.Id;
+            context.Modules.AddOrUpdate(m => m.Name,
+                Module);
+            context.SaveChanges();
+
+            Activity = new Activity { Name = "", Description = "", StartDate = null, EndDate = new DateTime(2016, 4, 18, 17, 0, 0), Deadline = new DateTime(2016, 4, 18, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+            Activity = new Activity { Name = "", Description = "", StartDate = null, EndDate = new DateTime(2016, 4, 18, 17, 0, 0), Deadline = new DateTime(2016, 4, 18, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+            Activity = new Activity { Name = "", Description = "", StartDate = null, EndDate = new DateTime(2016, 6, 21, 17, 0, 0), Deadline = new DateTime(2016, 6, 21, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
+            context.Activities.AddOrUpdate(x => x.Name,
+                Activity);
+            Activity = new Activity { Name = "", Description = "", StartDate = null, EndDate = new DateTime(2016, 7, 2, 17, 0, 0), Deadline = new DateTime(2016, 7, 2, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
             context.SaveChanges();
