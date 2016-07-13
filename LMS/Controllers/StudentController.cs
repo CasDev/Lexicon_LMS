@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace LMS.Controllers
-{
+{ n
     public class StudentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
