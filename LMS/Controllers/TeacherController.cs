@@ -58,6 +58,13 @@ namespace LMS.Controllers
             ViewBag.Menu = items;
         }
 
+        [HttpGet]
+        public ActionResult AddToCourse(int? id)
+        {
+            // TODO:
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Teacher")]

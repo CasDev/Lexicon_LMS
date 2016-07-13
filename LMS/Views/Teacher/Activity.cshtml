@@ -4,7 +4,7 @@
 }
 <div class="leftalize fortywidth center">
     <h4>@Model.Name</h4>
-    @if (Model.EndDate == null || (Model.EndDate < DateTime.Now || Model.Module.EndDate < DateTime.Now))
+    @if (Model.EndDate == null || Model.EndDate > DateTime.Now)
     {
         <p>@Html.ActionLink("Redigera", "EditActivity", new { id = Model.Id })</p>
     }
@@ -15,7 +15,7 @@
     }
     <!-- <p>Detta är en @Model.Type-aktivitet</p> -->
     <p>Denna tillhör modulen: @Model.Module.Name</p>
-    @if (Model.EndDate == null || (Model.EndDate < DateTime.Now || Model.Module.EndDate < DateTime.Now))
+    @if (Model.EndDate == null || Model.EndDate > DateTime.Now)
     {
         <p>
             @Html.ActionLink("Lägg till nytt dokument", "CreateDocument", new { type = "Activity", id = Model.Id })
