@@ -29,7 +29,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
-                @if (item.EndDate > DateTime.Now)
+                @if (item.EndDate == null || item.EndDate > DateTime.Now)
                 {
                     <td>
                         @Html.ActionLink("Redigera", "EditActivity", new { id = item.Id })
