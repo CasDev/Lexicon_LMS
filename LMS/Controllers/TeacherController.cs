@@ -306,7 +306,6 @@ namespace LMS.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Teacher")]
-        [Authorize(Roles = "Teacher")]
         public ActionResult Download(int? id)
         {
             if (id == null)
@@ -522,6 +521,9 @@ namespace LMS.Controllers
                 return View(model);
             }
 
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
+
             bool hasError = false;
             if (model.StartDate < DateTime.Today.AddDays(1))
             {
@@ -618,6 +620,9 @@ namespace LMS.Controllers
 
                 return View(model);
             }
+
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
 
             if (model.StartDate < DateTime.Today.AddDays(1))
             {
@@ -733,6 +738,13 @@ namespace LMS.Controllers
 //                FetchAllModules();        //Anrop till metoden FetchAllModules.  
 
                 return View(model);
+            }
+
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
+            if (model.Deadline != null)
+            {
+                model.Deadline = new DateTime(((DateTime)model.Deadline).Year, ((DateTime)model.Deadline).Month, ((DateTime)model.Deadline).Day, 23, 59, 0);
             }
 
             bool hasError = false;
@@ -1069,6 +1081,16 @@ namespace LMS.Controllers
             {
                 hasError = true;
             }
+
+            if (model.StartDate != null)
+            {
+                model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            }
+            if (model.EndDate != null)
+            {
+                model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
+            }
+
             if (model.StartDate < DateTime.Today.AddDays(1))       //Vi kollar att den inte är mindre än morgondagen. D v s vi lägger till 1 till i dag, för att få morgondagen. Kollar att startdatumet ligger i framtiden. 
             {
                 ModelState.AddModelError("StartDate", "Kursen kan inte starta före morgondagens datum.");
@@ -1166,6 +1188,9 @@ namespace LMS.Controllers
 
                 return View(model);
             }
+
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
 
             bool hasError = false;
             if (module == null)
@@ -1300,6 +1325,12 @@ namespace LMS.Controllers
                 ViewBag.Id = (int)id;
 
                 return View(model);
+            }
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
+            if (model.Deadline != null)
+            {
+                model.Deadline = new DateTime(((DateTime)model.Deadline).Year, ((DateTime)model.Deadline).Month, ((DateTime)model.Deadline).Day, 23, 59, 0);
             }
 
             bool hasError = false;

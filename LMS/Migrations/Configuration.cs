@@ -66,12 +66,12 @@ namespace LMS.Migrations
             uManager.AddToRole(user.Id, "Student");
             uManager.Update(user);
 
-            Course Course = new Course { Name = ".NET, Våren -15", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2015, 2, 16), EndDate = new DateTime(2015, 8, 15), Users = new List<User>() };
+            Course Course = new Course { Name = ".NET, Våren -15", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2015, 2, 16), EndDate = new DateTime(2015, 8, 15, 23, 59, 0), Users = new List<User>() };
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
             context.SaveChanges();
 
-            Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15), Users = new List<User>() };
+            Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15, 23, 59, 0), Users = new List<User>() };
             Course.Users.Add(user);
             user = uManager.FindByName("castell_john@hotmail.com");
             Course.Users.Add(user);
