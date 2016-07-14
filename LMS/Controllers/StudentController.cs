@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace LMS.Controllers
-{
+{ 
     public class StudentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -285,6 +285,7 @@ namespace LMS.Controllers
             bool _sort = (sort != null && sort == "FirstName" ? false : true);
 
             course.Users = (course.Users != null ? course.Users : new List<User>());
+            course.Users = course.Users.Where(s => s.IsStudent()).ToList();
             if (_sort)
             {
                 course.Users = course.Users.OrderBy(u => u.LastName).ToList();

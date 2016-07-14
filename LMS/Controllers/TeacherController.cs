@@ -39,7 +39,7 @@ namespace LMS.Controllers
             ViewBag.BreadCrumbs = items;
         }
 
-        public void Menu(bool Home = false, MenyItem Back = null)
+        public void Menu(bool Home = false, MenyItem Back = null, MenyItem Extra = null)
         {
             MenyItems items = new MenyItems();
             if (Home)
@@ -55,7 +55,115 @@ namespace LMS.Controllers
             {
                 items.Add(Back);
             }
+            if (Extra != null)
+            {
+                items.Add(Extra);
+            }
             ViewBag.Menu = items;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Teacher")]
+        public ActionResult AddToCourse(int? id)
+        {
+            if (id == null)
+            {
+                ViewBag.Error = "Inget Id har hittats";
+                return View("~/Error/Index.cshtml");
+            }
+            Course course = db.Courses.FirstOrDefault(c => c.Id == id);
+            if (course == null)
+            {
+                ViewBag.Error = "Ingen kurs har hittats med detta id";
+                return View("~/Error/Index.cshtml");
+            }
+            List<User> Users = db.Users.Where(s => s.CoursesId == null).ToList(); // studenter som ej hör till någon kurs än
+            Users = Users.Where(s => s.IsStudent()).ToList();
+            if (Users.Count() <= 0)
+            {
+                ViewBag.Error = "Inga studenter finns tillgängliga, till att läggas till i denna kurs";
+                return View("~/Error/Index.cshtml");
+            }
+            ViewBag.Users = Users;
+            AddToCourseViewModel model = new AddToCourseViewModel();
+            model.CourseId = (int)id;
+            model.Students = new List<string>();
+
+            Menu(Home: true, Back: new MenyItem { Link = "~/Teacher/Course/" + id, Text = "Tillbaka till " + course.Name });
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two: new MenyItem { Link = "~/Teacher/Course/" + id, Text = course.Name });
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher")]
+        public ActionResult AddToCourse(int? id, AddToCourseViewModel model)
+        {
+            Course course = db.Courses.FirstOrDefault(c => c.Id == id);
+            Menu(Home: true, Back: new MenyItem { Link = "~/Teacher/Course/"+ id, Text = "Tillbaka" + (course != null ? " till "+ course.Name : "") });
+            SetBreadcrumbs(
+                one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two: new MenyItem { Link = "~/Teacher/Course/"+ id, Text = (course != null ? course.Name : "Tillbaka") });
+
+            bool hasError = false;
+            if (!ModelState.IsValid)
+            {
+                hasError = true;
+            }
+            if (id == null)
+            {
+                ModelState.AddModelError("", "Inget Id har angets");
+                id = 0;
+                hasError = true;
+            }
+            if (id != model.CourseId)
+            {
+                ModelState.AddModelError("CourseId", "Kursens id överanstämmer ej med sig själv");
+                hasError = true;
+            }
+
+            if (course == null)
+            {
+                ModelState.AddModelError("CourseId", "Ingen kurs har hittats med detta id");
+                hasError = true;
+            }
+            List<User> Users = db.Users.Where(s => s.CoursesId == null).ToList(); // studenter som ej hör till någon kurs än
+            Users = Users.Where(s => s.IsStudent()).ToList();
+            if (Users.Count() <= 0)
+            {
+                ModelState.AddModelError("Students", "Inga studenter finns tillgängliga, till att läggas till i denna kurs");
+                hasError = true;
+            }
+            ViewBag.Users = Users;
+            
+            model.Students = (model.Students != null ? model.Students : new List<string>());
+            if (hasError)
+            {
+                return View(model);
+            }
+            foreach (string _id in model.Students)
+            {
+                User user = db.Users.FirstOrDefault(u => u.Id == _id);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Student kunde ej hittas");
+                    hasError = true;
+                    break;
+                }
+
+                course.Users.Add(user);
+                user.CoursesId = course.Id;
+                db.Entry(user).State = EntityState.Modified;
+            }
+            if (hasError)
+            {
+                return View(model);
+            }
+            db.Entry(course).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Redirect("~/Teacher/Course/"+ course.Id);
         }
 
         [HttpPost]
@@ -383,7 +491,7 @@ namespace LMS.Controllers
             course.Modules = (course.Modules != null ? course.Modules : new List<Module>());
             course.Modules = course.Modules.Where(m => m.EndDate > DateTime.Now).OrderBy(m => m.StartDate).ToList();
 
-            Menu(Home: true, Back: new MenyItem { Link = "~/Teacher/OldModules/"+ course.Id, Text = course.Name + "'s äldre moduler" });
+            Menu(Home: true, Back: new MenyItem { Link = "~/Teacher/OldModules/"+ course.Id, Text = course.Name + "'s äldre moduler" }, Extra: new MenyItem { Link = "~/Teacher/AddToCourse/" + course.Id, Text = "Lägg till nya elever till "+ course.Name });
             SetBreadcrumbs(one: new MenyItem { Link = "~/Teacher/", Text = "Se alla kurser" }, two : new MenyItem { Link = "~/Teacher/Course/"+ id, Text = course.Name });
 
             ViewBag.Documents = DocumentCRUD.FindAllDocumentsBelongingToCourse(course.Id, db);
@@ -514,6 +622,9 @@ namespace LMS.Controllers
                 return View(model);
             }
 
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
+
             bool hasError = false;
             if (model.StartDate < DateTime.Today.AddDays(1))
             {
@@ -610,6 +721,9 @@ namespace LMS.Controllers
 
                 return View(model);
             }
+
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
 
             if (model.StartDate < DateTime.Today.AddDays(1))
             {
@@ -725,6 +839,13 @@ namespace LMS.Controllers
 //                FetchAllModules();        //Anrop till metoden FetchAllModules.  
 
                 return View(model);
+            }
+
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
+            if (model.Deadline != null)
+            {
+                model.Deadline = new DateTime(((DateTime)model.Deadline).Year, ((DateTime)model.Deadline).Month, ((DateTime)model.Deadline).Day, 23, 59, 0);
             }
 
             bool hasError = false;
@@ -1061,6 +1182,16 @@ namespace LMS.Controllers
             {
                 hasError = true;
             }
+
+            if (model.StartDate != null)
+            {
+                model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            }
+            if (model.EndDate != null)
+            {
+                model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
+            }
+
             if (model.StartDate < DateTime.Today.AddDays(1))       //Vi kollar att den inte är mindre än morgondagen. D v s vi lägger till 1 till i dag, för att få morgondagen. Kollar att startdatumet ligger i framtiden. 
             {
                 ModelState.AddModelError("StartDate", "Kursen kan inte starta före morgondagens datum.");
@@ -1158,6 +1289,9 @@ namespace LMS.Controllers
 
                 return View(model);
             }
+
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
 
             bool hasError = false;
             if (module == null)
@@ -1292,6 +1426,12 @@ namespace LMS.Controllers
                 ViewBag.Id = (int)id;
 
                 return View(model);
+            }
+            model.StartDate = new DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day, 0, 0, 0);
+            model.EndDate = new DateTime(model.EndDate.Year, model.EndDate.Month, model.EndDate.Day, 23, 59, 0);
+            if (model.Deadline != null)
+            {
+                model.Deadline = new DateTime(((DateTime)model.Deadline).Year, ((DateTime)model.Deadline).Month, ((DateTime)model.Deadline).Day, 23, 59, 0);
             }
 
             bool hasError = false;

@@ -66,7 +66,12 @@ namespace LMS.Migrations
             uManager.AddToRole(user.Id, "Student");
             uManager.Update(user);
 
-            Course Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15), Users = new List<User>() };
+            Course Course = new Course { Name = ".NET, Våren -15", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2015, 2, 16), EndDate = new DateTime(2015, 8, 15, 23, 59, 0), Users = new List<User>() };
+            context.Courses.AddOrUpdate(x => x.Name,
+                Course);
+            context.SaveChanges();
+
+            Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15, 23, 59, 0), Users = new List<User>() };
             Course.Users.Add(user);
             user = uManager.FindByName("castell_john@hotmail.com");
             Course.Users.Add(user);
@@ -177,16 +182,16 @@ namespace LMS.Migrations
                 Module);
             context.SaveChanges();
 
-            Activity = new Activity { Name = "", Description = "", StartDate = null, EndDate = new DateTime(2016, 4, 18, 17, 0, 0), Deadline = new DateTime(2016, 4, 18, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
+            Activity = new Activity { Name = "Sprint 1", Description = "Första sprinten i SCRUM-arbetet för slutprojektet", StartDate = new DateTime(2016, 7, 20), EndDate = new DateTime(2016, 7, 27, 17, 0, 0), Deadline = null, ModuleId = Module.Id, Type = "Practice" };
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
-            Activity = new Activity { Name = "", Description = "", StartDate = null, EndDate = new DateTime(2016, 4, 18, 17, 0, 0), Deadline = new DateTime(2016, 4, 18, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
+            Activity = new Activity { Name = "Sprint 2", Description = "Andra sprinten i SCRUM-arbete för slutprojektet", StartDate = new DateTime(2016, 7, 28), EndDate = new DateTime(2016, 8, 5, 17, 0, 0), Deadline = null, ModuleId = Module.Id, Type = "Practice" };
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
-            Activity = new Activity { Name = "", Description = "", StartDate = null, EndDate = new DateTime(2016, 6, 21, 17, 0, 0), Deadline = new DateTime(2016, 6, 21, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
+            Activity = new Activity { Name = "Sprint 3", Description = "Tredje sprinten i SCRUM-arbete för slutprojektet", StartDate = new DateTime(2016, 8, 6), EndDate = new DateTime(2016, 8, 10, 17, 0, 0), Deadline = null, ModuleId = Module.Id, Type = "Practice" };
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
-            Activity = new Activity { Name = "", Description = "", StartDate = null, EndDate = new DateTime(2016, 7, 2, 17, 0, 0), Deadline = new DateTime(2016, 7, 2, 15, 30, 0), ModuleId = Module.Id, Type = "Practice" };
+            Activity = new Activity { Name = "Slutprojekt", Description = "En inlämningsuppgift för slutprojektet", StartDate = null, EndDate = null, Deadline = new DateTime(2016, 8, 10, 17, 0, 0), ModuleId = Module.Id, Type = "Practice" };
             context.Activities.AddOrUpdate(x => x.Name,
                 Activity);
             context.SaveChanges();

@@ -239,6 +239,7 @@
       <DependentUpon>201607051455550_Update_Document_ModifyUserId.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Utils\Annotation.cs" />
     <Compile Include="Models\Utils\AssignmentCheck.cs" />
     <Compile Include="Models\ViewModels\ViewModels.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -293,6 +294,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Doc till LMS\Entity Relations.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -353,6 +355,7 @@
     <Content Include="Views\Teacher\CreateDocument.cshtml" />
     <Content Include="Views\Teacher\OldModules.cshtml" />
     <Content Include="Views\Teacher\OldActivities.cshtml" />
+    <Content Include="Views\Teacher\AddToCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

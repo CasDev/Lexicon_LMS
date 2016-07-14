@@ -1,10 +1,21 @@
-﻿using System;
+﻿using LMS.Models.Utils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
 namespace LMS.Models
 {
+    public class AddToCourseViewModel
+    {
+        [Display(Name = "Studenter")]
+        [ListSize(1, ErrorMessage = "Du måste ha minst en student med")]
+        public List<string> Students { get; set; }
+
+        [Required(ErrorMessage = "Ett id behövs för kurs")]
+        public int CourseId { get; set; }
+    }
+
     public class CreateDocumentViewModule
     {
         [Display(Name = "Namn")]
