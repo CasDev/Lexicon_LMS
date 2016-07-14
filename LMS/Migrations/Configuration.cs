@@ -238,11 +238,11 @@ namespace LMS.Migrations
                 }
             }
 
-            user = uManager.FindByName("lozano@skola.se");
+            user = uManager.FindByName("lozano@skola.se");      //Adrian Lozano är en av lärarna och får här tilldelad en lärarroll. 
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);
 
-            user = uManager.FindByName("jakobsson@skola.se");
+            user = uManager.FindByName("jakobsson@skola.se");   //Oscar Jacobsson är en annan lärare, som också får en lärarroll tilldelad här. 
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);
         }

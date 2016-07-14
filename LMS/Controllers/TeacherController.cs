@@ -299,7 +299,6 @@ namespace LMS.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Teacher")]
-        [Authorize(Roles = "Teacher")]
         public ActionResult Download(int? id)
         {
             if (id == null)
