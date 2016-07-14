@@ -47,6 +47,10 @@
     </div>
     <div class="container body-content lmsbackground center centralize">
         <h1>Lexicon LMS, Lärplattform</h1>
+        @if (Request.QueryString["warning"] != null)
+        {
+            <h3>@Request.QueryString["warning"]</h3>
+        }
         <hr />
         @RenderBody()
     </div>
