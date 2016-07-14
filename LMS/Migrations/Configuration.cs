@@ -199,9 +199,14 @@ namespace LMS.Migrations
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
 
-            foreach (string file in Directory.GetFiles(MapPath("~/documents/module/-1/").Replace("%20", " "))) {
+            // loopar alla filer i "~/documents/module/-1/"
+            foreach (string file in Directory.GetFiles(MapPath("~/documents/module/-1/").Replace("%20", " ")))
+            {
+                // hämtar ut vilken extention det är, t.ex. .txt
                 string extention = System.IO.Path.GetExtension(file);
+                // hämtar ut titel i dokument, t.ex. "teext"
                 string name = System.IO.Path.GetFileNameWithoutExtension(file);
+                // sparar filen på disk, samt få t.ex. ett dokument att spara i databas
                 Document Document = DocumentCRUD.SaveDocument(MapPath("~/documents/module/3/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
                 if (Document != null)
                 {
@@ -214,6 +219,7 @@ namespace LMS.Migrations
                     Document.ModuleId = 3;
                     Document.UserId = user.Id;
                     context.Documents.AddOrUpdate(d => d.Name, Document);
+                    //metadata tillagd i databasen
                 }
                 Document = DocumentCRUD.SaveDocument(MapPath("~/documents/course/1/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
                 if (Document != null)
