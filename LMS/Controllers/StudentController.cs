@@ -326,6 +326,7 @@ namespace LMS.Controllers
                 return View("~/Views/Student/NoKnown.cshtml");
             }
 
+            bool hasError = false;
             Activity activity = FindActivity((int)id);
             if (activity == null)
             {
@@ -340,6 +341,7 @@ namespace LMS.Controllers
                 if (Document == null)
                 {
                     ModelState.AddModelError("", "Din inlämningsuppgift har ej sparats");
+                    hasError = true;
                 }
                 else
                 {
@@ -359,6 +361,12 @@ namespace LMS.Controllers
             else
             {
                 ModelState.AddModelError("", "En fil med innehåll måste erhållas");
+                hasError = true;
+            }
+
+            if (hasError)
+            {
+                return View("~/Views/Student/Activity.cshtml", activity);
             }
 
             return Redirect("~/Student/Activity/" + id);
