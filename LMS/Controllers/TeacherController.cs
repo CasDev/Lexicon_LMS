@@ -69,20 +69,20 @@ namespace LMS.Controllers
             if (id == null)
             {
                 ViewBag.Error = "Inget Id har hittats";
-                return View("~/Error/Index.cshtml");
+                return View("~/Views/Error/Index.cshtml");
             }
             Course course = db.Courses.FirstOrDefault(c => c.Id == id);
             if (course == null)
             {
                 ViewBag.Error = "Ingen kurs har hittats med detta id";
-                return View("~/Error/Index.cshtml");
+                return View("~/Views/Error/Index.cshtml");
             }
             List<User> Users = db.Users.Where(s => s.CoursesId == null).ToList(); // studenter som ej hör till någon kurs än
             Users = Users.Where(s => s.IsStudent()).ToList();
             if (Users.Count() <= 0)
             {
                 ViewBag.Error = "Inga studenter finns tillgängliga, till att läggas till i denna kurs";
-                return View("~/Error/Index.cshtml");
+                return View("~/Views/Error/Index.cshtml");
             }
             ViewBag.Users = Users;
             AddToCourseViewModel model = new AddToCourseViewModel();
