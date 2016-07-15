@@ -66,12 +66,12 @@ namespace LMS.Migrations
             uManager.AddToRole(user.Id, "Student");
             uManager.Update(user);
 
-            Course Course = new Course { Name = ".NET, Våren -15", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2015, 2, 16), EndDate = new DateTime(2015, 8, 15), Users = new List<User>() };
+            Course Course = new Course { Name = ".NET, Våren -15", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2015, 2, 16), EndDate = new DateTime(2015, 8, 15, 23, 59, 0), Users = new List<User>() };
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
             context.SaveChanges();
 
-            Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15), Users = new List<User>() };
+            Course = new Course { Name = ".NET, Våren -16", Description = "En utbildning i .NET C#, .NET MVC5, Bootstrap, AngularJS, etc. etc.", StartDate = new DateTime(2016, 2, 16), EndDate = new DateTime(2016, 8, 15, 23, 59, 0), Users = new List<User>() };
             Course.Users.Add(user);
             user = uManager.FindByName("castell_john@hotmail.com");
             Course.Users.Add(user);
@@ -199,9 +199,14 @@ namespace LMS.Migrations
             context.Courses.AddOrUpdate(x => x.Name,
                 Course);
 
-            foreach (string file in Directory.GetFiles(MapPath("~/documents/module/-1/").Replace("%20", " "))) {
+            // loopar alla filer i "~/documents/module/-1/"
+            foreach (string file in Directory.GetFiles(MapPath("~/documents/module/-1/").Replace("%20", " ")))
+            {
+                // hämtar ut vilken extention det är, t.ex. .txt
                 string extention = System.IO.Path.GetExtension(file);
+                // hämtar ut titel i dokument, t.ex. "teext"
                 string name = System.IO.Path.GetFileNameWithoutExtension(file);
+                // sparar filen på disk, samt få t.ex. ett dokument att spara i databas
                 Document Document = DocumentCRUD.SaveDocument(MapPath("~/documents/module/3/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
                 if (Document != null)
                 {
@@ -214,6 +219,7 @@ namespace LMS.Migrations
                     Document.ModuleId = 3;
                     Document.UserId = user.Id;
                     context.Documents.AddOrUpdate(d => d.Name, Document);
+                    //metadata tillagd i databasen
                 }
                 Document = DocumentCRUD.SaveDocument(MapPath("~/documents/course/1/").Replace("%20", " "), name, extention, File.ReadAllBytes(file));
                 if (Document != null)
@@ -243,11 +249,11 @@ namespace LMS.Migrations
                 }
             }
 
-            user = uManager.FindByName("lozano@skola.se");
+            user = uManager.FindByName("lozano@skola.se");      //Adrian Lozano är en av lärarna och får här tilldelad en lärarroll. 
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);
 
-            user = uManager.FindByName("jakobsson@skola.se");
+            user = uManager.FindByName("jakobsson@skola.se");   //Oscar Jacobsson är en annan lärare, som också får en lärarroll tilldelad här. 
             uManager.AddToRole(user.Id, "Teacher");
             uManager.Update(user);
         }
